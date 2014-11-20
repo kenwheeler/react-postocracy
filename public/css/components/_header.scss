@@ -1,5 +1,5 @@
 .siteHeader {
-    @extend .red;
+    background: $primary;
     color: white;
     text-align: right;
     position: fixed;
@@ -19,6 +19,6 @@
     }
     .siteHeader__button {
         @extend .button;
-        margin: 15px 20px;
+        margin: 10px 20px;
     }
 }

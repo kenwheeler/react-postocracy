@@ -4,7 +4,7 @@ var Header = require('./common/Header');
 var Navigation = require('./common/Navigation');
 var UIStore = require('../stores/UIStore');
 var LinkStore = require('../stores/LinkStore');
-var API = require('../api/Api');
+var API = require('../../api/Api');
 
 function getState() {
   return {

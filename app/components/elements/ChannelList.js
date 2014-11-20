@@ -11,6 +11,9 @@ module.exports = React.createClass({
         <ul className="channels__list">
           <li><Link to="home">All</Link></li>
         </ul>
+        <div className="channels__actions">
+          <button type="button" className="channels__create">Create A Channel</button>
+        </div>
       </div>
     )
   }

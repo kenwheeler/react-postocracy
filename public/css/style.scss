@@ -4,6 +4,9 @@
 // Color Palette
 @import "./includes/_palette";
 
+// Variables
+@import "./includes/_variables";
+
 // Typography
 @include reset();
 @include type(14);

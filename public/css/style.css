@@ -3,35 +3,35 @@
   display: table;
   clear: both; }
 
-.red, .siteHeader {
-  background: #bb4545; }
+.red {
+  background: #e11f1f; }
 
 .orange {
-  background: #bb7645; }
+  background: #e1701f; }
 
 .yellow {
-  background: #bba745; }
+  background: #e1c01f; }
 
 .lime {
-  background: #9fbb45; }
+  background: #b4e11f; }
 
 .green {
-  background: #6cbb45; }
+  background: #60e11f; }
 
 .blue {
-  background: #4594bb; }
+  background: #1fa0e1; }
 
 .turq {
-  background: #45bb4d; }
+  background: #1fe12c; }
 
 .cyan {
-  background: #45bb80; }
+  background: #1fe180; }
 
 .indigo {
-  background: #4563bb; }
+  background: #1f50e1; }
 
 .violet {
-  background: #5745bb; }
+  background: #3c1fe1; }
 
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
   margin: 0;
@@ -125,6 +125,7 @@ body {
   padding: 20px; }
   .main .main__feed {
     background: white;
+    border-radius: 3px;
     padding-left: 20px;
     padding-right: 20px;
     width: 66.66667%;
@@ -145,6 +146,7 @@ body {
         display: none; } }
 
 .siteHeader {
+  background: #e11f1f;
   color: white;
   text-align: right;
   position: fixed;
@@ -162,7 +164,7 @@ body {
     float: left;
     -webkit-user-select: none; }
   .siteHeader .siteHeader__button {
-    margin: 15px 20px; }
+    margin: 10px 20px; }
 
 nav {
   position: fixed;
@@ -230,7 +232,7 @@ nav ul {
   .link .link__title {
     font-size: 18px;
     display: block;
-    color: #4563bb;
+    color: #1fa0e1;
     font-weight: bold; }
     @media (max-width: 767px) {
       .link .link__title {
@@ -241,10 +243,10 @@ nav ul {
     color: #666;
     margin-top: 5px; }
     .link .link__addedby .link__user {
-      color: #bb4545; }
+      color: #e11f1f; }
   .link .link__actions .link__action {
     display: inline-block;
-    color: #bb4545;
+    color: #e11f1f;
     font-weight: bold;
     font-size: 12px;
     padding-right: 10px; }
@@ -252,31 +254,51 @@ nav ul {
 .channels {
   background: white;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.25);
-  border-radius: 2px; }
+  border-radius: 3px; }
   .channels .channels__header {
     font-size: 16px;
     font-weight: bold;
-    background: #4563bb;
+    background: #1fa0e1;
     padding: 10px 20px;
     color: white; }
   .channels .channels__list {
     padding: 10px 20px; }
     .channels .channels__list li a {
       font-size: 14px;
-      color: #4563bb; }
+      color: #1fa0e1; }
       .channels .channels__list li a.active {
         font-weight: bold; }
+  .channels .channels__actions {
+    padding: 20px;
+    border-top: 1px solid #efefef; }
+    .channels .channels__actions .channels__create {
+      width: 100%; }
 
-.button, .siteHeader .siteHeader__button {
-  background: #4563bb;
-  box-shadow: 0px 3px 0px #2a3c70;
+.button, .siteHeader .siteHeader__button, .button__primary, .channels .channels__actions .channels__create {
+  background: #1fa0e1;
+  box-shadow: 0px 3px 0px #126188;
   border: 0;
   border-radius: 3px;
-  padding: 5px 20px;
+  padding: 10px 20px;
   font-size: 16px;
   font-weight: bold;
   color: white;
   outline: none; }
-  .button:hover, .siteHeader .siteHeader__button:hover {
-    background: #375096;
-    box-shadow: 0px 3px 0px #1c284b; }
+  .button:hover, .siteHeader .siteHeader__button:hover, .button__primary:hover, .channels .channels__actions .channels__create:hover {
+    background: #1881b5;
+    box-shadow: 0px 3px 0px #0c415b; }
+  .button:active, .siteHeader .siteHeader__button:active, .button__primary:active, .channels .channels__actions .channels__create:active {
+    position: relative;
+    top: 2px;
+    box-shadow: none; }
+
+.button__primary, .channels .channels__actions .channels__create {
+  background: #e11f1f;
+  box-shadow: 0px 3px 0px #881212; }
+  .button__primary:hover, .channels .channels__actions .channels__create:hover {
+    background: #b51818;
+    box-shadow: 0px 3px 0px #5b0c0c; }
+  .button__primary:active, .channels .channels__actions .channels__create:active {
+    position: relative;
+    top: 2px;
+    box-shadow: none; }

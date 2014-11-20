@@ -21,7 +21,7 @@
   .link__title {
     font-size: 18px;
     display: block;
-    color: $indigo;
+    color: $secondary;
     font-weight: bold;
     @include breakpoint($mobile){
       font-size: 16px;
@@ -33,13 +33,13 @@
     color: #666;
     margin-top: 5px;
     .link__user {
-      color: $red;
+      color: $primary;
     }
   }
   .link__actions {
     .link__action {
       display: inline-block;
-      color: $red;
+      color: $primary;
       font-weight: bold;
       font-size: 12px;
       padding-right: 10px;

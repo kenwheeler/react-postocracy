@@ -1,7 +1,7 @@
 $colorStart: #ff0000;
 $lighten: 10%;
 $darken: 10%;
-$desaturate: 35%;
+$desaturate: 5%;
 
 $red: desaturate(mix(white,mix(black,adjust_hue($colorStart, 0deg), $darken), $lighten), $desaturate);
 $orange: desaturate(mix(white,mix(black,adjust_hue($colorStart, 25deg), $darken), $lighten), $desaturate);

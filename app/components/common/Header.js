@@ -6,7 +6,9 @@ module.exports = React.createClass({
       <header className="siteHeader">
         <div className="contain">
           <h1 className="siteHeader__title">postocracy</h1>
-          <button className="siteHeader__button" type="button">+</button>
+          <div class="siteHeader__actions">
+            <button className="siteHeader__button" type="button">Log In</button>
+          </div>
         </div>
       </header>
     )

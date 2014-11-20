@@ -9,36 +9,10 @@ LinkActions.setLinks(initialState);
 
 React.render(Router, document.body);
 
-},{"./app/actions/LinkActions":2,"./routes":269,"react":268}],2:[function(require,module,exports){
-var McFly = require('../flux/McFly');
-
-var LinkActions = McFly.createActions({
-  setLinks: function(links){
-    return {
-      actionType: 'SET_LINKS',
-      links: links
-    }
-  }
-})
-
-module.exports = LinkActions;
-},{"../flux/McFly":15}],3:[function(require,module,exports){
-var McFly = require('../flux/McFly');
-
-var UIActions = McFly.createActions({
-  setNavState: function(state){
-    return {
-      actionType: 'SET_NAVSTATE',
-      state: state
-    }
-  }
-})
-
-module.exports = UIActions;
-},{"../flux/McFly":15}],4:[function(require,module,exports){
+},{"./app/actions/LinkActions":3,"./routes":269,"react":268}],2:[function(require,module,exports){
 var Promise = require('es6-promise').Promise;
 var http = require('http');
-var LinkActions = require('../actions/LinkActions');
+var LinkActions = require('../app/actions/LinkActions');
 
 var Api = {
   getLinks: function(callback) {
@@ -63,14 +37,40 @@ function get(){
 }
 
 module.exports = Api;
-},{"../actions/LinkActions":2,"es6-promise":50,"http":23}],5:[function(require,module,exports){
+},{"../app/actions/LinkActions":3,"es6-promise":50,"http":23}],3:[function(require,module,exports){
+var McFly = require('../flux/McFly');
+
+var LinkActions = McFly.createActions({
+  setLinks: function(links){
+    return {
+      actionType: 'SET_LINKS',
+      links: links
+    }
+  }
+})
+
+module.exports = LinkActions;
+},{"../flux/McFly":15}],4:[function(require,module,exports){
+var McFly = require('../flux/McFly');
+
+var UIActions = McFly.createActions({
+  setNavState: function(state){
+    return {
+      actionType: 'SET_NAVSTATE',
+      state: state
+    }
+  }
+})
+
+module.exports = UIActions;
+},{"../flux/McFly":15}],5:[function(require,module,exports){
 var React =  require('react/addons');
 var PureRenderMixin = React.addons.PureRenderMixin;
 var Header = require('./common/Header');
 var Navigation = require('./common/Navigation');
 var UIStore = require('../stores/UIStore');
 var LinkStore = require('../stores/LinkStore');
-var API = require('../api/Api');
+var API = require('../../api/Api');
 
 function getState() {
   return {
@@ -107,7 +107,7 @@ var App = React.createClass({displayName: 'App',
 });
 
 module.exports = App;
-},{"../api/Api":4,"../stores/LinkStore":16,"../stores/UIStore":17,"./common/Header":7,"./common/Navigation":8,"react/addons":105}],6:[function(require,module,exports){
+},{"../../api/Api":2,"../stores/LinkStore":16,"../stores/UIStore":17,"./common/Header":7,"./common/Navigation":8,"react/addons":105}],6:[function(require,module,exports){
 var React = require('react');
 var PureRenderMixin = React.addons.PureRenderMixin;
 var LinkList = require('../elements/LinkList');
@@ -131,7 +131,9 @@ module.exports = React.createClass({displayName: 'exports',
       React.createElement("header", {className: "siteHeader"}, 
         React.createElement("div", {className: "contain"}, 
           React.createElement("h1", {className: "siteHeader__title"}, "postocracy"), 
-          React.createElement("button", {className: "siteHeader__button", type: "button"}, "+")
+          React.createElement("div", {class: "siteHeader__actions"}, 
+            React.createElement("button", {className: "siteHeader__button", type: "button"}, "Log In")
+          )
         )
       )
     )
@@ -158,7 +160,7 @@ module.exports = React.createClass({displayName: 'exports',
     )
   }
 });
-},{"../../actions/UIActions":3,"../elements/MenuButton":13,"react":268,"react-router":74}],9:[function(require,module,exports){
+},{"../../actions/UIActions":4,"../elements/MenuButton":13,"react":268,"react-router":74}],9:[function(require,module,exports){
 var React = require('react');
 var PureRenderMixin = React.addons.PureRenderMixin;
 var ChannelList = require('../elements/ChannelList');
@@ -186,6 +188,9 @@ module.exports = React.createClass({displayName: 'exports',
         React.createElement("h2", {className: "channels__header"}, "Channels"), 
         React.createElement("ul", {className: "channels__list"}, 
           React.createElement("li", null, React.createElement(Link, {to: "home"}, "All"))
+        ), 
+        React.createElement("div", {className: "channels__actions"}, 
+          React.createElement("button", {type: "button", className: "channels__create"}, "Create A Channel")
         )
       )
     )

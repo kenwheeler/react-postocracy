@@ -1,14 +1,22 @@
+// Server
 var express = require('express');
 var exphbs = require('express-handlebars');
 var morgan = require('morgan');
 var http = require('http');
+
+// Auth
+// var config = require('./config.js');
+// var passport = require('passport');
+// var TwitterStrategy = require('passport-twitter').Strategy;
+// var session = require('express-session');
+
+// API
+var API = require('./api/Api');
 var links = require('./mocks/links.js');
 
-var API = require('./app/api/Api');
-
+// React
 var React = require('React');
 require('node-jsx').install();
-
 var Router = require('react-router');
 var routes = require('./routes.js');
 

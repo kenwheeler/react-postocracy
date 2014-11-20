@@ -1,6 +1,6 @@
 var Promise = require('es6-promise').Promise;
 var http = require('http');
-var LinkActions = require('../actions/LinkActions');
+var LinkActions = require('../app/actions/LinkActions');
 
 var Api = {
   getLinks: function(callback) {
