@@ -17,8 +17,36 @@
         float: left;
         -webkit-user-select: none;
     }
-    .siteHeader__button {
-        @extend .button;
-        margin: 10px 20px;
+    .siteHeader__filters {
+        float: left;
+        display: inline-block;
+        a {
+            color: white;
+            line-height: 20px;
+            display: inline-block;
+            padding: 20px 10px;
+            font-size: 14px;
+            min-width: 75px;
+            text-align: center;
+            &.active, &:hover {
+                background: darken($primary, 10%);
+            }
+        }
+        @include breakpoint($mobile) {
+            @include clear();
+            float: none;
+            display: block;
+            clear: left;
+            background: darken($primary, 10%);
+            a {
+                padding: 5px;
+                width: 33.3%;
+                display: block;
+                float: left;
+                &.active, &:hover {
+                    background: darken($primary, 20%);
+                }
+            }
+        }
     }
 }

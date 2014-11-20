@@ -96,9 +96,7 @@ var App = React.createClass({displayName: 'App',
     return (
       React.createElement("div", {className: "container"}, 
         React.createElement(Header, null), 
-        React.createElement("section", null, 
         this.props.activeRouteHandler({links: this.state.links})
-        )
       )
     )
 
@@ -131,8 +129,13 @@ module.exports = React.createClass({displayName: 'exports',
       React.createElement("header", {className: "siteHeader"}, 
         React.createElement("div", {className: "contain"}, 
           React.createElement("h1", {className: "siteHeader__title"}, "postocracy"), 
-          React.createElement("div", {class: "siteHeader__actions"}, 
-            React.createElement("button", {className: "siteHeader__button", type: "button"}, "Log In")
+          React.createElement("div", {className: "siteHeader__filters"}, 
+            React.createElement("a", {href: "#", className: "active"}, "Top"), 
+            React.createElement("a", {href: "#"}, "New"), 
+            React.createElement("a", {href: "#"}, "Controversial")
+          ), 
+          React.createElement("div", {class: "siteHeader__actions"}
+
           )
         )
       )

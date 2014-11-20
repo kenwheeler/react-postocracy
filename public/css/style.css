@@ -1,4 +1,4 @@
-.contain:after, .main:after, .link:after {
+.contain:after, .main:after, .siteHeader .siteHeader__filters:after, .link:after {
   content: "";
   display: table;
   clear: both; }
@@ -111,6 +111,9 @@ body {
 
 .container {
   padding-top: 64px; }
+  @media (max-width: 767px) {
+    .container {
+      padding-top: 94px; } }
 
 .contain {
   width: 100%;
@@ -163,8 +166,32 @@ body {
     user-select: none;
     float: left;
     -webkit-user-select: none; }
-  .siteHeader .siteHeader__button {
-    margin: 10px 20px; }
+  .siteHeader .siteHeader__filters {
+    float: left;
+    display: inline-block; }
+    .siteHeader .siteHeader__filters a {
+      color: white;
+      line-height: 20px;
+      display: inline-block;
+      padding: 20px 10px;
+      font-size: 14px;
+      min-width: 75px;
+      text-align: center; }
+      .siteHeader .siteHeader__filters a.active, .siteHeader .siteHeader__filters a:hover {
+        background: #b51818; }
+    @media (max-width: 767px) {
+      .siteHeader .siteHeader__filters {
+        float: none;
+        display: block;
+        clear: left;
+        background: #b51818; }
+        .siteHeader .siteHeader__filters a {
+          padding: 5px;
+          width: 33.3%;
+          display: block;
+          float: left; }
+          .siteHeader .siteHeader__filters a.active, .siteHeader .siteHeader__filters a:hover {
+            background: #881212; } }
 
 nav {
   position: fixed;
@@ -274,7 +301,7 @@ nav ul {
     .channels .channels__actions .channels__create {
       width: 100%; }
 
-.button, .siteHeader .siteHeader__button, .button__primary, .channels .channels__actions .channels__create {
+.button, .button__primary, .channels .channels__actions .channels__create {
   background: #1fa0e1;
   box-shadow: 0px 3px 0px #126188;
   border: 0;
@@ -284,10 +311,10 @@ nav ul {
   font-weight: bold;
   color: white;
   outline: none; }
-  .button:hover, .siteHeader .siteHeader__button:hover, .button__primary:hover, .channels .channels__actions .channels__create:hover {
+  .button:hover, .button__primary:hover, .channels .channels__actions .channels__create:hover {
     background: #1881b5;
     box-shadow: 0px 3px 0px #0c415b; }
-  .button:active, .siteHeader .siteHeader__button:active, .button__primary:active, .channels .channels__actions .channels__create:active {
+  .button:active, .button__primary:active, .channels .channels__actions .channels__create:active {
     position: relative;
     top: 2px;
     box-shadow: none; }

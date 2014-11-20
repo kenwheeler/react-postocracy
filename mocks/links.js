@@ -12,7 +12,7 @@ module.exports = [
     title: "Cache is the new RAM",
     url: "http://blog.memsql.com/cache-is-the-new-ram/",
     user: "thekenwheeler",
-    createdAt: "2014-11-19T21:55:32.264Z",
+    createdAt: "2014-11-19T19:55:32.264Z",
     commentCount: 2
   },
   {
@@ -20,7 +20,7 @@ module.exports = [
     title: "Neural Networks That Describe Images",
     url: "http://cs.stanford.edu/people/karpathy/deepimagesent/?hn",
     user: "thekenwheeler",
-    createdAt: "2014-11-19T21:55:32.264Z",
+    createdAt: "2014-11-19T23:55:32.264Z",
     commentCount: 15
   },
   {
@@ -28,7 +28,7 @@ module.exports = [
     title: "Light Table 0.7.0",
     url: "http://lighttable.com/2014/11/19/light-table-070/",
     user: "thekenwheeler",
-    createdAt: "2014-11-19T21:55:32.264Z",
+    createdAt: "2014-11-14T21:55:32.264Z",
     commentCount: 0
   },
   {
@@ -36,7 +36,7 @@ module.exports = [
     title: "Queues Don't Fix Overload",
     url: "http://ferd.ca/queues-don-t-fix-overload.html",
     user: "thekenwheeler",
-    createdAt: "2014-11-19T21:55:32.264Z",
+    createdAt: "2014-11-12T21:55:32.264Z",
     commentCount: 3
   },
   {
@@ -44,7 +44,55 @@ module.exports = [
     title: "The Startup That Built Google’s First Self-Driving Car",
     url: "http://spectrum.ieee.org/robotics/artificial-intelligence/the-unknown-startup-that-built-googles-first-selfdriving-car",
     user: "thekenwheeler",
+    createdAt: "2014-11-11T21:55:32.264Z",
+    commentCount: 2
+  },
+  {
+    id: 7,
+    title: "Node.js in Flame Graphs",
+    url: "http://techblog.netflix.com/2014/11/nodejs-in-flames.html",
+    user: "thekenwheeler",
     createdAt: "2014-11-19T21:55:32.264Z",
+    commentCount: 5
+  },
+  {
+    id: 8,
+    title: "Cache is the new RAM",
+    url: "http://blog.memsql.com/cache-is-the-new-ram/",
+    user: "thekenwheeler",
+    createdAt: "2014-11-19T19:55:32.264Z",
+    commentCount: 2
+  },
+  {
+    id: 9,
+    title: "Neural Networks That Describe Images",
+    url: "http://cs.stanford.edu/people/karpathy/deepimagesent/?hn",
+    user: "thekenwheeler",
+    createdAt: "2014-11-19T23:55:32.264Z",
+    commentCount: 15
+  },
+  {
+    id: 10,
+    title: "Light Table 0.7.0",
+    url: "http://lighttable.com/2014/11/19/light-table-070/",
+    user: "thekenwheeler",
+    createdAt: "2014-11-14T21:55:32.264Z",
+    commentCount: 0
+  },
+  {
+    id: 11,
+    title: "Queues Don't Fix Overload",
+    url: "http://ferd.ca/queues-don-t-fix-overload.html",
+    user: "thekenwheeler",
+    createdAt: "2014-11-12T21:55:32.264Z",
+    commentCount: 3
+  },
+  {
+    id: 12,
+    title: "The Startup That Built Google’s First Self-Driving Car",
+    url: "http://spectrum.ieee.org/robotics/artificial-intelligence/the-unknown-startup-that-built-googles-first-selfdriving-car",
+    user: "thekenwheeler",
+    createdAt: "2014-11-11T21:55:32.264Z",
     commentCount: 2
   },
 ]
