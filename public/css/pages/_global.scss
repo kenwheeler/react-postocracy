@@ -1,0 +1,21 @@
+* {
+    box-sizing: border-box;
+}
+
+html, body, .container {
+    height: 100%;
+}
+
+body {
+    font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    padding-top: 64px;
+}
+
+.main {
+  padding: 20px;
+}

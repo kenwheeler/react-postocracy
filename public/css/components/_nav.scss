@@ -1,0 +1,50 @@
+nav {
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    background: #5677fc;
+    width: 100%;
+    text-align: center;
+    button {
+        position: relative;
+        display: inline-block;
+        padding: 20px;
+        margin: 0;
+        border: 0;
+        background: none;
+        outline: none;
+    }
+}
+
+nav ul {
+    margin: 0;
+    padding: 0;
+    position: relative;
+    width: 100%;
+    background: #eee;
+    max-height: 0px;
+    border-top: 5px solid #5677fc;
+    overflow: hidden;
+    transition: all 200ms ease;
+    &.active {
+        max-height: 240px;
+        overflow: scroll;
+        -webkit-overflow-scrolling: touch;
+        transition: all 200ms ease;
+    }
+    li {
+        list-style-type: none;
+        display: block;
+        border-bottom: 1px solid #ddd;
+        a {
+            color: #5677fc;
+            display: block;
+            text-decoration: none;
+            line-height: 24px;
+            padding: 20px;
+            &:hover {
+                background: rgba(0, 0, 0, 0.1);
+            }
+        }
+    }
+}

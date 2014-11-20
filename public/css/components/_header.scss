@@ -1,0 +1,19 @@
+.siteHeader {
+    @extend .red;
+    color: white;
+    text-align: left;
+    position: fixed;
+    width: 100%;
+    top: 0px;
+    box-shadow: 0px 0px 5px rgba(0,0,0,0.5);
+    .siteHeader__title {
+        margin: -2px 0px 2px;
+        font-size: 20px;
+        display: inline-block;
+        font-weight: bold;
+        line-height: 20px;
+        padding: 20px;
+        user-select: none;
+        -webkit-user-select: none;
+    }
+}

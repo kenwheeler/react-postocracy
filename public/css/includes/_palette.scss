@@ -1,0 +1,26 @@
+$colorStart: #ff0000;
+$lighten: 10%;
+$darken: 10%;
+$desaturate: 35%;
+
+$red: desaturate(mix(white,mix(black,adjust_hue($colorStart, 0deg), $darken), $lighten), $desaturate);
+$orange: desaturate(mix(white,mix(black,adjust_hue($colorStart, 25deg), $darken), $lighten), $desaturate);
+$yellow: desaturate(mix(white,mix(black,adjust_hue($colorStart, 50deg), $darken), $lighten), $desaturate);
+$lime: desaturate(mix(white,mix(black,adjust_hue($colorStart, 75deg), $darken), $lighten), $desaturate);
+$green: desaturate(mix(white,mix(black,adjust_hue($colorStart, 100deg), $darken), $lighten), $desaturate);
+$turq: desaturate(mix(white,mix(black,adjust_hue($colorStart, 125deg), $darken), $lighten), $desaturate);
+$cyan: desaturate(mix(white,mix(black,adjust_hue($colorStart, 150deg), $darken), $lighten), $desaturate);
+$blue: desaturate(mix(white,mix(black,adjust_hue($colorStart, 200deg), $darken), $lighten), $desaturate);
+$indigo: desaturate(mix(white,mix(black,adjust_hue($colorStart, 225deg), $darken), $lighten), $desaturate);
+$violet: desaturate(mix(white,mix(black,adjust_hue($colorStart, 250deg), $darken), $lighten), $desaturate);
+
+.red { background: $red; }
+.orange { background: $orange; }
+.yellow { background: $yellow; }
+.lime { background: $lime; }
+.green { background: $green; }
+.blue { background: $blue; }
+.turq { background: $turq; }
+.cyan { background: $cyan; }
+.indigo { background: $indigo; }
+.violet { background: $violet; }
