@@ -1,5 +1,6 @@
 var express = require('express');
 var exphbs = require('express-handlebars');
+var morgan = require('morgan');
 var http = require('http');
 var links = require('./mocks/links.js');
 
@@ -19,6 +20,8 @@ app.set('view engine', 'handlebars');
 
 app.disable('etag');
 
+app.use(morgan('combined'))
+
 app.use("/", express.static(__dirname + "/public/"));
 
 app.get("/api/links", function(req,res){
@@ -26,20 +29,14 @@ app.get("/api/links", function(req,res){
 });
 
 app.get('*', function(req,res){
-  switch(req.path) {
-    case '/favicon.ico':
-      return "lol"
-    default:
-      API.getLinks(function(links){
-        Router.renderRoutesToString(routes, req.path, function(err, ar, html, data) {
-          res.render('index', {
-            markup: html,
-            state: links
-          });
-        });
+  API.getLinks(function(links){
+    Router.renderRoutesToString(routes, req.path, function(err, ar, html, data) {
+      res.render('index', {
+        markup: html,
+        state: links
       });
-  }
-
+    });
+  });
 });
 
 var server = http.createServer(app).listen(port, function() {

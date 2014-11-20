@@ -30,7 +30,6 @@ var App = React.createClass({
     return (
       <div className="container">
         <Header />
-        <Navigation navigationActive={this.state.navigationActive} />
         <section>
         {this.props.activeRouteHandler({links: this.state.links})}
         </section>

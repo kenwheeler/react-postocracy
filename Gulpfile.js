@@ -17,7 +17,7 @@ gulp.task('clean', function(done) {
 
 gulp.task('css', ['clean'], function() {
   return gulp.src(paths.css)
-    .pipe(sass())
+    .pipe(sass({errLogToConsole: true}))
     .pipe(gulp.dest('./public/css'));
 });
 

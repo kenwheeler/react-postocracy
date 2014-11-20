@@ -1,0 +1,22 @@
+.channels {
+  background: white;
+  box-shadow: 0px 0px 5px rgba(0,0,0,0.25);
+  border-radius: 2px;
+  .channels__header {
+    font-size: 16px;
+    font-weight: bold;
+    background: $indigo;
+    padding: 10px 20px;
+    color: white;
+  }
+  .channels__list {
+    padding: 10px 20px;
+    li a {
+      font-size: 14px;
+      color: $indigo;
+      &.active {
+        font-weight: bold;
+      }
+    }
+  }
+}

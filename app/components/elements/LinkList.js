@@ -7,11 +7,11 @@ module.exports = React.createClass({
   render: function() {
     var links = this.props.links.map(function(link, index){
       return <Link key={index} index={index} link={link} />
-    })
+    });
     return (
-      <section className="linklist">
+      <div className="linklist">
         {links}
-      </section>
+      </div>
     )
   }
 });

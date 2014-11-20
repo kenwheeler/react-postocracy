@@ -1,3 +1,8 @@
+.contain:after, .main:after, .link:after {
+  content: "";
+  display: table;
+  clear: both; }
+
 .red, .siteHeader {
   background: #bb4545; }
 
@@ -99,6 +104,7 @@ html, body, .container {
   height: 100%; }
 
 body {
+  background: #eee;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   margin: 0;
   padding: 0; }
@@ -106,12 +112,41 @@ body {
 .container {
   padding-top: 64px; }
 
+.contain {
+  width: 100%;
+  max-width: 1024px;
+  position: relative;
+  margin: auto; }
+
 .main {
+  width: 100%;
+  max-width: 1024px;
+  margin: auto;
   padding: 20px; }
+  .main .main__feed {
+    background: white;
+    padding-left: 20px;
+    padding-right: 20px;
+    width: 66.66667%;
+    float: left;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.25); }
+    @media (max-width: 767px) {
+      .main .main__feed {
+        padding-left: 20px;
+        padding-right: 20px;
+        width: 100%;
+        float: left; } }
+  .main .main__sidebar {
+    width: 33.33333%;
+    float: left;
+    padding-left: 20px; }
+    @media (max-width: 767px) {
+      .main .main__sidebar {
+        display: none; } }
 
 .siteHeader {
   color: white;
-  text-align: left;
+  text-align: right;
   position: fixed;
   width: 100%;
   top: 0px;
@@ -124,7 +159,10 @@ body {
     line-height: 20px;
     padding: 20px;
     user-select: none;
+    float: left;
     -webkit-user-select: none; }
+  .siteHeader .siteHeader__button {
+    margin: 15px 20px; }
 
 nav {
   position: fixed;
@@ -170,6 +208,75 @@ nav ul {
       nav ul li a:hover {
         background: rgba(0, 0, 0, 0.1); }
 
-.link .link__rank {
+.link {
+  width: 100%;
+  max-width: 1024px;
+  padding: 20px 0px;
+  border-bottom: 1px solid #efefef;
+  line-height: 1; }
+  .link .link__rank {
+    font-size: 18px;
+    font-weight: bold;
+    color: #aaa;
+    vertical-align: middle;
+    padding-right: 20px;
+    display: table-cell; }
+    @media (max-width: 767px) {
+      .link .link__rank {
+        font-size: 16px; } }
+  .link .link__content {
+    display: table-cell;
+    vertical-align: top; }
+  .link .link__title {
+    font-size: 18px;
+    display: block;
+    color: #4563bb;
+    font-weight: bold; }
+    @media (max-width: 767px) {
+      .link .link__title {
+        font-size: 16px; } }
+  .link .link__addedby {
+    display: block;
+    font-size: 12px;
+    color: #666;
+    margin-top: 5px; }
+    .link .link__addedby .link__user {
+      color: #bb4545; }
+  .link .link__actions .link__action {
+    display: inline-block;
+    color: #bb4545;
+    font-weight: bold;
+    font-size: 12px;
+    padding-right: 10px; }
+
+.channels {
+  background: white;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.25);
+  border-radius: 2px; }
+  .channels .channels__header {
+    font-size: 16px;
+    font-weight: bold;
+    background: #4563bb;
+    padding: 10px 20px;
+    color: white; }
+  .channels .channels__list {
+    padding: 10px 20px; }
+    .channels .channels__list li a {
+      font-size: 14px;
+      color: #4563bb; }
+      .channels .channels__list li a.active {
+        font-weight: bold; }
+
+.button, .siteHeader .siteHeader__button {
+  background: #4563bb;
+  box-shadow: 0px 3px 0px #2a3c70;
+  border: 0;
+  border-radius: 3px;
+  padding: 5px 20px;
   font-size: 16px;
-  font-weight: bold; }
+  font-weight: bold;
+  color: white;
+  outline: none; }
+  .button:hover, .siteHeader .siteHeader__button:hover {
+    background: #375096;
+    box-shadow: 0px 3px 0px #1c284b; }

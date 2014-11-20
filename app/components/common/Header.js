@@ -4,7 +4,10 @@ module.exports = React.createClass({
   render: function() {
     return (
       <header className="siteHeader">
-        <h1 className="siteHeader__title">postocracy</h1>
+        <div className="contain">
+          <h1 className="siteHeader__title">postocracy</h1>
+          <button className="siteHeader__button" type="button">+</button>
+        </div>
       </header>
     )
   }

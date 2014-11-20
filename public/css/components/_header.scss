@@ -1,7 +1,7 @@
 .siteHeader {
     @extend .red;
     color: white;
-    text-align: left;
+    text-align: right;
     position: fixed;
     width: 100%;
     top: 0px;
@@ -14,6 +14,11 @@
         line-height: 20px;
         padding: 20px;
         user-select: none;
+        float: left;
         -webkit-user-select: none;
+    }
+    .siteHeader__button {
+        @extend .button;
+        margin: 15px 20px;
     }
 }

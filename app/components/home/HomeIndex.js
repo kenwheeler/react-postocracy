@@ -1,7 +1,8 @@
 var React = require('react');
 var PureRenderMixin = React.addons.PureRenderMixin;
 var DocumentTitle = require('react-document-title');
-var LinkList = require('../elements/LinkList');
+var Feed = require('../common/Feed');
+var Sidebar = require('../common/Sidebar');
 
 module.exports = React.createClass({
   mixins: [PureRenderMixin],
@@ -9,7 +10,8 @@ module.exports = React.createClass({
     return (
       <DocumentTitle title='postocracy'>
         <main className="main">
-          <LinkList links={this.props.links} />
+          <Feed links={this.props.links} />
+          <Sidebar />
         </main>
       </DocumentTitle>
     )

@@ -28,6 +28,7 @@
     "gulp": "^3.8.10",
     "gulp-nodemon": "^1.0.4",
     "gulp-sass": "^1.1.0",
+    "morgan": "^1.5.0",
     "nodemon": "^1.2.1",
     "reactify": "^0.17.0",
     "uglify": "^0.1.0",
