@@ -221,7 +221,8 @@ body {
   padding-top: 64px; }
   @media (max-width: 767px) {
     .container {
-      padding-top: 94px; } }
+      padding-top: 94px;
+      width: 100%; } }
 
 .contain {
   width: 100%;
@@ -257,7 +258,7 @@ body {
         display: none; } }
 
 .siteHeader {
-  background: #e11f1f;
+  background: #00bcd4;
   color: white;
   text-align: right;
   position: fixed;
@@ -274,19 +275,6 @@ body {
     user-select: none;
     float: left;
     -webkit-user-select: none; }
-  .siteHeader .siteHeader__actions {
-    margin-right: 20px; }
-    .siteHeader .siteHeader__actions a {
-      font-size: 20px;
-      color: white;
-      padding: 22px 20px 18px;
-      line-height: 20px;
-      display: inline-block; }
-      .siteHeader .siteHeader__actions a:active, .siteHeader .siteHeader__actions a:hover {
-        background: #b51818; }
-      @media (max-width: 767px) {
-        .siteHeader .siteHeader__actions a {
-          display: none; } }
   .siteHeader .siteHeader__filters {
     float: left;
     display: inline-block; }
@@ -300,13 +288,13 @@ body {
       border-radius: 3px;
       text-align: center; }
       .siteHeader .siteHeader__filters a.active, .siteHeader .siteHeader__filters a:hover {
-        background: #b51818; }
+        background: #0091a1; }
     @media (max-width: 767px) {
       .siteHeader .siteHeader__filters {
         float: none;
         display: block;
         clear: left;
-        background: #1fa0e1; }
+        background: #ff4081; }
         .siteHeader .siteHeader__filters a {
           padding: 5px;
           margin: 0;
@@ -315,51 +303,47 @@ body {
           float: left;
           border-radius: 0; }
           .siteHeader .siteHeader__filters a.active, .siteHeader .siteHeader__filters a:hover {
-            background: #1881b5; } }
+            background: #ff0d62; } }
+  .siteHeader .menuButton {
+    display: none; }
+    @media (max-width: 767px) {
+      .siteHeader .menuButton {
+        display: inline-block;
+        padding: 15px 20px; } }
 
-nav {
-  position: fixed;
-  bottom: 0px;
-  left: 0px;
-  background: #5677fc;
-  width: 100%;
-  text-align: center; }
-  nav button {
-    position: relative;
-    display: inline-block;
-    padding: 20px;
-    margin: 0;
-    border: 0;
-    background: none;
-    outline: none; }
-
-nav ul {
-  margin: 0;
-  padding: 0;
-  position: relative;
-  width: 100%;
-  background: #eee;
-  max-height: 0px;
-  border-top: 5px solid #5677fc;
-  overflow: hidden;
-  transition: all 200ms ease; }
-  nav ul.active {
-    max-height: 240px;
-    overflow: scroll;
-    -webkit-overflow-scrolling: touch;
-    transition: all 200ms ease; }
-  nav ul li {
-    list-style-type: none;
-    display: block;
-    border-bottom: 1px solid #ddd; }
-    nav ul li a {
-      color: #5677fc;
+.navigation {
+  display: none; }
+  @media (max-width: 767px) {
+    .navigation {
       display: block;
-      text-decoration: none;
-      line-height: 24px;
-      padding: 20px; }
-      nav ul li a:hover {
-        background: rgba(0, 0, 0, 0.1); }
+      position: fixed;
+      top: 60px;
+      right: -100%;
+      bottom: 0px;
+      width: 100%;
+      background: #ccc;
+      transition: right 200ms ease;
+      -webkit-transition: right 200ms ease;
+      -moz-transition: right 200ms ease; }
+      .navigation.active {
+        right: 0px;
+        transition: right 200ms ease;
+        -webkit-transition: right 200ms ease;
+        -moz-transition: right 200ms ease; } }
+  .navigation .actionsList {
+    background: #0091a1;
+    margin-right: 0; }
+    .navigation .actionsList a {
+      width: 25%;
+      display: inline-block;
+      text-align: center;
+      border-right: 1px solid rgba(0, 0, 0, 0.25);
+      border-top: 1px solid rgba(0, 0, 0, 0.25);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.25); }
+    .navigation .actionsList a:last-child {
+      border-right: none; }
+  .navigation .channels {
+    box-shadow: none; }
 
 .link {
   width: 100%;
@@ -377,7 +361,8 @@ nav ul {
     display: table-cell; }
     .link .link__rank .link__upvote, .link .link__rank .link__downvote, .link .link__rank .link__rankNumber {
       display: block;
-      font-size: 18px;
+      line-height: 1;
+      font-size: 14px;
       color: #aaa;
       text-align: center; }
     .link .link__rank .link__upvote {
@@ -393,7 +378,7 @@ nav ul {
   .link .link__title {
     font-size: 18px;
     display: block;
-    color: #1fa0e1;
+    color: #ff4081;
     font-weight: bold; }
     @media (max-width: 767px) {
       .link .link__title {
@@ -404,10 +389,10 @@ nav ul {
     color: #666;
     margin-top: 5px; }
     .link .link__addedby .link__user {
-      color: #e11f1f; }
+      color: #00bcd4; }
   .link .link__actions .link__action {
     display: inline-block;
-    color: #e11f1f;
+    color: #00bcd4;
     font-weight: bold;
     font-size: 12px;
     padding-right: 10px; }
@@ -419,7 +404,7 @@ nav ul {
   .channels .channels__header {
     font-size: 16px;
     font-weight: bold;
-    background: #1fa0e1;
+    background: #ff4081;
     padding: 10px 20px;
     color: white; }
   .channels .channels__list {
@@ -429,7 +414,7 @@ nav ul {
       width: 100%;
       padding: 5px 10px;
       display: block;
-      color: #1fa0e1;
+      color: #ff4081;
       border-radius: 3px; }
       .channels .channels__list li a.active, .channels .channels__list li a:hover {
         font-weight: bold;
@@ -441,8 +426,8 @@ nav ul {
       width: 100%; }
 
 .button, .button__primary, .channels .channels__actions .channels__create {
-  background: #1fa0e1;
-  box-shadow: 0px 3px 0px #126188;
+  background: #ff4081;
+  box-shadow: 0px 3px 0px #d9004c;
   border: 0;
   border-radius: 3px;
   padding: 10px 20px;
@@ -451,20 +436,39 @@ nav ul {
   color: white;
   outline: none; }
   .button:hover, .button__primary:hover, .channels .channels__actions .channels__create:hover {
-    background: #1881b5;
-    box-shadow: 0px 3px 0px #0c415b; }
+    background: #ff0d62;
+    box-shadow: 0px 3px 0px #a6003a; }
   .button:active, .button__primary:active, .channels .channels__actions .channels__create:active {
     position: relative;
     top: 2px;
     box-shadow: none; }
 
 .button__primary, .channels .channels__actions .channels__create {
-  background: #e11f1f;
-  box-shadow: 0px 3px 0px #881212; }
+  background: #00bcd4;
+  box-shadow: 0px 3px 0px #00636e; }
   .button__primary:hover, .channels .channels__actions .channels__create:hover {
-    background: #b51818;
-    box-shadow: 0px 3px 0px #5b0c0c; }
+    background: #0091a1;
+    box-shadow: 0px 3px 0px #00353b; }
   .button__primary:active, .channels .channels__actions .channels__create:active {
     position: relative;
     top: 2px;
     box-shadow: none; }
+
+.menuButton {
+  background: none;
+  border: none;
+  outline: none; }
+
+.actionsList {
+  margin-right: 20px; }
+  .actionsList a {
+    font-size: 20px;
+    color: white;
+    padding: 22px 20px 18px;
+    line-height: 20px;
+    display: inline-block; }
+    .actionsList a:active, .actionsList a:hover {
+      background: #0091a1; }
+    @media (max-width: 767px) {
+      .actionsList a {
+        display: none; } }

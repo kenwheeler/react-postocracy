@@ -13,7 +13,8 @@
     display: table-cell;
     .link__upvote, .link__downvote, .link__rankNumber {
       display: block;
-      font-size: 18px;
+      line-height: 1;
+      font-size: 14px;
       color: #aaa;
       text-align: center;
     }

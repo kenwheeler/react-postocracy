@@ -29,7 +29,8 @@ var App = React.createClass({
 
     return (
       <div className="container">
-        <Header />
+        <Header navigationActive={this.state.navigationActive}/>
+        <Navigation navigationActive={this.state.navigationActive} />
         {this.props.activeRouteHandler({links: this.state.links})}
       </div>
     )

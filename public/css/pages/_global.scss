@@ -17,6 +17,7 @@ body {
     padding-top: 64px;
     @include breakpoint($mobile){
       padding-top: 94px;
+      width: 100%;
     }
 }
 

@@ -17,22 +17,6 @@
         float: left;
         -webkit-user-select: none;
     }
-    .siteHeader__actions {
-        margin-right: 20px;
-        a {
-            font-size: 20px;
-            color: white;
-            padding: 22px 20px 18px;
-            line-height: 20px;
-            display: inline-block;
-            &:active, &:hover {
-                background: darken($primary,10%);
-            }
-            @include breakpoint($mobile) {
-                display: none;
-            }
-        }
-    }
     .siteHeader__filters {
         float: left;
         display: inline-block;
@@ -66,6 +50,13 @@
                     background: darken($secondary, 10%);
                 }
             }
+        }
+    }
+    .menuButton {
+        display: none;
+        @include breakpoint($mobile) {
+            display: inline-block;
+            padding: 15px 20px;
         }
     }
 }

@@ -1,12 +1,14 @@
 var React = require('react');
 
 module.exports = React.createClass({
-  handleClick: function(){
+  handleClick: function(event){
+    event.nativeEvent.stopPropagation();
+    event.nativeEvent.preventDefault();
     this.props.onClick && this.props.onClick();
   },
   render: function() {
     return (
-      <button type="button" onClick={this.handleClick}>
+      <button type="button" className="menuButton" onTouchEnd={this.handleClick} onClick={this.handleClick}>
         <svg x="0px" y="0px" width="24px" height="24px" viewBox="0 0 24 24">
           <rect y="3" width="24" height="3"  style={styles[this.props.active ? 'active' : 'default'].a} fill="white"/>
           <rect y="12" width="24" height="3" style={styles[this.props.active ? 'active' : 'default'].b} fill="white"/>

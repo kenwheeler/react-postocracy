@@ -1,50 +1,39 @@
-nav {
-    position: fixed;
-    bottom: 0px;
-    left: 0px;
-    background: #5677fc;
-    width: 100%;
-    text-align: center;
-    button {
-        position: relative;
-        display: inline-block;
-        padding: 20px;
-        margin: 0;
-        border: 0;
-        background: none;
-        outline: none;
-    }
-}
-
-nav ul {
-    margin: 0;
-    padding: 0;
-    position: relative;
-    width: 100%;
-    background: #eee;
-    max-height: 0px;
-    border-top: 5px solid #5677fc;
-    overflow: hidden;
-    transition: all 200ms ease;
-    &.active {
-        max-height: 240px;
-        overflow: scroll;
-        -webkit-overflow-scrolling: touch;
-        transition: all 200ms ease;
-    }
-    li {
-        list-style-type: none;
+.navigation {
+    display: none;
+    @include breakpoint($mobile) {
         display: block;
-        border-bottom: 1px solid #ddd;
-        a {
-            color: #5677fc;
-            display: block;
-            text-decoration: none;
-            line-height: 24px;
-            padding: 20px;
-            &:hover {
-                background: rgba(0, 0, 0, 0.1);
-            }
+        position: fixed;
+        top: 60px;
+        right: -100%;
+        bottom: 0px;
+        width: 100%;
+        background: #ccc;
+        transition: right 200ms ease;
+        -webkit-transition: right 200ms ease;
+        -moz-transition: right 200ms ease;
+        &.active {
+            right: 0px;
+            transition: right 200ms ease;
+            -webkit-transition: right 200ms ease;
+            -moz-transition: right 200ms ease;
         }
+    }
+    .actionsList {
+        background: darken($primary, 10%);
+        margin-right: 0;
+        a {
+            width: 25%;
+            display: inline-block;
+            text-align: center;
+            border-right: 1px solid rgba(0,0,0,0.25);
+            border-top: 1px solid rgba(0,0,0,0.25);
+            border-bottom: 1px solid rgba(0,0,0,0.25);
+        }
+        a:last-child {
+            border-right: none;
+        }
+    }
+    .channels {
+        box-shadow: none;
     }
 }
