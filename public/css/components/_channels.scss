@@ -10,12 +10,17 @@
     color: white;
   }
   .channels__list {
-    padding: 10px 20px;
+    padding: 10px 10px;
     li a {
       font-size: 14px;
+      width: 100%;
+      padding: 5px 10px;
+      display: block;
       color: $secondary;
-      &.active {
+      border-radius: 3px;
+      &.active, &:hover {
         font-weight: bold;
+        background: $tertiary;
       }
     }
   }

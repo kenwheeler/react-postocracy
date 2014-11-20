@@ -11,8 +11,15 @@
 @include reset();
 @include type(14);
 
+// Settings
+
+$grid-max-width: 1240px;
+
 // Fonts
 @import "./includes/_fonts";
+
+// Icons
+@import "./includes/_icons";
 
 // Global Styles
 @import "./pages/_global";

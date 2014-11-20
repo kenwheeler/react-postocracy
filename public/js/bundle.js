@@ -134,8 +134,11 @@ module.exports = React.createClass({displayName: 'exports',
             React.createElement("a", {href: "#"}, "New"), 
             React.createElement("a", {href: "#"}, "Controversial")
           ), 
-          React.createElement("div", {class: "siteHeader__actions"}
-
+          React.createElement("div", {className: "siteHeader__actions"}, 
+            React.createElement("a", {href: "#"}, React.createElement("i", {className: "icon-magnifying-glass"})), 
+            React.createElement("a", {href: "#"}, React.createElement("i", {className: "icon-mail"})), 
+            React.createElement("a", {href: "#"}, React.createElement("i", {className: "icon-torso"})), 
+            React.createElement("a", {href: "#"}, React.createElement("i", {className: "icon-widget"}))
           )
         )
       )
@@ -207,7 +210,11 @@ module.exports = React.createClass({displayName: 'exports',
   render: function() {
     return (
       React.createElement("article", {className: "link"}, 
-        React.createElement("p", {className: "link__rank"}, this.props.index + 1), 
+        React.createElement("p", {className: "link__rank"}, 
+          React.createElement("a", {href: "#", className: "link__upvote"}, React.createElement("i", {className: "icon-arrow-up"})), 
+          React.createElement("span", {className: "link__rankNumber"}, this.props.index + 1), 
+          React.createElement("a", {href: "#", className: "link__downvote"}, React.createElement("i", {className: "icon-arrow-down"}))
+        ), 
         React.createElement("div", {className: "link__content"}, 
           React.createElement("a", {className: "link__title", href: this.props.link.url}, this.props.link.title), 
           React.createElement("p", {className: "link__addedby"}, 

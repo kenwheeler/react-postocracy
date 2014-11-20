@@ -17,16 +17,33 @@
         float: left;
         -webkit-user-select: none;
     }
+    .siteHeader__actions {
+        margin-right: 20px;
+        a {
+            font-size: 20px;
+            color: white;
+            padding: 22px 20px 18px;
+            line-height: 20px;
+            display: inline-block;
+            &:active, &:hover {
+                background: darken($primary,10%);
+            }
+            @include breakpoint($mobile) {
+                display: none;
+            }
+        }
+    }
     .siteHeader__filters {
         float: left;
         display: inline-block;
         a {
             color: white;
-            line-height: 20px;
             display: inline-block;
-            padding: 20px 10px;
+            padding: 3px 10px;
+            margin: 14px 5px;
             font-size: 14px;
             min-width: 75px;
+            border-radius: 3px;
             text-align: center;
             &.active, &:hover {
                 background: darken($primary, 10%);
@@ -37,14 +54,16 @@
             float: none;
             display: block;
             clear: left;
-            background: darken($primary, 10%);
+            background: $secondary;
             a {
                 padding: 5px;
+                margin: 0;
                 width: 33.3%;
                 display: block;
                 float: left;
+                border-radius: 0;
                 &.active, &:hover {
-                    background: darken($primary, 20%);
+                    background: darken($secondary, 10%);
                 }
             }
         }

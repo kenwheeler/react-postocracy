@@ -5,7 +5,11 @@ module.exports = React.createClass({
   render: function() {
     return (
       <article className="link">
-        <p className="link__rank">{this.props.index + 1}</p>
+        <p className="link__rank">
+          <a href="#" className="link__upvote"><i className="icon-arrow-up"/></a>
+          <span className="link__rankNumber">{this.props.index + 1}</span>
+          <a href="#" className="link__downvote"><i className="icon-arrow-down"/></a>
+        </p>
         <div className="link__content">
           <a className="link__title" href={this.props.link.url}>{this.props.link.title}</a>
           <p className="link__addedby">

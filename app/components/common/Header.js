@@ -11,8 +11,11 @@ module.exports = React.createClass({
             <a href="#">New</a>
             <a href="#">Controversial</a>
           </div>
-          <div class="siteHeader__actions">
-
+          <div className="siteHeader__actions">
+            <a href="#"><i className="icon-magnifying-glass"/></a>
+            <a href="#"><i className="icon-mail"/></a>
+            <a href="#"><i className="icon-torso"/></a>
+            <a href="#"><i className="icon-widget"/></a>
           </div>
         </div>
       </header>

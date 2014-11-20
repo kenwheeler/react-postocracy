@@ -97,6 +97,114 @@ p {
   font-size: 14px;
   font-size: 0.875rem; }
 
+@font-face {
+  font-family: "postocracy";
+  src: url("../../fonts/postocracy.eot");
+  src: url("../../fonts/postocracy.eot?#iefix") format("embedded-opentype"), url("../../fonts/postocracy.woff") format("woff"), url("../../fonts/postocracy.ttf") format("truetype"), url("../../fonts/postocracy.svg#untitled-font-1") format("svg");
+  font-weight: normal;
+  font-style: normal; }
+
+[data-icon]:before {
+  font-family: "postocracy" !important;
+  content: attr(data-icon);
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  speak: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; }
+
+[class^="icon-"]:before, [class*=" icon-"]:before {
+  font-family: "postocracy" !important;
+  font-style: normal !important;
+  font-weight: normal !important;
+  font-variant: normal !important;
+  text-transform: none !important;
+  speak: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; }
+
+.icon-heart:before {
+  content: "f"; }
+
+.icon-home:before {
+  content: "g"; }
+
+.icon-link:before {
+  content: "h"; }
+
+.icon-magnifying-glass:before {
+  content: "i"; }
+
+.icon-mail:before {
+  content: "j"; }
+
+.icon-x:before {
+  content: "k"; }
+
+.icon-widget:before {
+  content: "l"; }
+
+.icon-torso:before {
+  content: "m"; }
+
+.icon-trash:before {
+  content: "n"; }
+
+.icon-pencil:before {
+  content: "o"; }
+
+.icon-plus:before {
+  content: "p"; }
+
+.icon-flag:before {
+  content: "q"; }
+
+.icon-list-thumbnails:before {
+  content: "r"; }
+
+.icon-folder:before {
+  content: "s"; }
+
+.icon-check:before {
+  content: "t"; }
+
+.icon-arrow-up:before {
+  content: "u"; }
+
+.icon-arrow-down:before {
+  content: "v"; }
+
+.icon-dislike:before {
+  content: "w"; }
+
+.icon-like:before {
+  content: "x"; }
+
+.icon-share:before {
+  content: "y"; }
+
+.icon-alert:before {
+  content: "z"; }
+
+.icon-graph-pie:before {
+  content: "A"; }
+
+.icon-graph-bar:before {
+  content: "B"; }
+
+.icon-megaphone:before {
+  content: "C"; }
+
+.icon-comment:before {
+  content: "e"; }
+
+.icon-download:before {
+  content: "D"; }
+
 * {
   box-sizing: border-box; }
 
@@ -117,13 +225,13 @@ body {
 
 .contain {
   width: 100%;
-  max-width: 1024px;
+  max-width: 1240px;
   position: relative;
   margin: auto; }
 
 .main {
   width: 100%;
-  max-width: 1024px;
+  max-width: 1240px;
   margin: auto;
   padding: 20px; }
   .main .main__feed {
@@ -166,16 +274,30 @@ body {
     user-select: none;
     float: left;
     -webkit-user-select: none; }
+  .siteHeader .siteHeader__actions {
+    margin-right: 20px; }
+    .siteHeader .siteHeader__actions a {
+      font-size: 20px;
+      color: white;
+      padding: 22px 20px 18px;
+      line-height: 20px;
+      display: inline-block; }
+      .siteHeader .siteHeader__actions a:active, .siteHeader .siteHeader__actions a:hover {
+        background: #b51818; }
+      @media (max-width: 767px) {
+        .siteHeader .siteHeader__actions a {
+          display: none; } }
   .siteHeader .siteHeader__filters {
     float: left;
     display: inline-block; }
     .siteHeader .siteHeader__filters a {
       color: white;
-      line-height: 20px;
       display: inline-block;
-      padding: 20px 10px;
+      padding: 3px 10px;
+      margin: 14px 5px;
       font-size: 14px;
       min-width: 75px;
+      border-radius: 3px;
       text-align: center; }
       .siteHeader .siteHeader__filters a.active, .siteHeader .siteHeader__filters a:hover {
         background: #b51818; }
@@ -184,14 +306,16 @@ body {
         float: none;
         display: block;
         clear: left;
-        background: #b51818; }
+        background: #1fa0e1; }
         .siteHeader .siteHeader__filters a {
           padding: 5px;
+          margin: 0;
           width: 33.3%;
           display: block;
-          float: left; }
+          float: left;
+          border-radius: 0; }
           .siteHeader .siteHeader__filters a.active, .siteHeader .siteHeader__filters a:hover {
-            background: #881212; } }
+            background: #1881b5; } }
 
 nav {
   position: fixed;
@@ -239,7 +363,7 @@ nav ul {
 
 .link {
   width: 100%;
-  max-width: 1024px;
+  max-width: 1240px;
   padding: 20px 0px;
   border-bottom: 1px solid #efefef;
   line-height: 1; }
@@ -247,9 +371,19 @@ nav ul {
     font-size: 18px;
     font-weight: bold;
     color: #aaa;
+    line-height: 18px;
     vertical-align: middle;
     padding-right: 20px;
     display: table-cell; }
+    .link .link__rank .link__upvote, .link .link__rank .link__downvote, .link .link__rank .link__rankNumber {
+      display: block;
+      font-size: 18px;
+      color: #aaa;
+      text-align: center; }
+    .link .link__rank .link__upvote {
+      padding-bottom: 2px; }
+    .link .link__rank .link__downvote {
+      margin-top: 5px; }
     @media (max-width: 767px) {
       .link .link__rank {
         font-size: 16px; } }
@@ -289,12 +423,17 @@ nav ul {
     padding: 10px 20px;
     color: white; }
   .channels .channels__list {
-    padding: 10px 20px; }
+    padding: 10px 10px; }
     .channels .channels__list li a {
       font-size: 14px;
-      color: #1fa0e1; }
-      .channels .channels__list li a.active {
-        font-weight: bold; }
+      width: 100%;
+      padding: 5px 10px;
+      display: block;
+      color: #1fa0e1;
+      border-radius: 3px; }
+      .channels .channels__list li a.active, .channels .channels__list li a:hover {
+        font-weight: bold;
+        background: #eee; }
   .channels .channels__actions {
     padding: 20px;
     border-top: 1px solid #efefef; }

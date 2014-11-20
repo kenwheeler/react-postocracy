@@ -7,9 +7,22 @@
     font-size: 18px;
     font-weight: bold;
     color: #aaa;
+    line-height: 18px;
     vertical-align: middle;
     padding-right: 20px;
     display: table-cell;
+    .link__upvote, .link__downvote, .link__rankNumber {
+      display: block;
+      font-size: 18px;
+      color: #aaa;
+      text-align: center;
+    }
+    .link__upvote {
+      padding-bottom: 2px;
+    }
+    .link__downvote {
+      margin-top: 5px;
+    }
     @include breakpoint($mobile){
       font-size: 16px;
     }
