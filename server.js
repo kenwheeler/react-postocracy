@@ -62,7 +62,7 @@ var API = require('./api/Api');
 var links = require('./mocks/links.js');
 
 // React
-var React = require('React');
+var React = require('react');
 require('node-jsx').install();
 var Router = require('react-router');
 var routes = require('./routes.js');
