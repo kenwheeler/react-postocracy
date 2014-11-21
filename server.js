@@ -107,14 +107,12 @@ app.get('/logout', function(req, res) {
 });
 
 app.get('*', isLoggedIn, function(req,res){
-  API.getLinks(function(links){
-    req.user && UserActions.loadUser(req.user.twitter);
-    Router.renderRoutesToString(routes, req.path, function(err, ar, html, data) {
-      res.render('index', {
-        markup: html,
-        links: links,
-        user: req.user ? JSON.stringify(req.user.twitter) : "[]"
-      });
+  req.user && UserActions.loadUser(req.user.twitter);
+  Router.renderRoutesToString(routes, req.path, function(err, ar, html, data) {
+    res.render('index', {
+      markup: html,
+      links: JSON.stringify(links),
+      user: req.user ? JSON.stringify(req.user.twitter) : "[]"
     });
   });
 });
