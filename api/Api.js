@@ -1,5 +1,4 @@
 var Promise = require('es6-promise').Promise;
-var http = require('http');
 var LinkActions = require('../app/actions/LinkActions');
 var UserActions = require('../app/actions/UserActions');
 var links = require('../mocks/links');
