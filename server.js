@@ -18,6 +18,7 @@ var passport = require('passport');
 var TwitterStrategy = require('passport-twitter').Strategy;
 var session = require('express-session');
 var UserActions = require('./app/actions/UserActions');
+var LinkActions = require('./app/actions/LinkActions');
 
 passport.serializeUser(function(user, done) {
   done(null, user.id);
@@ -107,6 +108,7 @@ app.get('/logout', function(req, res) {
 });
 
 app.get('*', isLoggedIn, function(req,res){
+  LinkActions.loadLinks(links);
   req.user && UserActions.loadUser(req.user.twitter);
   Router.renderRoutesToString(routes, req.path, function(err, ar, html, data) {
     res.render('index', {
