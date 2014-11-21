@@ -1,0 +1,36 @@
+.accountBox {
+  background: white;
+  box-shadow: 0px 0px 5px rgba(0,0,0,0.25);
+  border-radius: 3px;
+  margin-bottom: 20px;
+  @include breakpoint($mobile) {
+    margin-bottom: 0px;
+  }
+  .account__header {
+    font-size: 16px;
+    font-weight: bold;
+    background: $secondary;
+    padding: 10px 20px;
+    color: white;
+  }
+  .account__body {
+    padding: 10px 10px;
+  }
+  .account__actions {
+    padding: 20px;
+    border-top: 1px solid #efefef;
+    .account__action {
+      @extend .button__primary;
+      width: 100%;
+      display: inline-block;
+      text-align: center;
+      line-height: 1.2;
+    }
+  }
+  .account__photo {
+    border-radius: 100%;
+    border: 1px solid #eee;
+    margin: 5px;
+    display: block;
+  }
+}

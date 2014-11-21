@@ -7,7 +7,7 @@
     top: 0px;
     box-shadow: 0px 0px 5px rgba(0,0,0,0.5);
     .siteHeader__title {
-        margin: -2px 0px 2px;
+        margin: 0px;
         font-size: 20px;
         display: inline-block;
         font-weight: bold;
@@ -15,6 +15,7 @@
         padding: 20px;
         user-select: none;
         float: left;
+        vertical-align: middle;
         -webkit-user-select: none;
     }
     .siteHeader__filters {
@@ -24,7 +25,7 @@
             color: white;
             display: inline-block;
             padding: 3px 10px;
-            margin: 14px 5px;
+            margin: 15px 5px;
             font-size: 14px;
             min-width: 75px;
             border-radius: 3px;
@@ -54,9 +55,11 @@
     }
     .menuButton {
         display: none;
+        -webkit-appearance:none;
         @include breakpoint($mobile) {
             display: inline-block;
-            padding: 15px 20px;
+            padding: 17px 20px;
+            margin: 0;
         }
     }
 }

@@ -213,7 +213,7 @@ html, body, .container {
 
 body {
   background: #eee;
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: 'Open Sans', sans-serif;
   margin: 0;
   padding: 0; }
 
@@ -266,7 +266,7 @@ body {
   top: 0px;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5); }
   .siteHeader .siteHeader__title {
-    margin: -2px 0px 2px;
+    margin: 0px;
     font-size: 20px;
     display: inline-block;
     font-weight: bold;
@@ -274,6 +274,7 @@ body {
     padding: 20px;
     user-select: none;
     float: left;
+    vertical-align: middle;
     -webkit-user-select: none; }
   .siteHeader .siteHeader__filters {
     float: left;
@@ -282,7 +283,7 @@ body {
       color: white;
       display: inline-block;
       padding: 3px 10px;
-      margin: 14px 5px;
+      margin: 15px 5px;
       font-size: 14px;
       min-width: 75px;
       border-radius: 3px;
@@ -305,11 +306,13 @@ body {
           .siteHeader .siteHeader__filters a.active, .siteHeader .siteHeader__filters a:hover {
             background: #ff0d62; } }
   .siteHeader .menuButton {
-    display: none; }
+    display: none;
+    -webkit-appearance: none; }
     @media (max-width: 767px) {
       .siteHeader .menuButton {
         display: inline-block;
-        padding: 15px 20px; } }
+        padding: 17px 20px;
+        margin: 0; } }
 
 .navigation {
   display: none; }
@@ -322,16 +325,16 @@ body {
       bottom: 0px;
       width: 100%;
       background: #ccc;
-      transition: right 200ms ease;
-      -webkit-transition: right 200ms ease;
-      -moz-transition: right 200ms ease; }
+      transition: right 200ms cubic-bezier(0.4, 0, 0.2, 1);
+      -webkit-transition: right 200ms cubic-bezier(0.4, 0, 0.2, 1);
+      -moz-transition: right 200ms cubic-bezier(0.4, 0, 0.2, 1); }
       .navigation.active {
         right: 0px;
-        transition: right 200ms ease;
-        -webkit-transition: right 200ms ease;
-        -moz-transition: right 200ms ease; } }
+        transition: right 200ms cubic-bezier(0.4, 0, 0.2, 1);
+        -webkit-transition: right 200ms cubic-bezier(0.4, 0, 0.2, 1);
+        -moz-transition: right 200ms cubic-bezier(0.4, 0, 0.2, 1); } }
   .navigation .actionsList {
-    background: #0091a1;
+    background: #ff0d62;
     margin-right: 0; }
     .navigation .actionsList a {
       width: 25%;
@@ -425,9 +428,9 @@ body {
     .channels .channels__actions .channels__create {
       width: 100%; }
 
-.button, .button__primary, .channels .channels__actions .channels__create {
+.button, .button__primary, .channels .channels__actions .channels__create, .accountBox .account__actions .account__action {
   background: #ff4081;
-  box-shadow: 0px 3px 0px #d9004c;
+  box-shadow: 0px 3px 0px #ff0d62;
   border: 0;
   border-radius: 3px;
   padding: 10px 20px;
@@ -435,21 +438,21 @@ body {
   font-weight: bold;
   color: white;
   outline: none; }
-  .button:hover, .button__primary:hover, .channels .channels__actions .channels__create:hover {
+  .button:hover, .button__primary:hover, .channels .channels__actions .channels__create:hover, .accountBox .account__actions .account__action:hover {
     background: #ff0d62;
-    box-shadow: 0px 3px 0px #a6003a; }
-  .button:active, .button__primary:active, .channels .channels__actions .channels__create:active {
+    box-shadow: 0px 3px 0px #d9004c; }
+  .button:active, .button__primary:active, .channels .channels__actions .channels__create:active, .accountBox .account__actions .account__action:active {
     position: relative;
     top: 2px;
     box-shadow: none; }
 
-.button__primary, .channels .channels__actions .channels__create {
+.button__primary, .channels .channels__actions .channels__create, .accountBox .account__actions .account__action {
   background: #00bcd4;
-  box-shadow: 0px 3px 0px #00636e; }
-  .button__primary:hover, .channels .channels__actions .channels__create:hover {
+  box-shadow: 0px 3px 0px #0091a1; }
+  .button__primary:hover, .channels .channels__actions .channels__create:hover, .accountBox .account__actions .account__action:hover {
     background: #0091a1;
-    box-shadow: 0px 3px 0px #00353b; }
-  .button__primary:active, .channels .channels__actions .channels__create:active {
+    box-shadow: 0px 3px 0px #00636e; }
+  .button__primary:active, .channels .channels__actions .channels__create:active, .accountBox .account__actions .account__action:active {
     position: relative;
     top: 2px;
     box-shadow: none; }
@@ -472,3 +475,33 @@ body {
     @media (max-width: 767px) {
       .actionsList a {
         display: none; } }
+
+.accountBox {
+  background: white;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.25);
+  border-radius: 3px;
+  margin-bottom: 20px; }
+  @media (max-width: 767px) {
+    .accountBox {
+      margin-bottom: 0px; } }
+  .accountBox .account__header {
+    font-size: 16px;
+    font-weight: bold;
+    background: #ff4081;
+    padding: 10px 20px;
+    color: white; }
+  .accountBox .account__body {
+    padding: 10px 10px; }
+  .accountBox .account__actions {
+    padding: 20px;
+    border-top: 1px solid #efefef; }
+    .accountBox .account__actions .account__action {
+      width: 100%;
+      display: inline-block;
+      text-align: center;
+      line-height: 1.2; }
+  .accountBox .account__photo {
+    border-radius: 100%;
+    border: 1px solid #eee;
+    margin: 5px;
+    display: block; }

@@ -8,18 +8,18 @@
         bottom: 0px;
         width: 100%;
         background: #ccc;
-        transition: right 200ms ease;
-        -webkit-transition: right 200ms ease;
-        -moz-transition: right 200ms ease;
+        transition: right 200ms cubic-bezier(0.4, 0, 0.2, 1);;
+        -webkit-transition: right 200ms cubic-bezier(0.4, 0, 0.2, 1);;
+        -moz-transition: right 200ms cubic-bezier(0.4, 0, 0.2, 1);;
         &.active {
             right: 0px;
-            transition: right 200ms ease;
-            -webkit-transition: right 200ms ease;
-            -moz-transition: right 200ms ease;
+            transition: right 200ms cubic-bezier(0.4, 0, 0.2, 1);;
+            -webkit-transition: right 200ms cubic-bezier(0.4, 0, 0.2, 1);;
+            -moz-transition: right 200ms cubic-bezier(0.4, 0, 0.2, 1);;
         }
     }
     .actionsList {
-        background: darken($primary, 10%);
+        background: darken($secondary, 10%);
         margin-right: 0;
         a {
             width: 25%;

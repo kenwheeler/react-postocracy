@@ -1,5 +1,6 @@
 var React = require('react');
 var PureRenderMixin = React.addons.PureRenderMixin;
+var AccountBox = require('../elements/AccountBox');
 var ChannelList = require('../elements/ChannelList');
 
 module.exports = React.createClass({
@@ -7,6 +8,7 @@ module.exports = React.createClass({
   render: function() {
     return (
       <aside className="main__sidebar">
+        <AccountBox user={this.props.user} />
         <ChannelList />
       </aside>
     )

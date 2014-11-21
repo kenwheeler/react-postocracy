@@ -18,7 +18,7 @@ module.exports = [
   {
     id: 3,
     title: "Neural Networks That Describe Images",
-    url: "http://cs.stanford.edu/people/karpathy/deepimagesent/?hn", 
+    url: "http://cs.stanford.edu/people/karpathy/deepimagesent/?hn",
     user: "thekenwheeler",
     createdAt: "2014-11-19T23:55:32.264Z",
     commentCount: 15

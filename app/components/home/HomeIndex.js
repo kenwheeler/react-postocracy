@@ -11,7 +11,7 @@ module.exports = React.createClass({
       <DocumentTitle title='postocracy'>
         <main className="main">
           <Feed links={this.props.links} />
-          <Sidebar />
+          <Sidebar user={this.props.user} />
         </main>
       </DocumentTitle>
     )

@@ -4,7 +4,7 @@ var Immutable = require('immutable');
 var _links = [];
 
 function setLinks(links) {
-  _links = JSON.parse(links);
+  _links = links;
 }
 
 var LinkStore = McFly.createStore({

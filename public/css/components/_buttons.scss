@@ -1,6 +1,6 @@
 .button {
   background: $secondary;
-  box-shadow: 0px 3px 0px darken($secondary, 20%);
+  box-shadow: 0px 3px 0px darken($secondary, 10%);
   border: 0;
   border-radius: 3px;
   padding: 10px 20px;
@@ -10,7 +10,7 @@
   outline: none;
   &:hover {
     background: darken($secondary, 10%);
-    box-shadow: 0px 3px 0px darken($secondary, 30%);
+    box-shadow: 0px 3px 0px darken($secondary, 20%);
   }
   &:active {
     position: relative;
@@ -22,10 +22,10 @@
 .button__primary {
   @extend .button;
   background: $primary;
-  box-shadow: 0px 3px 0px darken($primary, 20%);
+  box-shadow: 0px 3px 0px darken($primary, 10%);
   &:hover {
     background: darken($primary, 10%);
-    box-shadow: 0px 3px 0px darken($primary, 30%);
+    box-shadow: 0px 3px 0px darken($primary, 20%);
   }
   &:active {
     position: relative;
