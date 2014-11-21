@@ -16,7 +16,19 @@ module.exports = React.createClass({
       actions = ""
       content = (
         <div className="account__body">
-          <img className="account__photo" src={this.props.user.profilePhoto}/>
+          <div className="account__photo">
+            <img src={this.props.user.profilePhoto && this.props.user.profilePhoto.replace('normal','bigger')}/>
+          </div>
+          <div className="account__user">
+            <p className="account__displayName">{this.props.user.displayName}</p>
+            <p className="account__userName">{this.props.user.username}</p>
+            <div className="account__subactions">
+              <a href="#">Profile</a>
+              <a href="#">Friends</a>
+              <a href="#">Settings</a>
+              <a href="/logout">Logout</a>
+            </div>
+          </div>
         </div>
       )
     }
