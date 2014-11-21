@@ -71,42 +71,34 @@ var routes = require('./routes.js');
 // Server Init
 var app = express();
 var port = process.env.PORT || 1337;
-
 app.engine('handlebars', exphbs({ defaultLayout: 'layout'}));
 app.set('view engine', 'handlebars');
-
 app.disable('etag');
 
 app.use(morgan('dev'))
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
 app.use(session({ secret: 'cocainerainboots', resave: true, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
-
 app.use("/", express.static(__dirname + "/public/"));
 
 app.get("/api/links", function(req,res){
   res.json(links)
 });
-
 app.get('/login', passport.authenticate('twitter'));
-
 app.get('/auth/twitter/callback',
   passport.authenticate('twitter', {
     successRedirect : '/',
     failureRedirect : '/'
   })
 );
-
 app.get('/logout', function(req, res) {
   req.logout();
   res.redirect('/');
 });
-
 app.get('*', isLoggedIn, function(req,res){
   LinkActions.loadLinks(links);
   UserActions.loadUser(req.user ? req.user.twitter : []);
