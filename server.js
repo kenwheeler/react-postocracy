@@ -109,7 +109,7 @@ app.get('/logout', function(req, res) {
 
 app.get('*', isLoggedIn, function(req,res){
   LinkActions.loadLinks(links);
-  req.user && UserActions.loadUser(req.user.twitter);
+  UserActions.loadUser(req.user ? req.user.twitter : []);
   Router.renderRoutesToString(routes, req.path, function(err, ar, html, data) {
     res.render('index', {
       markup: html,
