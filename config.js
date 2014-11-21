@@ -1,4 +1,9 @@
 module.exports = {
-  consumerKey: "-FILL-ME-IN-",
-  consumerSecret: "-FILL-ME-IN-"
+  twitter: {
+    consumerKey: "wcazBxtTQ9MjN071iDpJPowOE",
+    consumerSecret: "ab9r9RD4U88N2VDmYKcWra3tlxBpgGHUqDELwvDGAjeXTMUZBx",
+  }, 
+  mongo: {
+    url: "mongodb://localhost/postocracy"
+  }
 }

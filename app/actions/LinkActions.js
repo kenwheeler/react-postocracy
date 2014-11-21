@@ -1,9 +1,9 @@
 var McFly = require('../flux/McFly');
 
 var LinkActions = McFly.createActions({
-  setLinks: function(links){
+  loadLinks: function(links){
     return {
-      actionType: 'SET_LINKS',
+      actionType: 'LOAD_LINKS',
       links: links
     }
   }

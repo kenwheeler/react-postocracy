@@ -1,9 +1,9 @@
 var McFly = require('../flux/McFly');
 
 var UserActions = McFly.createActions({
-  setUser: function(user){
+  loadUser: function(user){
     return {
-      actionType: 'SET_USER',
+      actionType: 'LOAD_USER',
       user: user
     }
   }

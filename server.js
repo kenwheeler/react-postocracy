@@ -8,7 +8,7 @@ var config = require('./config.js');
 // DB
 var mongoose = require('mongoose');
 var User = require('./api/models/User');
-mongoose.connect(config.mongo.url);
+mongoose.connect(process.env.MONGOLAB_URI || config.mongo.url);
 
 // Auth
 var cookieParser = require('cookie-parser');
@@ -42,7 +42,6 @@ passport.use(new TwitterStrategy({
         return done(null, user);
       } else {
         var newUser = new User();
-        console.log(profile)
         newUser.twitter.id = profile.id;
         newUser.twitter.token = token;
         newUser.twitter.username = profile.username;
@@ -109,7 +108,7 @@ app.get('/logout', function(req, res) {
 
 app.get('*', isLoggedIn, function(req,res){
   API.getLinks(function(links){
-    req.user && UserActions.setUser(req.user.twitter);
+    req.user && UserActions.loadUser(req.user.twitter);
     Router.renderRoutesToString(routes, req.path, function(err, ar, html, data) {
       res.render('index', {
         markup: html,

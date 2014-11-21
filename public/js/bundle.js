@@ -7,8 +7,8 @@ var UserActions = require('./app/actions/UserActions');
 var links = JSON.parse(document.getElementById('links-state').innerHTML);
 var user = JSON.parse(document.getElementById('user-state').innerHTML);
 
-LinkActions.setLinks(links);
-user && UserActions.setUser(user);
+LinkActions.loadLinks(links);
+user && UserActions.loadUser(user);
 
 React.render(Router, document.body);
 
@@ -46,9 +46,9 @@ module.exports = Api;
 var McFly = require('../flux/McFly');
 
 var LinkActions = McFly.createActions({
-  setLinks: function(links){
+  loadLinks: function(links){
     return {
-      actionType: 'SET_LINKS',
+      actionType: 'LOAD_LINKS',
       links: links
     }
   }
@@ -72,9 +72,9 @@ module.exports = UIActions;
 var McFly = require('../flux/McFly');
 
 var UserActions = McFly.createActions({
-  setUser: function(user){
+  loadUser: function(user){
     return {
-      actionType: 'SET_USER',
+      actionType: 'LOAD_USER',
       user: user
     }
   }
@@ -447,7 +447,7 @@ var Immutable = require('immutable');
 
 var _links = [];
 
-function setLinks(links) {
+function loadLinks(links) {
   _links = links;
 }
 
@@ -456,8 +456,8 @@ var LinkStore = McFly.createStore({
     return _links;
   }
 },function(payload){
-  if(payload.actionType === "SET_LINKS") {
-      setLinks(payload.links);
+  if(payload.actionType === "LOAD_LINKS") {
+      loadLinks(payload.links);
       LinkStore.emitChange();
   }
 });
@@ -490,7 +490,7 @@ var Immutable = require('immutable');
 
 var _user = {};
 
-function setUser(user) {
+function loadUser(user) {
   _user = user;
 }
 
@@ -499,8 +499,8 @@ var UserStore = McFly.createStore({
     return _user;
   }
 },function(payload){
-  if(payload.actionType === "SET_USER") {
-      setUser(payload.user);
+  if(payload.actionType === "LOAD_USER") {
+      loadUser(payload.user);
       UserStore.emitChange();
   }
 });

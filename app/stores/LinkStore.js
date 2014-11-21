@@ -3,7 +3,7 @@ var Immutable = require('immutable');
 
 var _links = [];
 
-function setLinks(links) {
+function loadLinks(links) {
   _links = links;
 }
 
@@ -12,8 +12,8 @@ var LinkStore = McFly.createStore({
     return _links;
   }
 },function(payload){
-  if(payload.actionType === "SET_LINKS") {
-      setLinks(payload.links);
+  if(payload.actionType === "LOAD_LINKS") {
+      loadLinks(payload.links);
       LinkStore.emitChange();
   }
 });

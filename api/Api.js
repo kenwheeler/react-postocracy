@@ -6,7 +6,7 @@ var UserActions = require('../app/actions/UserActions');
 var Api = {
   getLinks: function(callback) {
     get().then(function(links){
-      LinkActions.setLinks(JSON.parse(links));
+      LinkActions.loadLinks(JSON.parse(links));
       callback && callback.call(this,links);
     });
   },

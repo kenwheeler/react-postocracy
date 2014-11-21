@@ -3,7 +3,7 @@ var Immutable = require('immutable');
 
 var _user = {};
 
-function setUser(user) {
+function loadUser(user) {
   _user = user;
 }
 
@@ -12,8 +12,8 @@ var UserStore = McFly.createStore({
     return _user;
   }
 },function(payload){
-  if(payload.actionType === "SET_USER") {
-      setUser(payload.user);
+  if(payload.actionType === "LOAD_USER") {
+      loadUser(payload.user);
       UserStore.emitChange();
   }
 });
