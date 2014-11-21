@@ -106,7 +106,7 @@ app.get('/logout', function(req, res) {
   res.redirect('/');
 });
 
-app.get('/', isLoggedIn, function(req,res){
+app.get('*', isLoggedIn, function(req,res){
   API.getLinks(function(links){
     req.user && UserActions.loadUser(req.user.twitter);
     Router.renderRoutesToString(routes, req.path, function(err, ar, html, data) {

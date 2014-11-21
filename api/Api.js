@@ -15,7 +15,7 @@ var Api = {
 
 function get(){
   return new Promise(function(resolve, reject) {
-    http.get('http://localhost:1337/api/links', function(res) {
+    http.get('http://postocracy.herokuapp.com/api/links', function(res) {
       res.on('data', function(data){
         resolve(data);
       })
