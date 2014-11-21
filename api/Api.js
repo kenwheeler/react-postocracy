@@ -19,7 +19,7 @@ function get(){
       res.on('data', function(data){
         resolve(data);
       })
-      res.on('error', function(){
+      res.on('error', function(err){
         reject();
       });
     });

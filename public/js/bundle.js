@@ -21,7 +21,7 @@ var UserActions = require('../app/actions/UserActions');
 var Api = {
   getLinks: function(callback) {
     get().then(function(links){
-      LinkActions.setLinks(JSON.parse(links));
+      LinkActions.loadLinks(JSON.parse(links));
       callback && callback.call(this,links);
     });
   },
@@ -30,11 +30,11 @@ var Api = {
 
 function get(){
   return new Promise(function(resolve, reject) {
-    http.get('http://localhost:1337/api/links', function(res) {
+    http.get('http://127.0.0.1/api/links', function(res) {
       res.on('data', function(data){
         resolve(data);
       })
-      res.on('error', function(){
+      res.on('error', function(err){
         reject();
       });
     });

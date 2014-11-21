@@ -4,8 +4,7 @@
   "description": "React App Template",
   "main": "app.js",
   "scripts": {
-    "dev": "gulp & nodemon server.js",
-    "start": "node server.js"
+    "start": "gulp & nodemon server.js"
   },
   "author": "Ken Wheeler",
   "license": "MIT",
