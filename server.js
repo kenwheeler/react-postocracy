@@ -77,6 +77,7 @@ app.use(session({
   saveUninitialized: true,
   store: new MongoStore({
       db : 'sessions',
+      url: process.env.MONGOLAB_URI || config.mongo.url
   })
 }));
 app.use(passport.initialize());
