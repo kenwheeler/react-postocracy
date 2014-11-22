@@ -17,6 +17,7 @@ var flash    = require('connect-flash');
 var passport = require('passport');
 var TwitterStrategy = require('passport-twitter').Strategy;
 var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
 
 require('node-jsx').install();
 var routes = require('./routes.js');
@@ -70,7 +71,14 @@ app.use(morgan('dev'))
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(session({ secret: 'cocainerainboots', resave: true, saveUninitialized: true }));
+app.use(session({
+  secret: 'cocainerainboots',
+  resave: true,
+  saveUninitialized: true,
+  store: new MongoStore({
+      db : 'sessions',
+  })
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
