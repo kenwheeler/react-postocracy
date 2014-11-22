@@ -9,7 +9,6 @@ module.exports = React.createClass({
   render: function() {
     return (
       <aside className="main__sidebar">
-        <SearchBox />
         <AccountBox user={this.props.user} />
         <ChannelList />
       </aside>

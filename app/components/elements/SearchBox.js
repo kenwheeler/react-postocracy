@@ -8,7 +8,7 @@ module.exports = React.createClass({
       <div className="searchBox">
         <div className="searchBox__searchInput">
           <input type="text" className="searchBox__input"/>
-          <button type="button" className="searchBox__button"><i className="icon-magnifying-glass"/></button>
+          <i className="icon-magnifying-glass"/>
         </div>
       </div>
     )

@@ -24,7 +24,6 @@ module.exports = React.createClass({
             <p className="account__userName">{this.props.user.username}</p>
             <div className="account__subactions">
               <a href="#">Profile</a>
-              <a href="#">Friends</a>
               <a href="#">Settings</a>
               <a href="/logout">Logout</a>
             </div>

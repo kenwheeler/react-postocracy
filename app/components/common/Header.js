@@ -1,6 +1,6 @@
 var React = require('react');
 var MenuButton = require('../elements/MenuButton');
-var ActionsList = require('../elements/ActionsList');
+var SearchBox = require('../elements/SearchBox');
 var UIActions = require('../../actions/UIActions');
 
 module.exports = React.createClass({
@@ -18,7 +18,7 @@ module.exports = React.createClass({
             <a href="#">New</a>
             <a href="#">Controversial</a>
           </div>
-          <ActionsList />
+          <SearchBox />
         </div>
       </header>
     )

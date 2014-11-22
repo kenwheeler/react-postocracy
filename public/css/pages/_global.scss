@@ -15,7 +15,7 @@ body {
 }
 
 .container {
-    padding-top: 64px;
+    padding-top: 62px;
     @include breakpoint($mobile){
       padding-top: 94px;
       width: 100%;
@@ -30,20 +30,24 @@ body {
 
 .main {
   @include container;
+  position: relative;
   margin: auto;
-  padding: 20px;
+  padding: 0;
   .main__feed {
     background: white;
     border-radius: 3px;
-    @include span(8);
-    box-shadow: 0px 0px 5px rgba(0,0,0,0.25);
+    @include span(9, false);
     @include breakpoint($mobile){
-      @include span(12);
+      @include span(12, false);
     }
   }
   .main__sidebar {
-    @include span(4, false);
-    padding-left: 20px;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    right: 0px;
+    background: $secondary;
+    @include span(3, false);
     @include breakpoint($mobile){
       display: none;
     }

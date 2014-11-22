@@ -127,7 +127,7 @@ module.exports = React.createClass({displayName: 'exports',
 },{"../elements/LinkList":15,"react":248}],8:[function(require,module,exports){
 var React = require('react');
 var MenuButton = require('../elements/MenuButton');
-var ActionsList = require('../elements/ActionsList');
+var SearchBox = require('../elements/SearchBox');
 var UIActions = require('../../actions/UIActions');
 
 module.exports = React.createClass({displayName: 'exports',
@@ -145,13 +145,13 @@ module.exports = React.createClass({displayName: 'exports',
             React.createElement("a", {href: "#"}, "New"), 
             React.createElement("a", {href: "#"}, "Controversial")
           ), 
-          React.createElement(ActionsList, null)
+          React.createElement(SearchBox, null)
         )
       )
     )
   }
 });
-},{"../../actions/UIActions":4,"../elements/ActionsList":12,"../elements/MenuButton":16,"react":248}],9:[function(require,module,exports){
+},{"../../actions/UIActions":4,"../elements/MenuButton":16,"../elements/SearchBox":17,"react":248}],9:[function(require,module,exports){
 var React = require('react');
 var Link = require('react-router').Link;
 var MenuButton = require('../elements/MenuButton');
@@ -185,7 +185,6 @@ module.exports = React.createClass({displayName: 'exports',
   render: function() {
     return (
       React.createElement("aside", {className: "main__sidebar"}, 
-        React.createElement(SearchBox, null), 
         React.createElement(AccountBox, {user: this.props.user}), 
         React.createElement(ChannelList, null)
       )
@@ -219,7 +218,6 @@ module.exports = React.createClass({displayName: 'exports',
             React.createElement("p", {className: "account__userName"}, this.props.user.username), 
             React.createElement("div", {className: "account__subactions"}, 
               React.createElement("a", {href: "#"}, "Profile"), 
-              React.createElement("a", {href: "#"}, "Friends"), 
               React.createElement("a", {href: "#"}, "Settings"), 
               React.createElement("a", {href: "/logout"}, "Logout")
             )
@@ -400,7 +398,7 @@ module.exports = React.createClass({displayName: 'exports',
       React.createElement("div", {className: "searchBox"}, 
         React.createElement("div", {className: "searchBox__searchInput"}, 
           React.createElement("input", {type: "text", className: "searchBox__input"}), 
-          React.createElement("button", {type: "button", className: "searchBox__button"}, React.createElement("i", {className: "icon-magnifying-glass"}))
+          React.createElement("i", {className: "icon-magnifying-glass"})
         )
       )
     )
