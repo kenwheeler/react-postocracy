@@ -17,8 +17,9 @@ var flash    = require('connect-flash');
 var passport = require('passport');
 var TwitterStrategy = require('passport-twitter').Strategy;
 var session = require('express-session');
-var UserActions = require('./app/actions/UserActions');
-var LinkActions = require('./app/actions/LinkActions');
+
+require('node-jsx').install();
+var routes = require('./routes.js');
 
 passport.serializeUser(function(user, done) {
   done(null, user.id);
@@ -58,16 +59,6 @@ passport.use(new TwitterStrategy({
   });
 }));
 
-// API
-var API = require('./api/Api');
-var links = require('./mocks/links.js');
-
-// React
-var React = require('react');
-require('node-jsx').install();
-var Router = require('react-router');
-var routes = require('./routes.js');
-
 // Server Init
 var app = express();
 var port = process.env.PORT || 1337;
@@ -83,11 +74,10 @@ app.use(session({ secret: 'cocainerainboots', resave: true, saveUninitialized: t
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
+
 app.use("/", express.static(__dirname + "/public/"));
 
-app.get("/api/links", function(req,res){
-  res.json(links)
-});
+app.get("/api/links", routes.api.links);
 app.get('/login', passport.authenticate('twitter'));
 app.get('/auth/twitter/callback',
   passport.authenticate('twitter', {
@@ -99,17 +89,7 @@ app.get('/logout', function(req, res) {
   req.logout();
   res.redirect('/');
 });
-app.get('*', isLoggedIn, function(req,res){
-  LinkActions.loadLinks(links);
-  UserActions.loadUser(req.user ? req.user.twitter : []);
-  Router.renderRoutesToString(routes, req.path, function(err, ar, html, data) {
-    res.render('index', {
-      markup: html,
-      links: JSON.stringify(links),
-      user: req.user ? JSON.stringify(req.user.twitter) : "[]"
-    });
-  });
-});
+app.get('*', isLoggedIn, routes.catchall);
 
 function isLoggedIn(req, res, next) {
   if (req.isAuthenticated())

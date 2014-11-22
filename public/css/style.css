@@ -251,7 +251,7 @@ body {
     top: 0px;
     bottom: 0px;
     right: 0px;
-    background: #ff4081;
+    background: #34495e;
     width: 25%;
     float: left; }
     @media (max-width: 767px) {
@@ -259,7 +259,7 @@ body {
         display: none; } }
 
 .siteHeader {
-  background: #00bcd4;
+  background: #e74c3c;
   color: white;
   text-align: right;
   position: fixed;
@@ -291,13 +291,13 @@ body {
       border-radius: 3px;
       text-align: center; }
       .siteHeader .siteHeader__filters a.active, .siteHeader .siteHeader__filters a:hover {
-        background: #0091a1; }
+        background: #d62a1a; }
     @media (max-width: 767px) {
       .siteHeader .siteHeader__filters {
         float: none;
         display: block;
         clear: left;
-        background: #ff4081; }
+        background: #34495e; }
         .siteHeader .siteHeader__filters a {
           padding: 5px;
           margin: 0;
@@ -306,7 +306,7 @@ body {
           float: left;
           border-radius: 0; }
           .siteHeader .siteHeader__filters a.active, .siteHeader .siteHeader__filters a:hover {
-            background: #ff0d62; } }
+            background: #222f3d; } }
   .siteHeader .menuButton {
     display: none;
     -webkit-appearance: none; }
@@ -337,7 +337,7 @@ body {
         -webkit-transition: right 200ms cubic-bezier(0.4, 0, 0.2, 1);
         -moz-transition: right 200ms cubic-bezier(0.4, 0, 0.2, 1); } }
   .navigation .actionsList {
-    background: #ff4081;
+    background: #34495e;
     margin-right: 0; }
     .navigation .actionsList a {
       width: 25%;
@@ -347,7 +347,7 @@ body {
       border-top: 1px solid rgba(0, 0, 0, 0.25);
       border-bottom: 1px solid rgba(0, 0, 0, 0.25); }
       .navigation .actionsList a:active, .navigation .actionsList a:hover {
-        background: #d9004c; }
+        background: #10161c; }
     .navigation .actionsList a:last-child {
       border-right: none; }
   .navigation .channels {
@@ -386,7 +386,7 @@ body {
   .link .link__title {
     font-size: 18px;
     display: block;
-    color: #ff4081;
+    color: #34495e;
     font-weight: bold; }
     @media (max-width: 767px) {
       .link .link__title {
@@ -397,10 +397,10 @@ body {
     color: #666;
     margin-top: 5px; }
     .link .link__addedby .link__user {
-      color: #00bcd4; }
+      color: #e74c3c; }
   .link .link__actions .link__action {
     display: inline-block;
-    color: #00bcd4;
+    color: #e74c3c;
     font-weight: bold;
     font-size: 12px;
     padding-right: 10px; }
@@ -413,7 +413,7 @@ body {
     font-size: 16px;
     font-weight: bold;
     padding: 10px 20px;
-    color: #00bcd4; }
+    color: #e74c3c; }
   .channels .channels__list {
     padding: 10px 10px; }
     .channels .channels__list li a {
@@ -421,7 +421,7 @@ body {
       width: 100%;
       padding: 5px 10px;
       display: block;
-      color: #ff4081;
+      color: #34495e;
       border-radius: 3px; }
       .channels .channels__list li a.active, .channels .channels__list li a:hover {
         font-weight: bold;
@@ -432,8 +432,8 @@ body {
       width: 100%; }
 
 .button, .button__primary, .channels .channels__actions .channels__create, .accountBox .account__actions .account__action {
-  background: #ff4081;
-  box-shadow: 0px 3px 0px #ff0d62;
+  background: #34495e;
+  box-shadow: 0px 3px 0px #222f3d;
   border: 0;
   border-radius: 3px;
   padding: 10px 20px;
@@ -442,19 +442,19 @@ body {
   color: white;
   outline: none; }
   .button:hover, .button__primary:hover, .channels .channels__actions .channels__create:hover, .accountBox .account__actions .account__action:hover {
-    background: #ff0d62;
-    box-shadow: 0px 3px 0px #d9004c; }
+    background: #222f3d;
+    box-shadow: 0px 3px 0px #10161c; }
   .button:active, .button__primary:active, .channels .channels__actions .channels__create:active, .accountBox .account__actions .account__action:active {
     position: relative;
     top: 2px;
     box-shadow: none; }
 
 .button__primary, .channels .channels__actions .channels__create, .accountBox .account__actions .account__action {
-  background: #00bcd4;
-  box-shadow: 0px 3px 0px #0091a1; }
+  background: #e74c3c;
+  box-shadow: 0px 3px 0px #d62a1a; }
   .button__primary:hover, .channels .channels__actions .channels__create:hover, .accountBox .account__actions .account__action:hover {
-    background: #0091a1;
-    box-shadow: 0px 3px 0px #00636e; }
+    background: #d62a1a;
+    box-shadow: 0px 3px 0px #a82115; }
   .button__primary:active, .channels .channels__actions .channels__create:active, .accountBox .account__actions .account__action:active {
     position: relative;
     top: 2px;
@@ -474,7 +474,7 @@ body {
     line-height: 20px;
     display: inline-block; }
     .actionsList a:active, .actionsList a:hover {
-      background: #0091a1; }
+      background: #d62a1a; }
     @media (max-width: 767px) {
       .actionsList a {
         display: none; } }
@@ -490,7 +490,7 @@ body {
   .accountBox .account__header {
     font-size: 16px;
     font-weight: bold;
-    background: #ff4081;
+    background: #34495e;
     padding: 10px 20px;
     color: white; }
   .accountBox .account__body {
@@ -506,7 +506,7 @@ body {
     display: table-cell; }
     .accountBox .account__photo img {
       border-radius: 10px;
-      border: 4px solid #00bcd4;
+      border: 4px solid #e74c3c;
       margin: 5px;
       display: block; }
   .accountBox .account__user {
@@ -518,14 +518,14 @@ body {
       line-height: 1;
       margin: 15px 10px 0px 10px; }
     .accountBox .account__user .account__userName {
-      color: #ff4081;
+      color: #34495e;
       margin: 0px 10px; }
     .accountBox .account__user .account__subactions {
       margin: 0px 10px;
       line-height: 1; }
       .accountBox .account__user .account__subactions a {
         display: inline-block;
-        color: #00bcd4;
+        color: #e74c3c;
         font-weight: bold;
         font-size: 12px;
         line-height: 1;
@@ -561,4 +561,4 @@ body {
       position: absolute;
       right: 20px;
       font-size: 24px;
-      color: #00bcd4; }
+      color: #e74c3c; }
