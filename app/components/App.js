@@ -2,8 +2,6 @@ var React =  require('react/addons');
 var Router = require('react-router');
 var RouteHandler = Router.RouteHandler;
 var PureRenderMixin = React.addons.PureRenderMixin;
-var Header = require('./common/Header');
-var Navigation = require('./common/Navigation');
 var UIStore = require('../stores/UIStore');
 var LinkStore = require('../stores/LinkStore');
 var UserStore = require('../stores/UserStore');
@@ -31,11 +29,7 @@ var App = React.createClass({
 
   render: function() {
     return (
-      <div className="container">
-        <Header navigationActive={this.state.navigationActive}/>
-        <Navigation navigationActive={this.state.navigationActive} user={this.state.user} />
-        <RouteHandler links={this.state.links} user={this.state.user} />
-      </div>
+      <RouteHandler links={this.state.links} user={this.state.user} params={this.props.params} navigationActive={this.state.navigationActive} />
     )
   }
 

@@ -2,6 +2,7 @@ var React = require('react');
 var MenuButton = require('../elements/MenuButton');
 var SearchBox = require('../elements/SearchBox');
 var UIActions = require('../../actions/UIActions');
+var Link = require('react-router').Link;
 
 module.exports = React.createClass({
   handleClick: function(){
@@ -14,9 +15,9 @@ module.exports = React.createClass({
           <h1 className="siteHeader__title">postocracy</h1>
           <MenuButton onClick={this.handleClick} active={this.props.navigationActive} />
           <div className="siteHeader__filters">
-            <a href="#" className="active">Top</a>
-            <a href="#">New</a>
-            <a href="#">Controversial</a>
+            <Link to="top">Top</Link>
+            <Link to="sort" params={{sort: 'new'}}>New</Link>
+            <Link to="sort" params={{sort: 'controversial'}}>Controversial</Link>
           </div>
           <SearchBox />
         </div>

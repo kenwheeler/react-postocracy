@@ -74,8 +74,6 @@ var React =  require('react/addons');
 var Router = require('react-router');
 var RouteHandler = Router.RouteHandler;
 var PureRenderMixin = React.addons.PureRenderMixin;
-var Header = require('./common/Header');
-var Navigation = require('./common/Navigation');
 var UIStore = require('../stores/UIStore');
 var LinkStore = require('../stores/LinkStore');
 var UserStore = require('../stores/UserStore');
@@ -103,18 +101,14 @@ var App = React.createClass({displayName: 'App',
 
   render: function() {
     return (
-      React.createElement("div", {className: "container"}, 
-        React.createElement(Header, {navigationActive: this.state.navigationActive}), 
-        React.createElement(Navigation, {navigationActive: this.state.navigationActive, user: this.state.user}), 
-        React.createElement(RouteHandler, {links: this.state.links, user: this.state.user})
-      )
+      React.createElement(RouteHandler, {links: this.state.links, user: this.state.user, params: this.props.params, navigationActive: this.state.navigationActive})
     )
   }
 
 });
 
 module.exports = App;
-},{"../../api/Api":2,"../stores/LinkStore":21,"../stores/UIStore":22,"../stores/UserStore":23,"./common/Header":9,"./common/Navigation":10,"react-router":54,"react/addons":85}],7:[function(require,module,exports){
+},{"../../api/Api":2,"../stores/LinkStore":21,"../stores/UIStore":22,"../stores/UserStore":23,"react-router":54,"react/addons":85}],7:[function(require,module,exports){
 var React = require('react');
 var Router = require('react-router');
 var Route = Router.Route;
@@ -122,7 +116,8 @@ var DefaultRoute = Router.DefaultRoute;
 
 var AppRoutes = (
   React.createElement(Route, {name: "app", path: "/", handler: require('./App')}, 
-    React.createElement(DefaultRoute, {name: "home", handler: require('./home/HomeIndex')})
+    React.createElement(Route, {name: "top", path: "/", handler: require('./home/HomeIndex')}), 
+    React.createElement(Route, {name: "sort", path: ":sort", handler: require('./home/HomeIndex')})
   )
 );
 
@@ -147,6 +142,7 @@ var React = require('react');
 var MenuButton = require('../elements/MenuButton');
 var SearchBox = require('../elements/SearchBox');
 var UIActions = require('../../actions/UIActions');
+var Link = require('react-router').Link;
 
 module.exports = React.createClass({displayName: 'exports',
   handleClick: function(){
@@ -159,9 +155,9 @@ module.exports = React.createClass({displayName: 'exports',
           React.createElement("h1", {className: "siteHeader__title"}, "postocracy"), 
           React.createElement(MenuButton, {onClick: this.handleClick, active: this.props.navigationActive}), 
           React.createElement("div", {className: "siteHeader__filters"}, 
-            React.createElement("a", {href: "#", className: "active"}, "Top"), 
-            React.createElement("a", {href: "#"}, "New"), 
-            React.createElement("a", {href: "#"}, "Controversial")
+            React.createElement(Link, {to: "top"}, "Top"), 
+            React.createElement(Link, {to: "sort", params: {sort: 'new'}}, "New"), 
+            React.createElement(Link, {to: "sort", params: {sort: 'controversial'}}, "Controversial")
           ), 
           React.createElement(SearchBox, null)
         )
@@ -169,7 +165,7 @@ module.exports = React.createClass({displayName: 'exports',
     )
   }
 });
-},{"../../actions/UIActions":4,"../elements/MenuButton":17,"../elements/SearchBox":18,"react":246}],10:[function(require,module,exports){
+},{"../../actions/UIActions":4,"../elements/MenuButton":17,"../elements/SearchBox":18,"react":246,"react-router":54}],10:[function(require,module,exports){
 var React = require('react');
 var Link = require('react-router').Link;
 var MenuButton = require('../elements/MenuButton');
@@ -281,7 +277,7 @@ module.exports = React.createClass({displayName: 'exports',
       React.createElement("div", {className: "channels"}, 
         React.createElement("h2", {className: "channels__header"}, "Channels"), 
         React.createElement("ul", {className: "channels__list"}, 
-          React.createElement("li", null, React.createElement(Link, {to: "home"}, "All"))
+          React.createElement("li", null, React.createElement(Link, {to: "app"}, "All"))
         ), 
         React.createElement("div", {className: "channels__actions"}, 
           React.createElement("button", {type: "button", className: "channels__create"}, "Create A Channel")
@@ -428,21 +424,28 @@ var PureRenderMixin = React.addons.PureRenderMixin;
 var DocumentTitle = require('react-document-title');
 var Feed = require('../common/Feed');
 var Sidebar = require('../common/Sidebar');
+var Header = require('../common/Header');
+var Navigation = require('../common/Navigation');
 
 module.exports = React.createClass({displayName: 'exports',
   mixins: [PureRenderMixin],
   render: function() {
+    console.log(this.props.params)
     return (
       React.createElement(DocumentTitle, {title: "postocracy"}, 
-        React.createElement("main", {className: "main"}, 
-          React.createElement(Feed, {links: this.props.links}), 
-          React.createElement(Sidebar, {user: this.props.user})
+        React.createElement("div", {className: "container"}, 
+          React.createElement(Header, {navigationActive: this.props.navigationActive}), 
+          React.createElement(Navigation, {navigationActive: this.props.navigationActive, user: this.props.user}), 
+          React.createElement("main", {className: "main"}, 
+            React.createElement(Feed, {links: this.props.links}), 
+            React.createElement(Sidebar, {user: this.props.user})
+          )
         )
       )
     )
   }
 });
-},{"../common/Feed":8,"../common/Sidebar":11,"react":246,"react-document-title":45}],20:[function(require,module,exports){
+},{"../common/Feed":8,"../common/Header":9,"../common/Navigation":10,"../common/Sidebar":11,"react":246,"react-document-title":45}],20:[function(require,module,exports){
 var McFly = require('mcfly');
 
 module.exports = new McFly();
