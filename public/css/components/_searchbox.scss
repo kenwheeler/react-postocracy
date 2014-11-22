@@ -33,7 +33,6 @@
       padding: 10px 20px;
       margin: 0;
       line-height: 1;
-      height: 40px;
       background: $secondary;
       color: white;
       border: none;
@@ -41,6 +40,9 @@
       -webkit-appearance: none;
       i {
         display: block;
+        height: 20px;
+        top: 2px;
+        position: relative;
       }
     }
   }

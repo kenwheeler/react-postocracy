@@ -366,22 +366,26 @@ var styles = {
   },
   active: {
     a: {
-      transform: "rotate(45deg)",
-      transformOrigin: "3 10",
       transition: "all 200ms cubic-bezier(0.4, 0, 0.2, 1);",
-      webkitTransform: "rotate(45deg)",
-      webkitTransformOrigin: "3 10"
+      transform: "rotate(45deg)",
+      transformOrigin: "3px 10px",
+      WebkitTransform: "rotate(45deg)",
+      WebkitTransformOrigin: "3px 10px",
+      MozTransform: "rotate(45deg)",
+      MozTransformOrigin: "3px 10px"
     },
     b: {
       opacity: 0,
       transition: "all 200ms cubic-bezier(0.4, 0, 0.2, 1);",
     },
     c: {
-      transform: "rotate(-45deg)",
-      transformOrigin: "0 16",
       transition: "all 200ms cubic-bezier(0.4, 0, 0.2, 1);",
-      webkitTransform: "rotate(-45deg)",
-      webkitTransformOrigin: "0 16",
+      transform: "rotate(-45deg)",
+      transformOrigin: "0px 16px",
+      WebkitTransform: "rotate(-45deg)",
+      WebkitTransformOrigin: "0px 16px",
+      mozTransform: "rotate(-45deg)",
+      mozTransformOrigin: "0px 16px"
     }
   }
 }

@@ -570,11 +570,13 @@ body {
       padding: 10px 20px;
       margin: 0;
       line-height: 1;
-      height: 40px;
       background: #ff4081;
       color: white;
       border: none;
       border-radius: 0px 3px 3px 0px;
       -webkit-appearance: none; }
       .searchBox .searchBox__searchInput .searchBox__button i {
-        display: block; }
+        display: block;
+        height: 20px;
+        top: 2px;
+        position: relative; }
