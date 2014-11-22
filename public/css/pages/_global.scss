@@ -36,9 +36,11 @@ body {
   .main__feed {
     background: white;
     border-radius: 3px;
-    @include span(9, false);
+    @include span(12, false);
+    padding-right: 300px;
     @include breakpoint($mobile){
       @include span(12, false);
+      padding-right: 0px;
     }
   }
   .main__sidebar {
@@ -47,7 +49,7 @@ body {
     bottom: 0px;
     right: 0px;
     background: $secondary;
-    @include span(3, false);
+    width: 300px;
     @include breakpoint($mobile){
       display: none;
     }

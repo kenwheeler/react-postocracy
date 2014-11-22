@@ -1,19 +1,10 @@
 var React = require('react');
 
-var touched = false;
-
 module.exports = React.createClass({
   handleClick: function(event){
-    if(event.nativeEvent.type == 'touchend') {
-      touched = true;
-    } else {
-      if(touched == true) {
-        touched = false;
-        return;
-      }
-    }
-    event.nativeEvent.stopPropagation();
-    event.nativeEvent.preventDefault();
+
+    event.preventDefault();
+
     this.props.onClick && this.props.onClick();
   },
   render: function() {

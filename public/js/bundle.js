@@ -335,20 +335,11 @@ module.exports = React.createClass({displayName: 'exports',
 },{"./Link":15,"react":246}],17:[function(require,module,exports){
 var React = require('react');
 
-var touched = false;
-
 module.exports = React.createClass({displayName: 'exports',
   handleClick: function(event){
-    if(event.nativeEvent.type == 'touchend') {
-      touched = true;
-    } else {
-      if(touched == true) {
-        touched = false;
-        return;
-      }
-    }
-    event.nativeEvent.stopPropagation();
-    event.nativeEvent.preventDefault();
+
+    event.preventDefault();
+
     this.props.onClick && this.props.onClick();
   },
   render: function() {
@@ -430,7 +421,6 @@ var Navigation = require('../common/Navigation');
 module.exports = React.createClass({displayName: 'exports',
   mixins: [PureRenderMixin],
   render: function() {
-    console.log(this.props.params)
     return (
       React.createElement(DocumentTitle, {title: "postocracy"}, 
         React.createElement("div", {className: "container"}, 

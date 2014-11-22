@@ -9,7 +9,6 @@ var Navigation = require('../common/Navigation');
 module.exports = React.createClass({
   mixins: [PureRenderMixin],
   render: function() {
-    console.log(this.props.params)
     return (
       <DocumentTitle title='postocracy'>
         <div className="container">
