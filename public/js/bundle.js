@@ -4,6 +4,7 @@ var Router = require('react-router')
 var routes = require('./app/components/Routes');
 var LinkActions = require('./app/actions/LinkActions');
 var UserActions = require('./app/actions/UserActions');
+var UIActions = require('./app/actions/UIActions');
 
 var links = JSON.parse(document.getElementById('links-state').innerHTML);
 var user = JSON.parse(document.getElementById('user-state').innerHTML);
@@ -13,24 +14,25 @@ user && UserActions.loadUser(user);
 
 Router.run(routes, Router.HistoryLocation, function (Handler, state) {
   var params = state.params;
-  React.render(React.createElement(Handler, {params: params}), document.body);
+  UIActions.setNavState(false);
+  React.render(React.createElement(Handler, {params: params}), document.body, function(){
+    nonbounce("content");
+  });
 });
-},{"./app/actions/LinkActions":3,"./app/actions/UserActions":5,"./app/components/Routes":7,"react":246,"react-router":54}],2:[function(require,module,exports){
-var Promise = require('es6-promise').Promise;
-var LinkActions = require('../app/actions/LinkActions');
-var UserActions = require('../app/actions/UserActions');
-var links = require('../mocks/links');
+},{"./app/actions/LinkActions":3,"./app/actions/UIActions":4,"./app/actions/UserActions":5,"./app/components/Routes":7,"react":246,"react-router":54}],2:[function(require,module,exports){
+var McFly = require('../flux/McFly');
 
-var Api = {
-  getLinks: function(callback) {
-    LinkActions.loadLinks(JSON.parse(links));
-    callback && callback.call(this,links);
-  },
+var ChannelActions = McFly.createActions({
+  loadChannels: function(channels){
+    return {
+      actionType: 'LOAD_CHANNELS',
+      links: links
+    }
+  }
+})
 
-}
-
-module.exports = Api;
-},{"../app/actions/LinkActions":3,"../app/actions/UserActions":5,"../mocks/links":24,"es6-promise":31}],3:[function(require,module,exports){
+module.exports = ChannelActions;
+},{"../flux/McFly":22}],3:[function(require,module,exports){
 var McFly = require('../flux/McFly');
 
 var LinkActions = McFly.createActions({
@@ -43,7 +45,7 @@ var LinkActions = McFly.createActions({
 })
 
 module.exports = LinkActions;
-},{"../flux/McFly":20}],4:[function(require,module,exports){
+},{"../flux/McFly":22}],4:[function(require,module,exports){
 var McFly = require('../flux/McFly');
 
 var UIActions = McFly.createActions({
@@ -56,7 +58,7 @@ var UIActions = McFly.createActions({
 })
 
 module.exports = UIActions;
-},{"../flux/McFly":20}],5:[function(require,module,exports){
+},{"../flux/McFly":22}],5:[function(require,module,exports){
 var McFly = require('../flux/McFly');
 
 var UserActions = McFly.createActions({
@@ -69,27 +71,27 @@ var UserActions = McFly.createActions({
 })
 
 module.exports = UserActions;
-},{"../flux/McFly":20}],6:[function(require,module,exports){
+},{"../flux/McFly":22}],6:[function(require,module,exports){
 var React =  require('react/addons');
 var Router = require('react-router');
 var RouteHandler = Router.RouteHandler;
 var PureRenderMixin = React.addons.PureRenderMixin;
 var UIStore = require('../stores/UIStore');
-var LinkStore = require('../stores/LinkStore');
 var UserStore = require('../stores/UserStore');
-var API = require('../../api/Api');
+var Sidebar = require('./common/Sidebar');
+var Header = require('./common/Header');
+var Navigation = require('./common/Navigation');
 
 function getState() {
   return {
     navigationActive: UIStore.getNavState(),
-    links: LinkStore.getLinks(),
     user: UserStore.getUser()
   }
 }
 
 var App = React.createClass({displayName: 'App',
 
-  mixins: [UIStore.mixin, LinkStore.mixin, UserStore.mixin, PureRenderMixin],
+  mixins: [UIStore.mixin, UserStore.mixin, PureRenderMixin],
 
   getInitialState: function(){
       return getState();
@@ -101,14 +103,23 @@ var App = React.createClass({displayName: 'App',
 
   render: function() {
     return (
-      React.createElement(RouteHandler, {links: this.state.links, user: this.state.user, params: this.props.params, navigationActive: this.state.navigationActive})
+      React.createElement("div", {className: "container"}, 
+        React.createElement(Header, {navigationActive: this.state.navigationActive}), 
+        React.createElement(Navigation, {navigationActive: this.state.navigationActive, user: this.state.user}), 
+        React.createElement("div", {className: "content", id: "content"}, 
+          React.createElement("main", {className: "main"}, 
+            React.createElement(RouteHandler, {user: this.state.user}), 
+            React.createElement(Sidebar, {user: this.state.user})
+          )
+        )
+      )
     )
   }
 
 });
 
 module.exports = App;
-},{"../../api/Api":2,"../stores/LinkStore":21,"../stores/UIStore":22,"../stores/UserStore":23,"react-router":54,"react/addons":85}],7:[function(require,module,exports){
+},{"../stores/UIStore":24,"../stores/UserStore":25,"./common/Header":11,"./common/Navigation":12,"./common/Sidebar":13,"react-router":54,"react/addons":85}],7:[function(require,module,exports){
 var React = require('react');
 var Router = require('react-router');
 var Route = Router.Route;
@@ -116,13 +127,97 @@ var DefaultRoute = Router.DefaultRoute;
 
 var AppRoutes = (
   React.createElement(Route, {name: "app", path: "/", handler: require('./App')}, 
-    React.createElement(Route, {name: "top", path: "/", handler: require('./home/HomeIndex')}), 
-    React.createElement(Route, {name: "sort", path: ":sort", handler: require('./home/HomeIndex')})
+    React.createElement(DefaultRoute, {handler: require('./home/Home')}), 
+    React.createElement(Route, {name: "sort", path: "/:sort", handler: require('./home/Home')}), 
+    React.createElement(Route, {name: "channelCreate", path: "/channel/create", handler: require('./channels/ChannelCreate')})
   )
 );
 
 module.exports = AppRoutes;
-},{"./App":6,"./home/HomeIndex":19,"react":246,"react-router":54}],8:[function(require,module,exports){
+},{"./App":6,"./channels/ChannelCreate":8,"./home/Home":21,"react":246,"react-router":54}],8:[function(require,module,exports){
+var React = require('react');
+var PureRenderMixin = React.addons.PureRenderMixin;
+var DocumentTitle = require('react-document-title');
+var ChannelForm = require('./ChannelForm');
+
+module.exports = React.createClass({displayName: 'exports',
+  mixins: [PureRenderMixin],
+  render: function() {
+    return (
+      React.createElement(DocumentTitle, {title: "postocracy | new channel"}, 
+        React.createElement(ChannelForm, {user: this.props.user})
+      )
+    )
+  }
+});
+},{"./ChannelForm":9,"react":246,"react-document-title":45}],9:[function(require,module,exports){
+var React = require('react');
+var PureRenderMixin = React.addons.PureRenderMixin;
+var ChannelActions = require('../../actions/ChannelActions');
+var superagent = require('superagent');
+
+module.exports = React.createClass({displayName: 'exports',
+  mixins: [PureRenderMixin],
+  getInitialState: function(){
+    return {
+      errors: [],
+      valid: true,
+      channelUnique: true,
+    }
+  },
+  validateForm: function(e){
+    return true;
+  },
+  checkUnique: function(){
+    var self = this;
+    superagent
+      .get('/api/channel/unique/')
+      .query({name: self.refs.name.getDOMNode().value})
+      .end(function(res){
+        self.setState({channelUnique: res.body.unique})
+      });
+  },
+  handleSubmit: function(e){
+    var self = this;
+    this.errors=[];
+    if(this.state.valid)
+      superagent
+        .post('/api/channel/')
+        .send({ name: self.refs.name.getDOMNode().value, description: self.refs.description.getDOMNode().value })
+        .end(function(error, res){
+          alert(res);
+        });
+    e.preventDefault();
+  },
+  render: function() {
+    var formErrors = this.state.errors.map(function(error){
+      return React.createElement("span", {className: "channel__error"}, error)
+    });
+    return (
+      React.createElement("section", {className: "main__feed main__feed--form"}, 
+        React.createElement("h2", null, "Create Channel"), 
+        React.createElement("form", {name: "channel-create", className: "channel__form", onSubmit: this.handleSubmit}, 
+          formErrors, 
+          React.createElement("div", {className: "form__row"}, 
+            React.createElement("label", {htmlFor: "name"}, "Name:"), 
+            React.createElement("input", {type: "text", name: "name", ref: "name", onKeyUp: this.checkUnique, placeholder: "Channel Name", autoComplete: "off"}), 
+            React.createElement("span", {className: "channel__unique"}, 
+              this.state.channelUnique ? React.createElement("i", {className: "icon-check"}) : React.createElement("i", {className: "icon-x"})
+            )
+          ), 
+          React.createElement("div", {className: "form__row"}, 
+            React.createElement("label", {htmlFor: "description"}, "Description:"), 
+            React.createElement("textarea", {name: "description", ref: "description", placeholder: "Describe your channel", rows: "5"})
+          ), 
+          React.createElement("div", {className: "form__row"}, 
+            React.createElement("button", {type: "submit"}, "Save Channel")
+          )
+        )
+      )
+    )
+  }
+});
+},{"../../actions/ChannelActions":2,"react":246,"superagent":247}],10:[function(require,module,exports){
 var React = require('react');
 var PureRenderMixin = React.addons.PureRenderMixin;
 var LinkList = require('../elements/LinkList');
@@ -137,10 +232,11 @@ module.exports = React.createClass({displayName: 'exports',
     )
   }
 });
-},{"../elements/LinkList":16,"react":246}],9:[function(require,module,exports){
+},{"../elements/LinkList":18,"react":246}],11:[function(require,module,exports){
 var React = require('react');
 var MenuButton = require('../elements/MenuButton');
 var SearchBox = require('../elements/SearchBox');
+var FilterBar = require('../elements/FilterBar');
 var UIActions = require('../../actions/UIActions');
 var Link = require('react-router').Link;
 
@@ -152,25 +248,18 @@ module.exports = React.createClass({displayName: 'exports',
     return (
       React.createElement("header", {className: "siteHeader"}, 
         React.createElement("div", {className: "contain"}, 
-          React.createElement("h1", {className: "siteHeader__title"}, "postocracy"), 
+          React.createElement("h1", {className: "siteHeader__title"}, React.createElement(Link, {to: "app"}, "postocracy")), 
           React.createElement(MenuButton, {onClick: this.handleClick, active: this.props.navigationActive}), 
-          React.createElement("div", {className: "siteHeader__filters"}, 
-            React.createElement(Link, {to: "top"}, "Top"), 
-            React.createElement(Link, {to: "sort", params: {sort: 'new'}}, "New"), 
-            React.createElement(Link, {to: "sort", params: {sort: 'controversial'}}, "Controversial")
-          ), 
+          React.createElement(FilterBar, null), 
           React.createElement(SearchBox, null)
         )
       )
     )
   }
 });
-},{"../../actions/UIActions":4,"../elements/MenuButton":17,"../elements/SearchBox":18,"react":246,"react-router":54}],10:[function(require,module,exports){
+},{"../../actions/UIActions":4,"../elements/FilterBar":16,"../elements/MenuButton":19,"../elements/SearchBox":20,"react":246,"react-router":54}],12:[function(require,module,exports){
 var React = require('react');
 var Link = require('react-router').Link;
-var MenuButton = require('../elements/MenuButton');
-var UIActions = require('../../actions/UIActions');
-var ActionsList = require('../elements/ActionsList');
 var ChannelList = require('../elements/ChannelList');
 var AccountBox = require('../elements/AccountBox');
 var SearchBox = require('../elements/SearchBox');
@@ -179,7 +268,6 @@ module.exports = React.createClass({displayName: 'exports',
   render: function() {
     return (
       React.createElement("nav", {className: 'navigation ' + (this.props.navigationActive ? 'active' : '')}, 
-        React.createElement(ActionsList, null), 
         React.createElement(SearchBox, null), 
         React.createElement(AccountBox, {user: this.props.user}), 
         React.createElement(ChannelList, null)
@@ -187,7 +275,7 @@ module.exports = React.createClass({displayName: 'exports',
     )
   }
 });
-},{"../../actions/UIActions":4,"../elements/AccountBox":12,"../elements/ActionsList":13,"../elements/ChannelList":14,"../elements/MenuButton":17,"../elements/SearchBox":18,"react":246,"react-router":54}],11:[function(require,module,exports){
+},{"../elements/AccountBox":14,"../elements/ChannelList":15,"../elements/SearchBox":20,"react":246,"react-router":54}],13:[function(require,module,exports){
 var React = require('react');
 var PureRenderMixin = React.addons.PureRenderMixin;
 var AccountBox = require('../elements/AccountBox');
@@ -205,7 +293,7 @@ module.exports = React.createClass({displayName: 'exports',
     )
   }
 });
-},{"../elements/AccountBox":12,"../elements/ChannelList":14,"../elements/SearchBox":18,"react":246}],12:[function(require,module,exports){
+},{"../elements/AccountBox":14,"../elements/ChannelList":15,"../elements/SearchBox":20,"react":246}],14:[function(require,module,exports){
 var React = require('react');
 var PureRenderMixin = React.addons.PureRenderMixin;
 
@@ -247,25 +335,7 @@ module.exports = React.createClass({displayName: 'exports',
     )
   }
 });
-},{"react":246}],13:[function(require,module,exports){
-var React = require('react');
-var PureRenderMixin = React.addons.PureRenderMixin;
-var Link = require('react-router').Link;
-
-module.exports = React.createClass({displayName: 'exports',
-  mixins: [PureRenderMixin],
-  render: function() {
-    return (
-      React.createElement("div", {className: "actionsList"}, 
-        React.createElement("a", {href: "#"}, React.createElement("i", {className: "icon-magnifying-glass"})), 
-        React.createElement("a", {href: "#"}, React.createElement("i", {className: "icon-mail"})), 
-        React.createElement("a", {href: "#"}, React.createElement("i", {className: "icon-torso"})), 
-        React.createElement("a", {href: "#"}, React.createElement("i", {className: "icon-widget"}))
-      )
-    )
-  }
-});
-},{"react":246,"react-router":54}],14:[function(require,module,exports){
+},{"react":246}],15:[function(require,module,exports){
 var React = require('react');
 var PureRenderMixin = React.addons.PureRenderMixin;
 var Link = require('react-router').Link;
@@ -280,13 +350,30 @@ module.exports = React.createClass({displayName: 'exports',
           React.createElement("li", null, React.createElement(Link, {to: "app"}, "All"))
         ), 
         React.createElement("div", {className: "channels__actions"}, 
-          React.createElement("button", {type: "button", className: "channels__create"}, "Create A Channel")
+          React.createElement(Link, {to: "channelCreate", className: "channels__create"}, "Create A Channel")
         )
       )
     )
   }
 });
-},{"react":246,"react-router":54}],15:[function(require,module,exports){
+},{"react":246,"react-router":54}],16:[function(require,module,exports){
+var React = require('react');
+var PureRenderMixin = React.addons.PureRenderMixin;
+var Link = require('react-router').Link;
+
+module.exports = React.createClass({displayName: 'exports',
+  mixins: [PureRenderMixin],
+  render: function() {
+    return (
+      React.createElement("div", {className: "siteHeader__filters"}, 
+        React.createElement(Link, {to: "sort", params: {sort: 'top'}}, "Top"), 
+        React.createElement(Link, {to: "sort", params: {sort: 'new'}}, "New"), 
+        React.createElement(Link, {to: "sort", params: {sort: 'controversial'}}, "Controversial")
+      )
+    )
+  }
+});
+},{"react":246,"react-router":54}],17:[function(require,module,exports){
 var React = require('react');
 var moment = require('moment');
 
@@ -314,7 +401,7 @@ module.exports = React.createClass({displayName: 'exports',
     )
   }
 });
-},{"moment":44,"react":246}],16:[function(require,module,exports){
+},{"moment":44,"react":246}],18:[function(require,module,exports){
 var React = require('react');
 var PureRenderMixin = React.addons.PureRenderMixin;
 var Link = require('./Link');
@@ -332,7 +419,7 @@ module.exports = React.createClass({displayName: 'exports',
     )
   }
 });
-},{"./Link":15,"react":246}],17:[function(require,module,exports){
+},{"./Link":17,"react":246}],19:[function(require,module,exports){
 var React = require('react');
 
 module.exports = React.createClass({displayName: 'exports',
@@ -392,7 +479,7 @@ var styles = {
     }
   }
 }
-},{"react":246}],18:[function(require,module,exports){
+},{"react":246}],20:[function(require,module,exports){
 var React = require('react');
 var PureRenderMixin = React.addons.PureRenderMixin;
 
@@ -409,37 +496,40 @@ module.exports = React.createClass({displayName: 'exports',
     )
   }
 });
-},{"react":246}],19:[function(require,module,exports){
+},{"react":246}],21:[function(require,module,exports){
 var React = require('react');
 var PureRenderMixin = React.addons.PureRenderMixin;
 var DocumentTitle = require('react-document-title');
+var LinkStore = require('../../stores/LinkStore');
 var Feed = require('../common/Feed');
-var Sidebar = require('../common/Sidebar');
-var Header = require('../common/Header');
-var Navigation = require('../common/Navigation');
+
+function getState() {
+  return {
+    links: LinkStore.getLinks()
+  }
+}
 
 module.exports = React.createClass({displayName: 'exports',
-  mixins: [PureRenderMixin],
+  mixins: [PureRenderMixin, LinkStore.mixin],
+  getInitialState: function(){
+      return getState();
+  },
+  onChange: function() {
+    this.setState(getState());
+  },
   render: function() {
     return (
-      React.createElement(DocumentTitle, {title: "postocracy"}, 
-        React.createElement("div", {className: "container"}, 
-          React.createElement(Header, {navigationActive: this.props.navigationActive}), 
-          React.createElement(Navigation, {navigationActive: this.props.navigationActive, user: this.props.user}), 
-          React.createElement("main", {className: "main"}, 
-            React.createElement(Feed, {links: this.props.links}), 
-            React.createElement(Sidebar, {user: this.props.user})
-          )
-        )
+      React.createElement(DocumentTitle, {title: "postocracy | home"}, 
+        React.createElement(Feed, {links: this.state.links})
       )
     )
   }
 });
-},{"../common/Feed":8,"../common/Header":9,"../common/Navigation":10,"../common/Sidebar":11,"react":246,"react-document-title":45}],20:[function(require,module,exports){
+},{"../../stores/LinkStore":23,"../common/Feed":10,"react":246,"react-document-title":45}],22:[function(require,module,exports){
 var McFly = require('mcfly');
 
 module.exports = new McFly();
-},{"mcfly":33}],21:[function(require,module,exports){
+},{"mcfly":33}],23:[function(require,module,exports){
 var McFly = require('../flux/McFly');
 var Immutable = require('immutable');
 
@@ -461,7 +551,7 @@ var LinkStore = McFly.createStore({
 });
 
 module.exports = LinkStore;
-},{"../flux/McFly":20,"immutable":32}],22:[function(require,module,exports){
+},{"../flux/McFly":22,"immutable":32}],24:[function(require,module,exports){
 var McFly = require('../flux/McFly');
 
 var _navigationActive = false;
@@ -482,7 +572,7 @@ var UIStore = McFly.createStore({
 });
 
 module.exports = UIStore;
-},{"../flux/McFly":20}],23:[function(require,module,exports){
+},{"../flux/McFly":22}],25:[function(require,module,exports){
 var McFly = require('../flux/McFly');
 var Immutable = require('immutable');
 
@@ -504,106 +594,7 @@ var UserStore = McFly.createStore({
 });
 
 module.exports = UserStore;
-},{"../flux/McFly":20,"immutable":32}],24:[function(require,module,exports){
-module.exports = [
-  {
-    id: 1,
-    title: "Node.js in Flame Graphs",
-    url: "http://techblog.netflix.com/2014/11/nodejs-in-flames.html",
-    user: "thekenwheeler",
-    createdAt: "2014-11-19T21:55:32.264Z",
-    commentCount: 5
-  },
-  {
-    id: 2,
-    title: "Cache is the new RAM",
-    url: "http://blog.memsql.com/cache-is-the-new-ram/",
-    user: "thekenwheeler",
-    createdAt: "2014-11-19T19:55:32.264Z",
-    commentCount: 2
-  },
-  {
-    id: 3,
-    title: "Neural Networks That Describe Images",
-    url: "http://cs.stanford.edu/people/karpathy/deepimagesent/?hn",
-    user: "thekenwheeler",
-    createdAt: "2014-11-19T23:55:32.264Z",
-    commentCount: 15
-  },
-  {
-    id: 4,
-    title: "Light Table 0.7.0",
-    url: "http://lighttable.com/2014/11/19/light-table-070/",
-    user: "thekenwheeler",
-    createdAt: "2014-11-14T21:55:32.264Z",
-    commentCount: 0
-  },
-  {
-    id: 5,
-    title: "Queues Don't Fix Overload",
-    url: "http://ferd.ca/queues-don-t-fix-overload.html",
-    user: "thekenwheeler",
-    createdAt: "2014-11-12T21:55:32.264Z",
-    commentCount: 3
-  },
-  {
-    id: 6,
-    title: "The Startup That Built Google’s First Self-Driving Car",
-    url: "http://spectrum.ieee.org/robotics/artificial-intelligence/the-unknown-startup-that-built-googles-first-selfdriving-car",
-    user: "thekenwheeler",
-    createdAt: "2014-11-11T21:55:32.264Z",
-    commentCount: 2
-  },
-  {
-    id: 7,
-    title: "Node.js in Flame Graphs",
-    url: "http://techblog.netflix.com/2014/11/nodejs-in-flames.html",
-    user: "thekenwheeler",
-    createdAt: "2014-11-19T21:55:32.264Z",
-    commentCount: 5
-  },
-  {
-    id: 8,
-    title: "Cache is the new RAM",
-    url: "http://blog.memsql.com/cache-is-the-new-ram/",
-    user: "thekenwheeler",
-    createdAt: "2014-11-19T19:55:32.264Z",
-    commentCount: 2
-  },
-  {
-    id: 9,
-    title: "Neural Networks That Describe Images",
-    url: "http://cs.stanford.edu/people/karpathy/deepimagesent/?hn",
-    user: "thekenwheeler",
-    createdAt: "2014-11-19T23:55:32.264Z",
-    commentCount: 15
-  },
-  {
-    id: 10,
-    title: "Light Table 0.7.0",
-    url: "http://lighttable.com/2014/11/19/light-table-070/",
-    user: "thekenwheeler",
-    createdAt: "2014-11-14T21:55:32.264Z",
-    commentCount: 0
-  },
-  {
-    id: 11,
-    title: "Queues Don't Fix Overload",
-    url: "http://ferd.ca/queues-don-t-fix-overload.html",
-    user: "thekenwheeler",
-    createdAt: "2014-11-12T21:55:32.264Z",
-    commentCount: 3
-  },
-  {
-    id: 12,
-    title: "The Startup That Built Google’s First Self-Driving Car",
-    url: "http://spectrum.ieee.org/robotics/artificial-intelligence/the-unknown-startup-that-built-googles-first-selfdriving-car",
-    user: "thekenwheeler",
-    createdAt: "2014-11-11T21:55:32.264Z",
-    commentCount: 2
-  },
-]
-},{}],25:[function(require,module,exports){
+},{"../flux/McFly":22,"immutable":32}],26:[function(require,module,exports){
 /*!
  * The buffer module from node.js, for the browser.
  *
@@ -1656,7 +1647,7 @@ function decodeUtf8Char (str) {
   }
 }
 
-},{"base64-js":26,"ieee754":27,"is-array":28}],26:[function(require,module,exports){
+},{"base64-js":27,"ieee754":28,"is-array":29}],27:[function(require,module,exports){
 var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 
 ;(function (exports) {
@@ -1778,7 +1769,7 @@ var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 	exports.fromByteArray = uint8ToBase64
 }(typeof exports === 'undefined' ? (this.base64js = {}) : exports))
 
-},{}],27:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 exports.read = function(buffer, offset, isLE, mLen, nBytes) {
   var e, m,
       eLen = nBytes * 8 - mLen - 1,
@@ -1864,7 +1855,7 @@ exports.write = function(buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128;
 };
 
-},{}],28:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 
 /**
  * isArray
@@ -1899,7 +1890,7 @@ module.exports = isArray || function (val) {
   return !! val && '[object Array]' == str.call(val);
 };
 
-},{}],29:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -2202,7 +2193,7 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
-},{}],30:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -2290,976 +2281,7 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-},{}],31:[function(require,module,exports){
-(function (process,global){
-/*!
- * @overview es6-promise - a tiny implementation of Promises/A+.
- * @copyright Copyright (c) 2014 Yehuda Katz, Tom Dale, Stefan Penner and contributors (Conversion to ES6 API by Jake Archibald)
- * @license   Licensed under MIT license
- *            See https://raw.githubusercontent.com/jakearchibald/es6-promise/master/LICENSE
- * @version   2.0.0
- */
-
-(function() {
-    "use strict";
-
-    function $$utils$$objectOrFunction(x) {
-      return typeof x === 'function' || (typeof x === 'object' && x !== null);
-    }
-
-    function $$utils$$isFunction(x) {
-      return typeof x === 'function';
-    }
-
-    function $$utils$$isMaybeThenable(x) {
-      return typeof x === 'object' && x !== null;
-    }
-
-    var $$utils$$_isArray;
-
-    if (!Array.isArray) {
-      $$utils$$_isArray = function (x) {
-        return Object.prototype.toString.call(x) === '[object Array]';
-      };
-    } else {
-      $$utils$$_isArray = Array.isArray;
-    }
-
-    var $$utils$$isArray = $$utils$$_isArray;
-    var $$utils$$now = Date.now || function() { return new Date().getTime(); };
-    function $$utils$$F() { }
-
-    var $$utils$$o_create = (Object.create || function (o) {
-      if (arguments.length > 1) {
-        throw new Error('Second argument not supported');
-      }
-      if (typeof o !== 'object') {
-        throw new TypeError('Argument must be an object');
-      }
-      $$utils$$F.prototype = o;
-      return new $$utils$$F();
-    });
-
-    var $$asap$$len = 0;
-
-    var $$asap$$default = function asap(callback, arg) {
-      $$asap$$queue[$$asap$$len] = callback;
-      $$asap$$queue[$$asap$$len + 1] = arg;
-      $$asap$$len += 2;
-      if ($$asap$$len === 2) {
-        // If len is 1, that means that we need to schedule an async flush.
-        // If additional callbacks are queued before the queue is flushed, they
-        // will be processed by this flush that we are scheduling.
-        $$asap$$scheduleFlush();
-      }
-    };
-
-    var $$asap$$browserGlobal = (typeof window !== 'undefined') ? window : {};
-    var $$asap$$BrowserMutationObserver = $$asap$$browserGlobal.MutationObserver || $$asap$$browserGlobal.WebKitMutationObserver;
-
-    // test for web worker but not in IE10
-    var $$asap$$isWorker = typeof Uint8ClampedArray !== 'undefined' &&
-      typeof importScripts !== 'undefined' &&
-      typeof MessageChannel !== 'undefined';
-
-    // node
-    function $$asap$$useNextTick() {
-      return function() {
-        process.nextTick($$asap$$flush);
-      };
-    }
-
-    function $$asap$$useMutationObserver() {
-      var iterations = 0;
-      var observer = new $$asap$$BrowserMutationObserver($$asap$$flush);
-      var node = document.createTextNode('');
-      observer.observe(node, { characterData: true });
-
-      return function() {
-        node.data = (iterations = ++iterations % 2);
-      };
-    }
-
-    // web worker
-    function $$asap$$useMessageChannel() {
-      var channel = new MessageChannel();
-      channel.port1.onmessage = $$asap$$flush;
-      return function () {
-        channel.port2.postMessage(0);
-      };
-    }
-
-    function $$asap$$useSetTimeout() {
-      return function() {
-        setTimeout($$asap$$flush, 1);
-      };
-    }
-
-    var $$asap$$queue = new Array(1000);
-
-    function $$asap$$flush() {
-      for (var i = 0; i < $$asap$$len; i+=2) {
-        var callback = $$asap$$queue[i];
-        var arg = $$asap$$queue[i+1];
-
-        callback(arg);
-
-        $$asap$$queue[i] = undefined;
-        $$asap$$queue[i+1] = undefined;
-      }
-
-      $$asap$$len = 0;
-    }
-
-    var $$asap$$scheduleFlush;
-
-    // Decide what async method to use to triggering processing of queued callbacks:
-    if (typeof process !== 'undefined' && {}.toString.call(process) === '[object process]') {
-      $$asap$$scheduleFlush = $$asap$$useNextTick();
-    } else if ($$asap$$BrowserMutationObserver) {
-      $$asap$$scheduleFlush = $$asap$$useMutationObserver();
-    } else if ($$asap$$isWorker) {
-      $$asap$$scheduleFlush = $$asap$$useMessageChannel();
-    } else {
-      $$asap$$scheduleFlush = $$asap$$useSetTimeout();
-    }
-
-    function $$$internal$$noop() {}
-    var $$$internal$$PENDING   = void 0;
-    var $$$internal$$FULFILLED = 1;
-    var $$$internal$$REJECTED  = 2;
-    var $$$internal$$GET_THEN_ERROR = new $$$internal$$ErrorObject();
-
-    function $$$internal$$selfFullfillment() {
-      return new TypeError("You cannot resolve a promise with itself");
-    }
-
-    function $$$internal$$cannotReturnOwn() {
-      return new TypeError('A promises callback cannot return that same promise.')
-    }
-
-    function $$$internal$$getThen(promise) {
-      try {
-        return promise.then;
-      } catch(error) {
-        $$$internal$$GET_THEN_ERROR.error = error;
-        return $$$internal$$GET_THEN_ERROR;
-      }
-    }
-
-    function $$$internal$$tryThen(then, value, fulfillmentHandler, rejectionHandler) {
-      try {
-        then.call(value, fulfillmentHandler, rejectionHandler);
-      } catch(e) {
-        return e;
-      }
-    }
-
-    function $$$internal$$handleForeignThenable(promise, thenable, then) {
-       $$asap$$default(function(promise) {
-        var sealed = false;
-        var error = $$$internal$$tryThen(then, thenable, function(value) {
-          if (sealed) { return; }
-          sealed = true;
-          if (thenable !== value) {
-            $$$internal$$resolve(promise, value);
-          } else {
-            $$$internal$$fulfill(promise, value);
-          }
-        }, function(reason) {
-          if (sealed) { return; }
-          sealed = true;
-
-          $$$internal$$reject(promise, reason);
-        }, 'Settle: ' + (promise._label || ' unknown promise'));
-
-        if (!sealed && error) {
-          sealed = true;
-          $$$internal$$reject(promise, error);
-        }
-      }, promise);
-    }
-
-    function $$$internal$$handleOwnThenable(promise, thenable) {
-      if (thenable._state === $$$internal$$FULFILLED) {
-        $$$internal$$fulfill(promise, thenable._result);
-      } else if (promise._state === $$$internal$$REJECTED) {
-        $$$internal$$reject(promise, thenable._result);
-      } else {
-        $$$internal$$subscribe(thenable, undefined, function(value) {
-          $$$internal$$resolve(promise, value);
-        }, function(reason) {
-          $$$internal$$reject(promise, reason);
-        });
-      }
-    }
-
-    function $$$internal$$handleMaybeThenable(promise, maybeThenable) {
-      if (maybeThenable.constructor === promise.constructor) {
-        $$$internal$$handleOwnThenable(promise, maybeThenable);
-      } else {
-        var then = $$$internal$$getThen(maybeThenable);
-
-        if (then === $$$internal$$GET_THEN_ERROR) {
-          $$$internal$$reject(promise, $$$internal$$GET_THEN_ERROR.error);
-        } else if (then === undefined) {
-          $$$internal$$fulfill(promise, maybeThenable);
-        } else if ($$utils$$isFunction(then)) {
-          $$$internal$$handleForeignThenable(promise, maybeThenable, then);
-        } else {
-          $$$internal$$fulfill(promise, maybeThenable);
-        }
-      }
-    }
-
-    function $$$internal$$resolve(promise, value) {
-      if (promise === value) {
-        $$$internal$$reject(promise, $$$internal$$selfFullfillment());
-      } else if ($$utils$$objectOrFunction(value)) {
-        $$$internal$$handleMaybeThenable(promise, value);
-      } else {
-        $$$internal$$fulfill(promise, value);
-      }
-    }
-
-    function $$$internal$$publishRejection(promise) {
-      if (promise._onerror) {
-        promise._onerror(promise._result);
-      }
-
-      $$$internal$$publish(promise);
-    }
-
-    function $$$internal$$fulfill(promise, value) {
-      if (promise._state !== $$$internal$$PENDING) { return; }
-
-      promise._result = value;
-      promise._state = $$$internal$$FULFILLED;
-
-      if (promise._subscribers.length === 0) {
-      } else {
-        $$asap$$default($$$internal$$publish, promise);
-      }
-    }
-
-    function $$$internal$$reject(promise, reason) {
-      if (promise._state !== $$$internal$$PENDING) { return; }
-      promise._state = $$$internal$$REJECTED;
-      promise._result = reason;
-
-      $$asap$$default($$$internal$$publishRejection, promise);
-    }
-
-    function $$$internal$$subscribe(parent, child, onFulfillment, onRejection) {
-      var subscribers = parent._subscribers;
-      var length = subscribers.length;
-
-      parent._onerror = null;
-
-      subscribers[length] = child;
-      subscribers[length + $$$internal$$FULFILLED] = onFulfillment;
-      subscribers[length + $$$internal$$REJECTED]  = onRejection;
-
-      if (length === 0 && parent._state) {
-        $$asap$$default($$$internal$$publish, parent);
-      }
-    }
-
-    function $$$internal$$publish(promise) {
-      var subscribers = promise._subscribers;
-      var settled = promise._state;
-
-      if (subscribers.length === 0) { return; }
-
-      var child, callback, detail = promise._result;
-
-      for (var i = 0; i < subscribers.length; i += 3) {
-        child = subscribers[i];
-        callback = subscribers[i + settled];
-
-        if (child) {
-          $$$internal$$invokeCallback(settled, child, callback, detail);
-        } else {
-          callback(detail);
-        }
-      }
-
-      promise._subscribers.length = 0;
-    }
-
-    function $$$internal$$ErrorObject() {
-      this.error = null;
-    }
-
-    var $$$internal$$TRY_CATCH_ERROR = new $$$internal$$ErrorObject();
-
-    function $$$internal$$tryCatch(callback, detail) {
-      try {
-        return callback(detail);
-      } catch(e) {
-        $$$internal$$TRY_CATCH_ERROR.error = e;
-        return $$$internal$$TRY_CATCH_ERROR;
-      }
-    }
-
-    function $$$internal$$invokeCallback(settled, promise, callback, detail) {
-      var hasCallback = $$utils$$isFunction(callback),
-          value, error, succeeded, failed;
-
-      if (hasCallback) {
-        value = $$$internal$$tryCatch(callback, detail);
-
-        if (value === $$$internal$$TRY_CATCH_ERROR) {
-          failed = true;
-          error = value.error;
-          value = null;
-        } else {
-          succeeded = true;
-        }
-
-        if (promise === value) {
-          $$$internal$$reject(promise, $$$internal$$cannotReturnOwn());
-          return;
-        }
-
-      } else {
-        value = detail;
-        succeeded = true;
-      }
-
-      if (promise._state !== $$$internal$$PENDING) {
-        // noop
-      } else if (hasCallback && succeeded) {
-        $$$internal$$resolve(promise, value);
-      } else if (failed) {
-        $$$internal$$reject(promise, error);
-      } else if (settled === $$$internal$$FULFILLED) {
-        $$$internal$$fulfill(promise, value);
-      } else if (settled === $$$internal$$REJECTED) {
-        $$$internal$$reject(promise, value);
-      }
-    }
-
-    function $$$internal$$initializePromise(promise, resolver) {
-      try {
-        resolver(function resolvePromise(value){
-          $$$internal$$resolve(promise, value);
-        }, function rejectPromise(reason) {
-          $$$internal$$reject(promise, reason);
-        });
-      } catch(e) {
-        $$$internal$$reject(promise, e);
-      }
-    }
-
-    function $$$enumerator$$makeSettledResult(state, position, value) {
-      if (state === $$$internal$$FULFILLED) {
-        return {
-          state: 'fulfilled',
-          value: value
-        };
-      } else {
-        return {
-          state: 'rejected',
-          reason: value
-        };
-      }
-    }
-
-    function $$$enumerator$$Enumerator(Constructor, input, abortOnReject, label) {
-      this._instanceConstructor = Constructor;
-      this.promise = new Constructor($$$internal$$noop, label);
-      this._abortOnReject = abortOnReject;
-
-      if (this._validateInput(input)) {
-        this._input     = input;
-        this.length     = input.length;
-        this._remaining = input.length;
-
-        this._init();
-
-        if (this.length === 0) {
-          $$$internal$$fulfill(this.promise, this._result);
-        } else {
-          this.length = this.length || 0;
-          this._enumerate();
-          if (this._remaining === 0) {
-            $$$internal$$fulfill(this.promise, this._result);
-          }
-        }
-      } else {
-        $$$internal$$reject(this.promise, this._validationError());
-      }
-    }
-
-    $$$enumerator$$Enumerator.prototype._validateInput = function(input) {
-      return $$utils$$isArray(input);
-    };
-
-    $$$enumerator$$Enumerator.prototype._validationError = function() {
-      return new Error('Array Methods must be provided an Array');
-    };
-
-    $$$enumerator$$Enumerator.prototype._init = function() {
-      this._result = new Array(this.length);
-    };
-
-    var $$$enumerator$$default = $$$enumerator$$Enumerator;
-
-    $$$enumerator$$Enumerator.prototype._enumerate = function() {
-      var length  = this.length;
-      var promise = this.promise;
-      var input   = this._input;
-
-      for (var i = 0; promise._state === $$$internal$$PENDING && i < length; i++) {
-        this._eachEntry(input[i], i);
-      }
-    };
-
-    $$$enumerator$$Enumerator.prototype._eachEntry = function(entry, i) {
-      var c = this._instanceConstructor;
-      if ($$utils$$isMaybeThenable(entry)) {
-        if (entry.constructor === c && entry._state !== $$$internal$$PENDING) {
-          entry._onerror = null;
-          this._settledAt(entry._state, i, entry._result);
-        } else {
-          this._willSettleAt(c.resolve(entry), i);
-        }
-      } else {
-        this._remaining--;
-        this._result[i] = this._makeResult($$$internal$$FULFILLED, i, entry);
-      }
-    };
-
-    $$$enumerator$$Enumerator.prototype._settledAt = function(state, i, value) {
-      var promise = this.promise;
-
-      if (promise._state === $$$internal$$PENDING) {
-        this._remaining--;
-
-        if (this._abortOnReject && state === $$$internal$$REJECTED) {
-          $$$internal$$reject(promise, value);
-        } else {
-          this._result[i] = this._makeResult(state, i, value);
-        }
-      }
-
-      if (this._remaining === 0) {
-        $$$internal$$fulfill(promise, this._result);
-      }
-    };
-
-    $$$enumerator$$Enumerator.prototype._makeResult = function(state, i, value) {
-      return value;
-    };
-
-    $$$enumerator$$Enumerator.prototype._willSettleAt = function(promise, i) {
-      var enumerator = this;
-
-      $$$internal$$subscribe(promise, undefined, function(value) {
-        enumerator._settledAt($$$internal$$FULFILLED, i, value);
-      }, function(reason) {
-        enumerator._settledAt($$$internal$$REJECTED, i, reason);
-      });
-    };
-
-    var $$promise$all$$default = function all(entries, label) {
-      return new $$$enumerator$$default(this, entries, true /* abort on reject */, label).promise;
-    };
-
-    var $$promise$race$$default = function race(entries, label) {
-      /*jshint validthis:true */
-      var Constructor = this;
-
-      var promise = new Constructor($$$internal$$noop, label);
-
-      if (!$$utils$$isArray(entries)) {
-        $$$internal$$reject(promise, new TypeError('You must pass an array to race.'));
-        return promise;
-      }
-
-      var length = entries.length;
-
-      function onFulfillment(value) {
-        $$$internal$$resolve(promise, value);
-      }
-
-      function onRejection(reason) {
-        $$$internal$$reject(promise, reason);
-      }
-
-      for (var i = 0; promise._state === $$$internal$$PENDING && i < length; i++) {
-        $$$internal$$subscribe(Constructor.resolve(entries[i]), undefined, onFulfillment, onRejection);
-      }
-
-      return promise;
-    };
-
-    var $$promise$resolve$$default = function resolve(object, label) {
-      /*jshint validthis:true */
-      var Constructor = this;
-
-      if (object && typeof object === 'object' && object.constructor === Constructor) {
-        return object;
-      }
-
-      var promise = new Constructor($$$internal$$noop, label);
-      $$$internal$$resolve(promise, object);
-      return promise;
-    };
-
-    var $$promise$reject$$default = function reject(reason, label) {
-      /*jshint validthis:true */
-      var Constructor = this;
-      var promise = new Constructor($$$internal$$noop, label);
-      $$$internal$$reject(promise, reason);
-      return promise;
-    };
-
-    var $$es6$promise$promise$$counter = 0;
-
-    function $$es6$promise$promise$$needsResolver() {
-      throw new TypeError('You must pass a resolver function as the first argument to the promise constructor');
-    }
-
-    function $$es6$promise$promise$$needsNew() {
-      throw new TypeError("Failed to construct 'Promise': Please use the 'new' operator, this object constructor cannot be called as a function.");
-    }
-
-    var $$es6$promise$promise$$default = $$es6$promise$promise$$Promise;
-
-    /**
-      Promise objects represent the eventual result of an asynchronous operation. The
-      primary way of interacting with a promise is through its `then` method, which
-      registers callbacks to receive either a promise’s eventual value or the reason
-      why the promise cannot be fulfilled.
-
-      Terminology
-      -----------
-
-      - `promise` is an object or function with a `then` method whose behavior conforms to this specification.
-      - `thenable` is an object or function that defines a `then` method.
-      - `value` is any legal JavaScript value (including undefined, a thenable, or a promise).
-      - `exception` is a value that is thrown using the throw statement.
-      - `reason` is a value that indicates why a promise was rejected.
-      - `settled` the final resting state of a promise, fulfilled or rejected.
-
-      A promise can be in one of three states: pending, fulfilled, or rejected.
-
-      Promises that are fulfilled have a fulfillment value and are in the fulfilled
-      state.  Promises that are rejected have a rejection reason and are in the
-      rejected state.  A fulfillment value is never a thenable.
-
-      Promises can also be said to *resolve* a value.  If this value is also a
-      promise, then the original promise's settled state will match the value's
-      settled state.  So a promise that *resolves* a promise that rejects will
-      itself reject, and a promise that *resolves* a promise that fulfills will
-      itself fulfill.
-
-
-      Basic Usage:
-      ------------
-
-      ```js
-      var promise = new Promise(function(resolve, reject) {
-        // on success
-        resolve(value);
-
-        // on failure
-        reject(reason);
-      });
-
-      promise.then(function(value) {
-        // on fulfillment
-      }, function(reason) {
-        // on rejection
-      });
-      ```
-
-      Advanced Usage:
-      ---------------
-
-      Promises shine when abstracting away asynchronous interactions such as
-      `XMLHttpRequest`s.
-
-      ```js
-      function getJSON(url) {
-        return new Promise(function(resolve, reject){
-          var xhr = new XMLHttpRequest();
-
-          xhr.open('GET', url);
-          xhr.onreadystatechange = handler;
-          xhr.responseType = 'json';
-          xhr.setRequestHeader('Accept', 'application/json');
-          xhr.send();
-
-          function handler() {
-            if (this.readyState === this.DONE) {
-              if (this.status === 200) {
-                resolve(this.response);
-              } else {
-                reject(new Error('getJSON: `' + url + '` failed with status: [' + this.status + ']'));
-              }
-            }
-          };
-        });
-      }
-
-      getJSON('/posts.json').then(function(json) {
-        // on fulfillment
-      }, function(reason) {
-        // on rejection
-      });
-      ```
-
-      Unlike callbacks, promises are great composable primitives.
-
-      ```js
-      Promise.all([
-        getJSON('/posts'),
-        getJSON('/comments')
-      ]).then(function(values){
-        values[0] // => postsJSON
-        values[1] // => commentsJSON
-
-        return values;
-      });
-      ```
-
-      @class Promise
-      @param {function} resolver
-      @param {String} label optional string for labeling the promise.
-      Useful for tooling.
-      @constructor
-    */
-    function $$es6$promise$promise$$Promise(resolver, label) {
-      this._id = $$es6$promise$promise$$counter++;
-      this._label = label;
-      this._state = undefined;
-      this._result = undefined;
-      this._subscribers = [];
-
-      if ($$$internal$$noop !== resolver) {
-        if (!$$utils$$isFunction(resolver)) {
-          $$es6$promise$promise$$needsResolver();
-        }
-
-        if (!(this instanceof $$es6$promise$promise$$Promise)) {
-          $$es6$promise$promise$$needsNew();
-        }
-
-        $$$internal$$initializePromise(this, resolver);
-      }
-    }
-
-    $$es6$promise$promise$$Promise.all = $$promise$all$$default;
-    $$es6$promise$promise$$Promise.race = $$promise$race$$default;
-    $$es6$promise$promise$$Promise.resolve = $$promise$resolve$$default;
-    $$es6$promise$promise$$Promise.reject = $$promise$reject$$default;
-
-    $$es6$promise$promise$$Promise.prototype = {
-      constructor: $$es6$promise$promise$$Promise,
-
-    /**
-      The primary way of interacting with a promise is through its `then` method,
-      which registers callbacks to receive either a promise's eventual value or the
-      reason why the promise cannot be fulfilled.
-
-      ```js
-      findUser().then(function(user){
-        // user is available
-      }, function(reason){
-        // user is unavailable, and you are given the reason why
-      });
-      ```
-
-      Chaining
-      --------
-
-      The return value of `then` is itself a promise.  This second, 'downstream'
-      promise is resolved with the return value of the first promise's fulfillment
-      or rejection handler, or rejected if the handler throws an exception.
-
-      ```js
-      findUser().then(function (user) {
-        return user.name;
-      }, function (reason) {
-        return 'default name';
-      }).then(function (userName) {
-        // If `findUser` fulfilled, `userName` will be the user's name, otherwise it
-        // will be `'default name'`
-      });
-
-      findUser().then(function (user) {
-        throw new Error('Found user, but still unhappy');
-      }, function (reason) {
-        throw new Error('`findUser` rejected and we're unhappy');
-      }).then(function (value) {
-        // never reached
-      }, function (reason) {
-        // if `findUser` fulfilled, `reason` will be 'Found user, but still unhappy'.
-        // If `findUser` rejected, `reason` will be '`findUser` rejected and we're unhappy'.
-      });
-      ```
-      If the downstream promise does not specify a rejection handler, rejection reasons will be propagated further downstream.
-
-      ```js
-      findUser().then(function (user) {
-        throw new PedagogicalException('Upstream error');
-      }).then(function (value) {
-        // never reached
-      }).then(function (value) {
-        // never reached
-      }, function (reason) {
-        // The `PedgagocialException` is propagated all the way down to here
-      });
-      ```
-
-      Assimilation
-      ------------
-
-      Sometimes the value you want to propagate to a downstream promise can only be
-      retrieved asynchronously. This can be achieved by returning a promise in the
-      fulfillment or rejection handler. The downstream promise will then be pending
-      until the returned promise is settled. This is called *assimilation*.
-
-      ```js
-      findUser().then(function (user) {
-        return findCommentsByAuthor(user);
-      }).then(function (comments) {
-        // The user's comments are now available
-      });
-      ```
-
-      If the assimliated promise rejects, then the downstream promise will also reject.
-
-      ```js
-      findUser().then(function (user) {
-        return findCommentsByAuthor(user);
-      }).then(function (comments) {
-        // If `findCommentsByAuthor` fulfills, we'll have the value here
-      }, function (reason) {
-        // If `findCommentsByAuthor` rejects, we'll have the reason here
-      });
-      ```
-
-      Simple Example
-      --------------
-
-      Synchronous Example
-
-      ```javascript
-      var result;
-
-      try {
-        result = findResult();
-        // success
-      } catch(reason) {
-        // failure
-      }
-      ```
-
-      Errback Example
-
-      ```js
-      findResult(function(result, err){
-        if (err) {
-          // failure
-        } else {
-          // success
-        }
-      });
-      ```
-
-      Promise Example;
-
-      ```javascript
-      findResult().then(function(result){
-        // success
-      }, function(reason){
-        // failure
-      });
-      ```
-
-      Advanced Example
-      --------------
-
-      Synchronous Example
-
-      ```javascript
-      var author, books;
-
-      try {
-        author = findAuthor();
-        books  = findBooksByAuthor(author);
-        // success
-      } catch(reason) {
-        // failure
-      }
-      ```
-
-      Errback Example
-
-      ```js
-
-      function foundBooks(books) {
-
-      }
-
-      function failure(reason) {
-
-      }
-
-      findAuthor(function(author, err){
-        if (err) {
-          failure(err);
-          // failure
-        } else {
-          try {
-            findBoooksByAuthor(author, function(books, err) {
-              if (err) {
-                failure(err);
-              } else {
-                try {
-                  foundBooks(books);
-                } catch(reason) {
-                  failure(reason);
-                }
-              }
-            });
-          } catch(error) {
-            failure(err);
-          }
-          // success
-        }
-      });
-      ```
-
-      Promise Example;
-
-      ```javascript
-      findAuthor().
-        then(findBooksByAuthor).
-        then(function(books){
-          // found books
-      }).catch(function(reason){
-        // something went wrong
-      });
-      ```
-
-      @method then
-      @param {Function} onFulfilled
-      @param {Function} onRejected
-      @param {String} label optional string for labeling the promise.
-      Useful for tooling.
-      @return {Promise}
-    */
-      then: function(onFulfillment, onRejection, label) {
-        var parent = this;
-        var state = parent._state;
-
-        if (state === $$$internal$$FULFILLED && !onFulfillment || state === $$$internal$$REJECTED && !onRejection) {
-          return this;
-        }
-
-        parent._onerror = null;
-
-        var child = new this.constructor($$$internal$$noop, label);
-        var result = parent._result;
-
-        if (state) {
-          var callback = arguments[state - 1];
-          $$asap$$default(function(){
-            $$$internal$$invokeCallback(state, child, callback, result);
-          });
-        } else {
-          $$$internal$$subscribe(parent, child, onFulfillment, onRejection);
-        }
-
-        return child;
-      },
-
-    /**
-      `catch` is simply sugar for `then(undefined, onRejection)` which makes it the same
-      as the catch block of a try/catch statement.
-
-      ```js
-      function findAuthor(){
-        throw new Error('couldn't find that author');
-      }
-
-      // synchronous
-      try {
-        findAuthor();
-      } catch(reason) {
-        // something went wrong
-      }
-
-      // async with promises
-      findAuthor().catch(function(reason){
-        // something went wrong
-      });
-      ```
-
-      @method catch
-      @param {Function} onRejection
-      @param {String} label optional string for labeling the promise.
-      Useful for tooling.
-      @return {Promise}
-    */
-      'catch': function(onRejection, label) {
-        return this.then(null, onRejection, label);
-      }
-    };
-
-    var $$es6$promise$polyfill$$default = function polyfill() {
-      var local;
-
-      if (typeof global !== 'undefined') {
-        local = global;
-      } else if (typeof window !== 'undefined' && window.document) {
-        local = window;
-      } else {
-        local = self;
-      }
-
-      var es6PromiseSupport =
-        "Promise" in local &&
-        // Some of these methods are missing from
-        // Firefox/Chrome experimental implementations
-        "resolve" in local.Promise &&
-        "reject" in local.Promise &&
-        "all" in local.Promise &&
-        "race" in local.Promise &&
-        // Older version of the spec had a resolver object
-        // as the arg rather than a function
-        (function() {
-          var resolve;
-          new local.Promise(function(r) { resolve = r; });
-          return $$utils$$isFunction(resolve);
-        }());
-
-      if (!es6PromiseSupport) {
-        local.Promise = $$es6$promise$promise$$default;
-      }
-    };
-
-    var es6$promise$umd$$ES6Promise = {
-      Promise: $$es6$promise$promise$$default,
-      polyfill: $$es6$promise$polyfill$$default
-    };
-
-    /* global define:true module:true window: true */
-    if (typeof define === 'function' && define['amd']) {
-      define(function() { return es6$promise$umd$$ES6Promise; });
-    } else if (typeof module !== 'undefined' && module['exports']) {
-      module['exports'] = es6$promise$umd$$ES6Promise;
-    } else if (typeof this !== 'undefined') {
-      this['ES6Promise'] = es6$promise$umd$$ES6Promise;
-    }
-}).call(this);
-}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"_process":30}],32:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 /**
  *  Copyright (c) 2014, Facebook, Inc.
  *  All rights reserved.
@@ -7272,7 +6294,7 @@ var invariant = require('invariant');
 
 
 module.exports = Store;
-},{"./Dispatcher":36,"events":29,"invariant":42,"object-assign":43}],39:[function(require,module,exports){
+},{"./Dispatcher":36,"events":30,"invariant":42,"object-assign":43}],39:[function(require,module,exports){
 /**
  * Copyright (c) 2014, Facebook, Inc.
  * All rights reserved.
@@ -12512,7 +11534,7 @@ function createRouter(options) {
 module.exports = createRouter;
 
 }).call(this,require('_process'))
-},{"../behaviors/ImitateBrowserBehavior":47,"../components/RouteHandler":53,"../locations/HashLocation":55,"../locations/HistoryLocation":56,"../mixins/NavigationContext":60,"../mixins/Scrolling":61,"../mixins/StateContext":63,"./Path":64,"./PropTypes":66,"./Redirect":67,"./Transition":68,"./createRoutesFromChildren":70,"./supportsHistory":74,"_process":30,"react":246,"react/lib/ExecutionEnvironment":107,"react/lib/invariant":225,"react/lib/warning":245}],70:[function(require,module,exports){
+},{"../behaviors/ImitateBrowserBehavior":47,"../components/RouteHandler":53,"../locations/HashLocation":55,"../locations/HistoryLocation":56,"../mixins/NavigationContext":60,"../mixins/Scrolling":61,"../mixins/StateContext":63,"./Path":64,"./PropTypes":66,"./Redirect":67,"./Transition":68,"./createRoutesFromChildren":70,"./supportsHistory":74,"_process":31,"react":246,"react/lib/ExecutionEnvironment":107,"react/lib/invariant":225,"react/lib/warning":245}],70:[function(require,module,exports){
 var React = require('react');
 var warning = require('react/lib/warning');
 var invariant = require('react/lib/invariant');
@@ -13149,7 +12171,7 @@ exports.isBuffer = function (obj) {
 };
 
 }).call(this,require("buffer").Buffer)
-},{"buffer":25}],80:[function(require,module,exports){
+},{"buffer":26}],80:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -13399,7 +12421,7 @@ define(function(require) {
 }(typeof define === 'function' && define.amd ? define : function(factory) { module.exports = factory(require); }));
 
 }).call(this,require('_process'))
-},{"_process":30}],84:[function(require,module,exports){
+},{"_process":31}],84:[function(require,module,exports){
 /** @license MIT License (c) copyright 2010-2014 original author or authors */
 /** @author Brian Cavalier */
 /** @author John Hann */
@@ -14561,7 +13583,7 @@ var CSSCore = {
 module.exports = CSSCore;
 
 }).call(this,require('_process'))
-},{"./invariant":225,"_process":30}],89:[function(require,module,exports){
+},{"./invariant":225,"_process":31}],89:[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -14812,7 +13834,7 @@ var CSSPropertyOperations = {
 module.exports = CSSPropertyOperations;
 
 }).call(this,require('_process'))
-},{"./CSSProperty":89,"./ExecutionEnvironment":107,"./camelizeStyleName":197,"./dangerousStyleValue":204,"./hyphenateStyleName":223,"./memoizeStringOnly":234,"./warning":245,"_process":30}],91:[function(require,module,exports){
+},{"./CSSProperty":89,"./ExecutionEnvironment":107,"./camelizeStyleName":197,"./dangerousStyleValue":204,"./hyphenateStyleName":223,"./memoizeStringOnly":234,"./warning":245,"_process":31}],91:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -14912,7 +13934,7 @@ PooledClass.addPoolingTo(CallbackQueue);
 module.exports = CallbackQueue;
 
 }).call(this,require('_process'))
-},{"./Object.assign":113,"./PooledClass":114,"./invariant":225,"_process":30}],92:[function(require,module,exports){
+},{"./Object.assign":113,"./PooledClass":114,"./invariant":225,"_process":31}],92:[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -15753,7 +14775,7 @@ var DOMChildrenOperations = {
 module.exports = DOMChildrenOperations;
 
 }).call(this,require('_process'))
-},{"./Danger":98,"./ReactMultiChildUpdateTypes":156,"./getTextContentAccessor":220,"./invariant":225,"_process":30}],96:[function(require,module,exports){
+},{"./Danger":98,"./ReactMultiChildUpdateTypes":156,"./getTextContentAccessor":220,"./invariant":225,"_process":31}],96:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -16052,7 +15074,7 @@ var DOMProperty = {
 module.exports = DOMProperty;
 
 }).call(this,require('_process'))
-},{"./invariant":225,"_process":30}],97:[function(require,module,exports){
+},{"./invariant":225,"_process":31}],97:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -16249,7 +15271,7 @@ var DOMPropertyOperations = {
 module.exports = DOMPropertyOperations;
 
 }).call(this,require('_process'))
-},{"./DOMProperty":96,"./escapeTextForBrowser":208,"./memoizeStringOnly":234,"./warning":245,"_process":30}],98:[function(require,module,exports){
+},{"./DOMProperty":96,"./escapeTextForBrowser":208,"./memoizeStringOnly":234,"./warning":245,"_process":31}],98:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -16435,7 +15457,7 @@ var Danger = {
 module.exports = Danger;
 
 }).call(this,require('_process'))
-},{"./ExecutionEnvironment":107,"./createNodesFromMarkup":202,"./emptyFunction":206,"./getMarkupWrap":217,"./invariant":225,"_process":30}],99:[function(require,module,exports){
+},{"./ExecutionEnvironment":107,"./createNodesFromMarkup":202,"./emptyFunction":206,"./getMarkupWrap":217,"./invariant":225,"_process":31}],99:[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -16777,7 +15799,7 @@ var EventListener = {
 module.exports = EventListener;
 
 }).call(this,require('_process'))
-},{"./emptyFunction":206,"_process":30}],103:[function(require,module,exports){
+},{"./emptyFunction":206,"_process":31}],103:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -17053,7 +16075,7 @@ var EventPluginHub = {
 module.exports = EventPluginHub;
 
 }).call(this,require('_process'))
-},{"./EventPluginRegistry":104,"./EventPluginUtils":105,"./accumulateInto":194,"./forEachAccumulated":211,"./invariant":225,"_process":30}],104:[function(require,module,exports){
+},{"./EventPluginRegistry":104,"./EventPluginUtils":105,"./accumulateInto":194,"./forEachAccumulated":211,"./invariant":225,"_process":31}],104:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -17333,7 +16355,7 @@ var EventPluginRegistry = {
 module.exports = EventPluginRegistry;
 
 }).call(this,require('_process'))
-},{"./invariant":225,"_process":30}],105:[function(require,module,exports){
+},{"./invariant":225,"_process":31}],105:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -17554,7 +16576,7 @@ var EventPluginUtils = {
 module.exports = EventPluginUtils;
 
 }).call(this,require('_process'))
-},{"./EventConstants":101,"./invariant":225,"_process":30}],106:[function(require,module,exports){
+},{"./EventConstants":101,"./invariant":225,"_process":31}],106:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -17696,7 +16718,7 @@ var EventPropagators = {
 module.exports = EventPropagators;
 
 }).call(this,require('_process'))
-},{"./EventConstants":101,"./EventPluginHub":103,"./accumulateInto":194,"./forEachAccumulated":211,"_process":30}],107:[function(require,module,exports){
+},{"./EventConstants":101,"./EventPluginHub":103,"./accumulateInto":194,"./forEachAccumulated":211,"_process":31}],107:[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -18124,7 +17146,7 @@ var LinkedValueUtils = {
 module.exports = LinkedValueUtils;
 
 }).call(this,require('_process'))
-},{"./ReactPropTypes":163,"./invariant":225,"_process":30}],111:[function(require,module,exports){
+},{"./ReactPropTypes":163,"./invariant":225,"_process":31}],111:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014, Facebook, Inc.
@@ -18174,7 +17196,7 @@ var LocalEventTrapMixin = {
 module.exports = LocalEventTrapMixin;
 
 }).call(this,require('_process'))
-},{"./ReactBrowserEventEmitter":117,"./accumulateInto":194,"./forEachAccumulated":211,"./invariant":225,"_process":30}],112:[function(require,module,exports){
+},{"./ReactBrowserEventEmitter":117,"./accumulateInto":194,"./forEachAccumulated":211,"./invariant":225,"_process":31}],112:[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -18395,7 +17417,7 @@ var PooledClass = {
 module.exports = PooledClass;
 
 }).call(this,require('_process'))
-},{"./invariant":225,"_process":30}],115:[function(require,module,exports){
+},{"./invariant":225,"_process":31}],115:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -18583,7 +17605,7 @@ React.version = '0.12.1';
 module.exports = React;
 
 }).call(this,require('_process'))
-},{"./DOMPropertyOperations":97,"./EventPluginUtils":105,"./ExecutionEnvironment":107,"./Object.assign":113,"./ReactChildren":120,"./ReactComponent":121,"./ReactCompositeComponent":124,"./ReactContext":125,"./ReactCurrentOwner":126,"./ReactDOM":127,"./ReactDOMComponent":129,"./ReactDefaultInjection":139,"./ReactElement":142,"./ReactElementValidator":143,"./ReactInstanceHandles":150,"./ReactLegacyElement":151,"./ReactMount":154,"./ReactMultiChild":155,"./ReactPerf":159,"./ReactPropTypes":163,"./ReactServerRendering":167,"./ReactTextComponent":171,"./deprecated":205,"./onlyChild":236,"_process":30}],116:[function(require,module,exports){
+},{"./DOMPropertyOperations":97,"./EventPluginUtils":105,"./ExecutionEnvironment":107,"./Object.assign":113,"./ReactChildren":120,"./ReactComponent":121,"./ReactCompositeComponent":124,"./ReactContext":125,"./ReactCurrentOwner":126,"./ReactDOM":127,"./ReactDOMComponent":129,"./ReactDefaultInjection":139,"./ReactElement":142,"./ReactElementValidator":143,"./ReactInstanceHandles":150,"./ReactLegacyElement":151,"./ReactMount":154,"./ReactMultiChild":155,"./ReactPerf":159,"./ReactPropTypes":163,"./ReactServerRendering":167,"./ReactTextComponent":171,"./deprecated":205,"./onlyChild":236,"_process":31}],116:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -18626,7 +17648,7 @@ var ReactBrowserComponentMixin = {
 module.exports = ReactBrowserComponentMixin;
 
 }).call(this,require('_process'))
-},{"./ReactEmptyComponent":144,"./ReactMount":154,"./invariant":225,"_process":30}],117:[function(require,module,exports){
+},{"./ReactEmptyComponent":144,"./ReactMount":154,"./invariant":225,"_process":31}],117:[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -19183,7 +18205,7 @@ var ReactCSSTransitionGroupChild = React.createClass({
 module.exports = ReactCSSTransitionGroupChild;
 
 }).call(this,require('_process'))
-},{"./CSSCore":88,"./React":115,"./ReactTransitionEvents":173,"./onlyChild":236,"_process":30}],120:[function(require,module,exports){
+},{"./CSSCore":88,"./React":115,"./ReactTransitionEvents":173,"./onlyChild":236,"_process":31}],120:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -19333,7 +18355,7 @@ var ReactChildren = {
 module.exports = ReactChildren;
 
 }).call(this,require('_process'))
-},{"./PooledClass":114,"./traverseAllChildren":243,"./warning":245,"_process":30}],121:[function(require,module,exports){
+},{"./PooledClass":114,"./traverseAllChildren":243,"./warning":245,"_process":31}],121:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -19776,7 +18798,7 @@ var ReactComponent = {
 module.exports = ReactComponent;
 
 }).call(this,require('_process'))
-},{"./Object.assign":113,"./ReactElement":142,"./ReactOwner":158,"./ReactUpdates":175,"./invariant":225,"./keyMirror":231,"_process":30}],122:[function(require,module,exports){
+},{"./Object.assign":113,"./ReactElement":142,"./ReactOwner":158,"./ReactUpdates":175,"./invariant":225,"./keyMirror":231,"_process":31}],122:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -19898,7 +18920,7 @@ var ReactComponentBrowserEnvironment = {
 module.exports = ReactComponentBrowserEnvironment;
 
 }).call(this,require('_process'))
-},{"./ReactDOMIDOperations":131,"./ReactMarkupChecksum":153,"./ReactMount":154,"./ReactPerf":159,"./ReactReconcileTransaction":165,"./getReactRootElementInContainer":219,"./invariant":225,"./setInnerHTML":239,"_process":30}],123:[function(require,module,exports){
+},{"./ReactDOMIDOperations":131,"./ReactMarkupChecksum":153,"./ReactMount":154,"./ReactPerf":159,"./ReactReconcileTransaction":165,"./getReactRootElementInContainer":219,"./invariant":225,"./setInnerHTML":239,"_process":31}],123:[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -21387,7 +20409,7 @@ var ReactCompositeComponent = {
 module.exports = ReactCompositeComponent;
 
 }).call(this,require('_process'))
-},{"./Object.assign":113,"./ReactComponent":121,"./ReactContext":125,"./ReactCurrentOwner":126,"./ReactElement":142,"./ReactElementValidator":143,"./ReactEmptyComponent":144,"./ReactErrorUtils":145,"./ReactLegacyElement":151,"./ReactOwner":158,"./ReactPerf":159,"./ReactPropTransferer":160,"./ReactPropTypeLocationNames":161,"./ReactPropTypeLocations":162,"./ReactUpdates":175,"./instantiateReactComponent":224,"./invariant":225,"./keyMirror":231,"./keyOf":232,"./mapObject":233,"./monitorCodeUse":235,"./shouldUpdateReactComponent":241,"./warning":245,"_process":30}],125:[function(require,module,exports){
+},{"./Object.assign":113,"./ReactComponent":121,"./ReactContext":125,"./ReactCurrentOwner":126,"./ReactElement":142,"./ReactElementValidator":143,"./ReactEmptyComponent":144,"./ReactErrorUtils":145,"./ReactLegacyElement":151,"./ReactOwner":158,"./ReactPerf":159,"./ReactPropTransferer":160,"./ReactPropTypeLocationNames":161,"./ReactPropTypeLocations":162,"./ReactUpdates":175,"./instantiateReactComponent":224,"./invariant":225,"./keyMirror":231,"./keyOf":232,"./mapObject":233,"./monitorCodeUse":235,"./shouldUpdateReactComponent":241,"./warning":245,"_process":31}],125:[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -21666,7 +20688,7 @@ var ReactDOM = mapObject({
 module.exports = ReactDOM;
 
 }).call(this,require('_process'))
-},{"./ReactElement":142,"./ReactElementValidator":143,"./ReactLegacyElement":151,"./mapObject":233,"_process":30}],128:[function(require,module,exports){
+},{"./ReactElement":142,"./ReactElementValidator":143,"./ReactLegacyElement":151,"./mapObject":233,"_process":31}],128:[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -22218,7 +21240,7 @@ assign(
 module.exports = ReactDOMComponent;
 
 }).call(this,require('_process'))
-},{"./CSSPropertyOperations":90,"./DOMProperty":96,"./DOMPropertyOperations":97,"./Object.assign":113,"./ReactBrowserComponentMixin":116,"./ReactBrowserEventEmitter":117,"./ReactComponent":121,"./ReactMount":154,"./ReactMultiChild":155,"./ReactPerf":159,"./escapeTextForBrowser":208,"./invariant":225,"./isEventSupported":226,"./keyOf":232,"./monitorCodeUse":235,"_process":30}],130:[function(require,module,exports){
+},{"./CSSPropertyOperations":90,"./DOMProperty":96,"./DOMPropertyOperations":97,"./Object.assign":113,"./ReactBrowserComponentMixin":116,"./ReactBrowserEventEmitter":117,"./ReactComponent":121,"./ReactMount":154,"./ReactMultiChild":155,"./ReactPerf":159,"./escapeTextForBrowser":208,"./invariant":225,"./isEventSupported":226,"./keyOf":232,"./monitorCodeUse":235,"_process":31}],130:[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -22454,7 +21476,7 @@ var ReactDOMIDOperations = {
 module.exports = ReactDOMIDOperations;
 
 }).call(this,require('_process'))
-},{"./CSSPropertyOperations":90,"./DOMChildrenOperations":95,"./DOMPropertyOperations":97,"./ReactMount":154,"./ReactPerf":159,"./invariant":225,"./setInnerHTML":239,"_process":30}],132:[function(require,module,exports){
+},{"./CSSPropertyOperations":90,"./DOMChildrenOperations":95,"./DOMPropertyOperations":97,"./ReactMount":154,"./ReactPerf":159,"./invariant":225,"./setInnerHTML":239,"_process":31}],132:[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -22680,7 +21702,7 @@ var ReactDOMInput = ReactCompositeComponent.createClass({
 module.exports = ReactDOMInput;
 
 }).call(this,require('_process'))
-},{"./AutoFocusMixin":86,"./DOMPropertyOperations":97,"./LinkedValueUtils":110,"./Object.assign":113,"./ReactBrowserComponentMixin":116,"./ReactCompositeComponent":124,"./ReactDOM":127,"./ReactElement":142,"./ReactMount":154,"./ReactUpdates":175,"./invariant":225,"_process":30}],134:[function(require,module,exports){
+},{"./AutoFocusMixin":86,"./DOMPropertyOperations":97,"./LinkedValueUtils":110,"./Object.assign":113,"./ReactBrowserComponentMixin":116,"./ReactCompositeComponent":124,"./ReactDOM":127,"./ReactElement":142,"./ReactMount":154,"./ReactUpdates":175,"./invariant":225,"_process":31}],134:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -22733,7 +21755,7 @@ var ReactDOMOption = ReactCompositeComponent.createClass({
 module.exports = ReactDOMOption;
 
 }).call(this,require('_process'))
-},{"./ReactBrowserComponentMixin":116,"./ReactCompositeComponent":124,"./ReactDOM":127,"./ReactElement":142,"./warning":245,"_process":30}],135:[function(require,module,exports){
+},{"./ReactBrowserComponentMixin":116,"./ReactCompositeComponent":124,"./ReactDOM":127,"./ReactElement":142,"./warning":245,"_process":31}],135:[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -23267,7 +22289,7 @@ var ReactDOMTextarea = ReactCompositeComponent.createClass({
 module.exports = ReactDOMTextarea;
 
 }).call(this,require('_process'))
-},{"./AutoFocusMixin":86,"./DOMPropertyOperations":97,"./LinkedValueUtils":110,"./Object.assign":113,"./ReactBrowserComponentMixin":116,"./ReactCompositeComponent":124,"./ReactDOM":127,"./ReactElement":142,"./ReactUpdates":175,"./invariant":225,"./warning":245,"_process":30}],138:[function(require,module,exports){
+},{"./AutoFocusMixin":86,"./DOMPropertyOperations":97,"./LinkedValueUtils":110,"./Object.assign":113,"./ReactBrowserComponentMixin":116,"./ReactCompositeComponent":124,"./ReactDOM":127,"./ReactElement":142,"./ReactUpdates":175,"./invariant":225,"./warning":245,"_process":31}],138:[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -23469,7 +22491,7 @@ module.exports = {
 };
 
 }).call(this,require('_process'))
-},{"./BeforeInputEventPlugin":87,"./ChangeEventPlugin":92,"./ClientReactRootIndex":93,"./CompositionEventPlugin":94,"./DefaultEventPluginOrder":99,"./EnterLeaveEventPlugin":100,"./ExecutionEnvironment":107,"./HTMLDOMPropertyConfig":108,"./MobileSafariClickEventPlugin":112,"./ReactBrowserComponentMixin":116,"./ReactComponentBrowserEnvironment":122,"./ReactDOMButton":128,"./ReactDOMComponent":129,"./ReactDOMForm":130,"./ReactDOMImg":132,"./ReactDOMInput":133,"./ReactDOMOption":134,"./ReactDOMSelect":135,"./ReactDOMTextarea":137,"./ReactDefaultBatchingStrategy":138,"./ReactDefaultPerf":140,"./ReactEventListener":147,"./ReactInjection":148,"./ReactInstanceHandles":150,"./ReactMount":154,"./SVGDOMPropertyConfig":177,"./SelectEventPlugin":178,"./ServerReactRootIndex":179,"./SimpleEventPlugin":180,"./createFullPageComponent":201,"_process":30}],140:[function(require,module,exports){
+},{"./BeforeInputEventPlugin":87,"./ChangeEventPlugin":92,"./ClientReactRootIndex":93,"./CompositionEventPlugin":94,"./DefaultEventPluginOrder":99,"./EnterLeaveEventPlugin":100,"./ExecutionEnvironment":107,"./HTMLDOMPropertyConfig":108,"./MobileSafariClickEventPlugin":112,"./ReactBrowserComponentMixin":116,"./ReactComponentBrowserEnvironment":122,"./ReactDOMButton":128,"./ReactDOMComponent":129,"./ReactDOMForm":130,"./ReactDOMImg":132,"./ReactDOMInput":133,"./ReactDOMOption":134,"./ReactDOMSelect":135,"./ReactDOMTextarea":137,"./ReactDefaultBatchingStrategy":138,"./ReactDefaultPerf":140,"./ReactEventListener":147,"./ReactInjection":148,"./ReactInstanceHandles":150,"./ReactMount":154,"./SVGDOMPropertyConfig":177,"./SelectEventPlugin":178,"./ServerReactRootIndex":179,"./SimpleEventPlugin":180,"./createFullPageComponent":201,"_process":31}],140:[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -24181,7 +23203,7 @@ ReactElement.isValidElement = function(object) {
 module.exports = ReactElement;
 
 }).call(this,require('_process'))
-},{"./ReactContext":125,"./ReactCurrentOwner":126,"./warning":245,"_process":30}],143:[function(require,module,exports){
+},{"./ReactContext":125,"./ReactCurrentOwner":126,"./warning":245,"_process":31}],143:[function(require,module,exports){
 /**
  * Copyright 2014, Facebook, Inc.
  * All rights reserved.
@@ -24526,7 +23548,7 @@ var ReactEmptyComponent = {
 module.exports = ReactEmptyComponent;
 
 }).call(this,require('_process'))
-},{"./ReactElement":142,"./invariant":225,"_process":30}],145:[function(require,module,exports){
+},{"./ReactElement":142,"./invariant":225,"_process":31}],145:[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -25303,7 +24325,7 @@ var ReactInstanceHandles = {
 module.exports = ReactInstanceHandles;
 
 }).call(this,require('_process'))
-},{"./ReactRootIndex":166,"./invariant":225,"_process":30}],151:[function(require,module,exports){
+},{"./ReactRootIndex":166,"./invariant":225,"_process":31}],151:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014, Facebook, Inc.
@@ -25550,7 +24572,7 @@ ReactLegacyElementFactory._isLegacyCallWarningEnabled = true;
 module.exports = ReactLegacyElementFactory;
 
 }).call(this,require('_process'))
-},{"./ReactCurrentOwner":126,"./invariant":225,"./monitorCodeUse":235,"./warning":245,"_process":30}],152:[function(require,module,exports){
+},{"./ReactCurrentOwner":126,"./invariant":225,"./monitorCodeUse":235,"./warning":245,"_process":31}],152:[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -26369,7 +25391,7 @@ ReactMount.renderComponent = deprecated(
 module.exports = ReactMount;
 
 }).call(this,require('_process'))
-},{"./DOMProperty":96,"./ReactBrowserEventEmitter":117,"./ReactCurrentOwner":126,"./ReactElement":142,"./ReactInstanceHandles":150,"./ReactLegacyElement":151,"./ReactPerf":159,"./containsNode":199,"./deprecated":205,"./getReactRootElementInContainer":219,"./instantiateReactComponent":224,"./invariant":225,"./shouldUpdateReactComponent":241,"./warning":245,"_process":30}],155:[function(require,module,exports){
+},{"./DOMProperty":96,"./ReactBrowserEventEmitter":117,"./ReactCurrentOwner":126,"./ReactElement":142,"./ReactInstanceHandles":150,"./ReactLegacyElement":151,"./ReactPerf":159,"./containsNode":199,"./deprecated":205,"./getReactRootElementInContainer":219,"./instantiateReactComponent":224,"./invariant":225,"./shouldUpdateReactComponent":241,"./warning":245,"_process":31}],155:[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -26903,7 +25925,7 @@ var ReactNativeComponent = {
 module.exports = ReactNativeComponent;
 
 }).call(this,require('_process'))
-},{"./Object.assign":113,"./invariant":225,"_process":30}],158:[function(require,module,exports){
+},{"./Object.assign":113,"./invariant":225,"_process":31}],158:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -27059,7 +26081,7 @@ var ReactOwner = {
 module.exports = ReactOwner;
 
 }).call(this,require('_process'))
-},{"./emptyObject":207,"./invariant":225,"_process":30}],159:[function(require,module,exports){
+},{"./emptyObject":207,"./invariant":225,"_process":31}],159:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -27143,7 +26165,7 @@ function _noMeasure(objName, fnName, func) {
 module.exports = ReactPerf;
 
 }).call(this,require('_process'))
-},{"_process":30}],160:[function(require,module,exports){
+},{"_process":31}],160:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -27310,7 +26332,7 @@ var ReactPropTransferer = {
 module.exports = ReactPropTransferer;
 
 }).call(this,require('_process'))
-},{"./Object.assign":113,"./emptyFunction":206,"./invariant":225,"./joinClasses":230,"./warning":245,"_process":30}],161:[function(require,module,exports){
+},{"./Object.assign":113,"./emptyFunction":206,"./invariant":225,"./joinClasses":230,"./warning":245,"_process":31}],161:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -27338,7 +26360,7 @@ if ("production" !== process.env.NODE_ENV) {
 module.exports = ReactPropTypeLocationNames;
 
 }).call(this,require('_process'))
-},{"_process":30}],162:[function(require,module,exports){
+},{"_process":31}],162:[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -28059,7 +27081,7 @@ module.exports = {
 };
 
 }).call(this,require('_process'))
-},{"./ReactElement":142,"./ReactInstanceHandles":150,"./ReactMarkupChecksum":153,"./ReactServerRenderingTransaction":168,"./instantiateReactComponent":224,"./invariant":225,"_process":30}],168:[function(require,module,exports){
+},{"./ReactElement":142,"./ReactInstanceHandles":150,"./ReactMarkupChecksum":153,"./ReactServerRenderingTransaction":168,"./instantiateReactComponent":224,"./invariant":225,"_process":31}],168:[function(require,module,exports){
 /**
  * Copyright 2014, Facebook, Inc.
  * All rights reserved.
@@ -29487,7 +28509,7 @@ var ReactUpdates = {
 module.exports = ReactUpdates;
 
 }).call(this,require('_process'))
-},{"./CallbackQueue":91,"./Object.assign":113,"./PooledClass":114,"./ReactCurrentOwner":126,"./ReactPerf":159,"./Transaction":192,"./invariant":225,"./warning":245,"_process":30}],176:[function(require,module,exports){
+},{"./CallbackQueue":91,"./Object.assign":113,"./PooledClass":114,"./ReactCurrentOwner":126,"./ReactPerf":159,"./Transaction":192,"./invariant":225,"./warning":245,"_process":31}],176:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -29541,7 +28563,7 @@ if ("production" !== process.env.NODE_ENV) {
 module.exports = React;
 
 }).call(this,require('_process'))
-},{"./LinkedStateMixin":109,"./React":115,"./ReactCSSTransitionGroup":118,"./ReactComponentWithPureRenderMixin":123,"./ReactDefaultPerf":140,"./ReactTestUtils":170,"./ReactTransitionGroup":174,"./ReactUpdates":175,"./cloneWithProps":198,"./cx":203,"./update":244,"_process":30}],177:[function(require,module,exports){
+},{"./LinkedStateMixin":109,"./React":115,"./ReactCSSTransitionGroup":118,"./ReactComponentWithPureRenderMixin":123,"./ReactDefaultPerf":140,"./ReactTestUtils":170,"./ReactTransitionGroup":174,"./ReactUpdates":175,"./cloneWithProps":198,"./cx":203,"./update":244,"_process":31}],177:[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -30287,7 +29309,7 @@ var SimpleEventPlugin = {
 module.exports = SimpleEventPlugin;
 
 }).call(this,require('_process'))
-},{"./EventConstants":101,"./EventPluginUtils":105,"./EventPropagators":106,"./SyntheticClipboardEvent":181,"./SyntheticDragEvent":183,"./SyntheticEvent":184,"./SyntheticFocusEvent":185,"./SyntheticKeyboardEvent":187,"./SyntheticMouseEvent":188,"./SyntheticTouchEvent":189,"./SyntheticUIEvent":190,"./SyntheticWheelEvent":191,"./getEventCharCode":213,"./invariant":225,"./keyOf":232,"./warning":245,"_process":30}],181:[function(require,module,exports){
+},{"./EventConstants":101,"./EventPluginUtils":105,"./EventPropagators":106,"./SyntheticClipboardEvent":181,"./SyntheticDragEvent":183,"./SyntheticEvent":184,"./SyntheticFocusEvent":185,"./SyntheticKeyboardEvent":187,"./SyntheticMouseEvent":188,"./SyntheticTouchEvent":189,"./SyntheticUIEvent":190,"./SyntheticWheelEvent":191,"./getEventCharCode":213,"./invariant":225,"./keyOf":232,"./warning":245,"_process":31}],181:[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -31244,7 +30266,7 @@ var Transaction = {
 module.exports = Transaction;
 
 }).call(this,require('_process'))
-},{"./invariant":225,"_process":30}],193:[function(require,module,exports){
+},{"./invariant":225,"_process":31}],193:[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -31342,7 +30364,7 @@ function accumulateInto(current, next) {
 module.exports = accumulateInto;
 
 }).call(this,require('_process'))
-},{"./invariant":225,"_process":30}],195:[function(require,module,exports){
+},{"./invariant":225,"_process":31}],195:[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -31509,7 +30531,7 @@ function cloneWithProps(child, props) {
 module.exports = cloneWithProps;
 
 }).call(this,require('_process'))
-},{"./ReactElement":142,"./ReactPropTransferer":160,"./keyOf":232,"./warning":245,"_process":30}],199:[function(require,module,exports){
+},{"./ReactElement":142,"./ReactPropTransferer":160,"./keyOf":232,"./warning":245,"_process":31}],199:[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -31700,7 +30722,7 @@ function createFullPageComponent(tag) {
 module.exports = createFullPageComponent;
 
 }).call(this,require('_process'))
-},{"./ReactCompositeComponent":124,"./ReactElement":142,"./invariant":225,"_process":30}],202:[function(require,module,exports){
+},{"./ReactCompositeComponent":124,"./ReactElement":142,"./invariant":225,"_process":31}],202:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -31790,7 +30812,7 @@ function createNodesFromMarkup(markup, handleScript) {
 module.exports = createNodesFromMarkup;
 
 }).call(this,require('_process'))
-},{"./ExecutionEnvironment":107,"./createArrayFrom":200,"./getMarkupWrap":217,"./invariant":225,"_process":30}],203:[function(require,module,exports){
+},{"./ExecutionEnvironment":107,"./createArrayFrom":200,"./getMarkupWrap":217,"./invariant":225,"_process":31}],203:[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -31938,7 +30960,7 @@ function deprecated(namespace, oldName, newName, ctx, fn) {
 module.exports = deprecated;
 
 }).call(this,require('_process'))
-},{"./Object.assign":113,"./warning":245,"_process":30}],206:[function(require,module,exports){
+},{"./Object.assign":113,"./warning":245,"_process":31}],206:[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -31996,7 +31018,7 @@ if ("production" !== process.env.NODE_ENV) {
 module.exports = emptyObject;
 
 }).call(this,require('_process'))
-},{"_process":30}],208:[function(require,module,exports){
+},{"_process":31}],208:[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -32106,7 +31128,7 @@ function flattenChildren(children) {
 module.exports = flattenChildren;
 
 }).call(this,require('_process'))
-},{"./ReactTextComponent":171,"./traverseAllChildren":243,"./warning":245,"_process":30}],210:[function(require,module,exports){
+},{"./ReactTextComponent":171,"./traverseAllChildren":243,"./warning":245,"_process":31}],210:[function(require,module,exports){
 /**
  * Copyright 2014, Facebook, Inc.
  * All rights reserved.
@@ -32547,7 +31569,7 @@ function getMarkupWrap(nodeName) {
 module.exports = getMarkupWrap;
 
 }).call(this,require('_process'))
-},{"./ExecutionEnvironment":107,"./invariant":225,"_process":30}],218:[function(require,module,exports){
+},{"./ExecutionEnvironment":107,"./invariant":225,"_process":31}],218:[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -32922,7 +31944,7 @@ function instantiateReactComponent(element, parentCompositeType) {
 module.exports = instantiateReactComponent;
 
 }).call(this,require('_process'))
-},{"./ReactElement":142,"./ReactEmptyComponent":144,"./ReactLegacyElement":151,"./ReactNativeComponent":157,"./warning":245,"_process":30}],225:[function(require,module,exports){
+},{"./ReactElement":142,"./ReactEmptyComponent":144,"./ReactLegacyElement":151,"./ReactNativeComponent":157,"./warning":245,"_process":31}],225:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -32979,7 +32001,7 @@ var invariant = function(condition, format, a, b, c, d, e, f) {
 module.exports = invariant;
 
 }).call(this,require('_process'))
-},{"_process":30}],226:[function(require,module,exports){
+},{"_process":31}],226:[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -33237,7 +32259,7 @@ var keyMirror = function(obj) {
 module.exports = keyMirror;
 
 }).call(this,require('_process'))
-},{"./invariant":225,"_process":30}],232:[function(require,module,exports){
+},{"./invariant":225,"_process":31}],232:[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -33394,7 +32416,7 @@ function monitorCodeUse(eventName, data) {
 module.exports = monitorCodeUse;
 
 }).call(this,require('_process'))
-},{"./invariant":225,"_process":30}],236:[function(require,module,exports){
+},{"./invariant":225,"_process":31}],236:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -33434,7 +32456,7 @@ function onlyChild(children) {
 module.exports = onlyChild;
 
 }).call(this,require('_process'))
-},{"./ReactElement":142,"./invariant":225,"_process":30}],237:[function(require,module,exports){
+},{"./ReactElement":142,"./invariant":225,"_process":31}],237:[function(require,module,exports){
 /**
  * Copyright 2013-2014, Facebook, Inc.
  * All rights reserved.
@@ -33722,7 +32744,7 @@ function toArray(obj) {
 module.exports = toArray;
 
 }).call(this,require('_process'))
-},{"./invariant":225,"_process":30}],243:[function(require,module,exports){
+},{"./invariant":225,"_process":31}],243:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -33905,7 +32927,7 @@ function traverseAllChildren(children, callback, traverseContext) {
 module.exports = traverseAllChildren;
 
 }).call(this,require('_process'))
-},{"./ReactElement":142,"./ReactInstanceHandles":150,"./invariant":225,"_process":30}],244:[function(require,module,exports){
+},{"./ReactElement":142,"./ReactInstanceHandles":150,"./invariant":225,"_process":31}],244:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2013-2014, Facebook, Inc.
@@ -34073,7 +33095,7 @@ function update(value, spec) {
 module.exports = update;
 
 }).call(this,require('_process'))
-},{"./Object.assign":113,"./invariant":225,"./keyOf":232,"_process":30}],245:[function(require,module,exports){
+},{"./Object.assign":113,"./invariant":225,"./keyOf":232,"_process":31}],245:[function(require,module,exports){
 (function (process){
 /**
  * Copyright 2014, Facebook, Inc.
@@ -34118,7 +33140,1281 @@ if ("production" !== process.env.NODE_ENV) {
 module.exports = warning;
 
 }).call(this,require('_process'))
-},{"./emptyFunction":206,"_process":30}],246:[function(require,module,exports){
+},{"./emptyFunction":206,"_process":31}],246:[function(require,module,exports){
 module.exports = require('./lib/React');
 
-},{"./lib/React":115}]},{},[1]);
+},{"./lib/React":115}],247:[function(require,module,exports){
+/**
+ * Module dependencies.
+ */
+
+var Emitter = require('emitter');
+var reduce = require('reduce');
+
+/**
+ * Root reference for iframes.
+ */
+
+var root = 'undefined' == typeof window
+  ? this
+  : window;
+
+/**
+ * Noop.
+ */
+
+function noop(){};
+
+/**
+ * Check if `obj` is a host object,
+ * we don't want to serialize these :)
+ *
+ * TODO: future proof, move to compoent land
+ *
+ * @param {Object} obj
+ * @return {Boolean}
+ * @api private
+ */
+
+function isHost(obj) {
+  var str = {}.toString.call(obj);
+
+  switch (str) {
+    case '[object File]':
+    case '[object Blob]':
+    case '[object FormData]':
+      return true;
+    default:
+      return false;
+  }
+}
+
+/**
+ * Determine XHR.
+ */
+
+function getXHR() {
+  if (root.XMLHttpRequest
+    && ('file:' != root.location.protocol || !root.ActiveXObject)) {
+    return new XMLHttpRequest;
+  } else {
+    try { return new ActiveXObject('Microsoft.XMLHTTP'); } catch(e) {}
+    try { return new ActiveXObject('Msxml2.XMLHTTP.6.0'); } catch(e) {}
+    try { return new ActiveXObject('Msxml2.XMLHTTP.3.0'); } catch(e) {}
+    try { return new ActiveXObject('Msxml2.XMLHTTP'); } catch(e) {}
+  }
+  return false;
+}
+
+/**
+ * Removes leading and trailing whitespace, added to support IE.
+ *
+ * @param {String} s
+ * @return {String}
+ * @api private
+ */
+
+var trim = ''.trim
+  ? function(s) { return s.trim(); }
+  : function(s) { return s.replace(/(^\s*|\s*$)/g, ''); };
+
+/**
+ * Check if `obj` is an object.
+ *
+ * @param {Object} obj
+ * @return {Boolean}
+ * @api private
+ */
+
+function isObject(obj) {
+  return obj === Object(obj);
+}
+
+/**
+ * Serialize the given `obj`.
+ *
+ * @param {Object} obj
+ * @return {String}
+ * @api private
+ */
+
+function serialize(obj) {
+  if (!isObject(obj)) return obj;
+  var pairs = [];
+  for (var key in obj) {
+    if (null != obj[key]) {
+      pairs.push(encodeURIComponent(key)
+        + '=' + encodeURIComponent(obj[key]));
+    }
+  }
+  return pairs.join('&');
+}
+
+/**
+ * Expose serialization method.
+ */
+
+ request.serializeObject = serialize;
+
+ /**
+  * Parse the given x-www-form-urlencoded `str`.
+  *
+  * @param {String} str
+  * @return {Object}
+  * @api private
+  */
+
+function parseString(str) {
+  var obj = {};
+  var pairs = str.split('&');
+  var parts;
+  var pair;
+
+  for (var i = 0, len = pairs.length; i < len; ++i) {
+    pair = pairs[i];
+    parts = pair.split('=');
+    obj[decodeURIComponent(parts[0])] = decodeURIComponent(parts[1]);
+  }
+
+  return obj;
+}
+
+/**
+ * Expose parser.
+ */
+
+request.parseString = parseString;
+
+/**
+ * Default MIME type map.
+ *
+ *     superagent.types.xml = 'application/xml';
+ *
+ */
+
+request.types = {
+  html: 'text/html',
+  json: 'application/json',
+  xml: 'application/xml',
+  urlencoded: 'application/x-www-form-urlencoded',
+  'form': 'application/x-www-form-urlencoded',
+  'form-data': 'application/x-www-form-urlencoded'
+};
+
+/**
+ * Default serialization map.
+ *
+ *     superagent.serialize['application/xml'] = function(obj){
+ *       return 'generated xml here';
+ *     };
+ *
+ */
+
+ request.serialize = {
+   'application/x-www-form-urlencoded': serialize,
+   'application/json': JSON.stringify
+ };
+
+ /**
+  * Default parsers.
+  *
+  *     superagent.parse['application/xml'] = function(str){
+  *       return { object parsed from str };
+  *     };
+  *
+  */
+
+request.parse = {
+  'application/x-www-form-urlencoded': parseString,
+  'application/json': JSON.parse
+};
+
+/**
+ * Parse the given header `str` into
+ * an object containing the mapped fields.
+ *
+ * @param {String} str
+ * @return {Object}
+ * @api private
+ */
+
+function parseHeader(str) {
+  var lines = str.split(/\r?\n/);
+  var fields = {};
+  var index;
+  var line;
+  var field;
+  var val;
+
+  lines.pop(); // trailing CRLF
+
+  for (var i = 0, len = lines.length; i < len; ++i) {
+    line = lines[i];
+    index = line.indexOf(':');
+    field = line.slice(0, index).toLowerCase();
+    val = trim(line.slice(index + 1));
+    fields[field] = val;
+  }
+
+  return fields;
+}
+
+/**
+ * Return the mime type for the given `str`.
+ *
+ * @param {String} str
+ * @return {String}
+ * @api private
+ */
+
+function type(str){
+  return str.split(/ *; */).shift();
+};
+
+/**
+ * Return header field parameters.
+ *
+ * @param {String} str
+ * @return {Object}
+ * @api private
+ */
+
+function params(str){
+  return reduce(str.split(/ *; */), function(obj, str){
+    var parts = str.split(/ *= */)
+      , key = parts.shift()
+      , val = parts.shift();
+
+    if (key && val) obj[key] = val;
+    return obj;
+  }, {});
+};
+
+/**
+ * Initialize a new `Response` with the given `xhr`.
+ *
+ *  - set flags (.ok, .error, etc)
+ *  - parse header
+ *
+ * Examples:
+ *
+ *  Aliasing `superagent` as `request` is nice:
+ *
+ *      request = superagent;
+ *
+ *  We can use the promise-like API, or pass callbacks:
+ *
+ *      request.get('/').end(function(res){});
+ *      request.get('/', function(res){});
+ *
+ *  Sending data can be chained:
+ *
+ *      request
+ *        .post('/user')
+ *        .send({ name: 'tj' })
+ *        .end(function(res){});
+ *
+ *  Or passed to `.send()`:
+ *
+ *      request
+ *        .post('/user')
+ *        .send({ name: 'tj' }, function(res){});
+ *
+ *  Or passed to `.post()`:
+ *
+ *      request
+ *        .post('/user', { name: 'tj' })
+ *        .end(function(res){});
+ *
+ * Or further reduced to a single call for simple cases:
+ *
+ *      request
+ *        .post('/user', { name: 'tj' }, function(res){});
+ *
+ * @param {XMLHTTPRequest} xhr
+ * @param {Object} options
+ * @api private
+ */
+
+function Response(req, options) {
+  options = options || {};
+  this.req = req;
+  this.xhr = this.req.xhr;
+  this.text = this.req.method !='HEAD' 
+     ? this.xhr.responseText 
+     : null;
+  this.setStatusProperties(this.xhr.status);
+  this.header = this.headers = parseHeader(this.xhr.getAllResponseHeaders());
+  // getAllResponseHeaders sometimes falsely returns "" for CORS requests, but
+  // getResponseHeader still works. so we get content-type even if getting
+  // other headers fails.
+  this.header['content-type'] = this.xhr.getResponseHeader('content-type');
+  this.setHeaderProperties(this.header);
+  this.body = this.req.method != 'HEAD'
+    ? this.parseBody(this.text)
+    : null;
+}
+
+/**
+ * Get case-insensitive `field` value.
+ *
+ * @param {String} field
+ * @return {String}
+ * @api public
+ */
+
+Response.prototype.get = function(field){
+  return this.header[field.toLowerCase()];
+};
+
+/**
+ * Set header related properties:
+ *
+ *   - `.type` the content type without params
+ *
+ * A response of "Content-Type: text/plain; charset=utf-8"
+ * will provide you with a `.type` of "text/plain".
+ *
+ * @param {Object} header
+ * @api private
+ */
+
+Response.prototype.setHeaderProperties = function(header){
+  // content-type
+  var ct = this.header['content-type'] || '';
+  this.type = type(ct);
+
+  // params
+  var obj = params(ct);
+  for (var key in obj) this[key] = obj[key];
+};
+
+/**
+ * Parse the given body `str`.
+ *
+ * Used for auto-parsing of bodies. Parsers
+ * are defined on the `superagent.parse` object.
+ *
+ * @param {String} str
+ * @return {Mixed}
+ * @api private
+ */
+
+Response.prototype.parseBody = function(str){
+  var parse = request.parse[this.type];
+  return parse && str && str.length
+    ? parse(str)
+    : null;
+};
+
+/**
+ * Set flags such as `.ok` based on `status`.
+ *
+ * For example a 2xx response will give you a `.ok` of __true__
+ * whereas 5xx will be __false__ and `.error` will be __true__. The
+ * `.clientError` and `.serverError` are also available to be more
+ * specific, and `.statusType` is the class of error ranging from 1..5
+ * sometimes useful for mapping respond colors etc.
+ *
+ * "sugar" properties are also defined for common cases. Currently providing:
+ *
+ *   - .noContent
+ *   - .badRequest
+ *   - .unauthorized
+ *   - .notAcceptable
+ *   - .notFound
+ *
+ * @param {Number} status
+ * @api private
+ */
+
+Response.prototype.setStatusProperties = function(status){
+  var type = status / 100 | 0;
+
+  // status / class
+  this.status = status;
+  this.statusType = type;
+
+  // basics
+  this.info = 1 == type;
+  this.ok = 2 == type;
+  this.clientError = 4 == type;
+  this.serverError = 5 == type;
+  this.error = (4 == type || 5 == type)
+    ? this.toError()
+    : false;
+
+  // sugar
+  this.accepted = 202 == status;
+  this.noContent = 204 == status || 1223 == status;
+  this.badRequest = 400 == status;
+  this.unauthorized = 401 == status;
+  this.notAcceptable = 406 == status;
+  this.notFound = 404 == status;
+  this.forbidden = 403 == status;
+};
+
+/**
+ * Return an `Error` representative of this response.
+ *
+ * @return {Error}
+ * @api public
+ */
+
+Response.prototype.toError = function(){
+  var req = this.req;
+  var method = req.method;
+  var url = req.url;
+
+  var msg = 'cannot ' + method + ' ' + url + ' (' + this.status + ')';
+  var err = new Error(msg);
+  err.status = this.status;
+  err.method = method;
+  err.url = url;
+
+  return err;
+};
+
+/**
+ * Expose `Response`.
+ */
+
+request.Response = Response;
+
+/**
+ * Initialize a new `Request` with the given `method` and `url`.
+ *
+ * @param {String} method
+ * @param {String} url
+ * @api public
+ */
+
+function Request(method, url) {
+  var self = this;
+  Emitter.call(this);
+  this._query = this._query || [];
+  this.method = method;
+  this.url = url;
+  this.header = {};
+  this._header = {};
+  this.on('end', function(){
+    var err = null;
+    var res = null;
+
+    try {
+      res = new Response(self); 
+    } catch(e) {
+      err = new Error('Parser is unable to parse the response');
+      err.parse = true;
+      err.original = e;
+    }
+
+    self.callback(err, res);
+  });
+}
+
+/**
+ * Mixin `Emitter`.
+ */
+
+Emitter(Request.prototype);
+
+/**
+ * Allow for extension
+ */
+
+Request.prototype.use = function(fn) {
+  fn(this);
+  return this;
+}
+
+/**
+ * Set timeout to `ms`.
+ *
+ * @param {Number} ms
+ * @return {Request} for chaining
+ * @api public
+ */
+
+Request.prototype.timeout = function(ms){
+  this._timeout = ms;
+  return this;
+};
+
+/**
+ * Clear previous timeout.
+ *
+ * @return {Request} for chaining
+ * @api public
+ */
+
+Request.prototype.clearTimeout = function(){
+  this._timeout = 0;
+  clearTimeout(this._timer);
+  return this;
+};
+
+/**
+ * Abort the request, and clear potential timeout.
+ *
+ * @return {Request}
+ * @api public
+ */
+
+Request.prototype.abort = function(){
+  if (this.aborted) return;
+  this.aborted = true;
+  this.xhr.abort();
+  this.clearTimeout();
+  this.emit('abort');
+  return this;
+};
+
+/**
+ * Set header `field` to `val`, or multiple fields with one object.
+ *
+ * Examples:
+ *
+ *      req.get('/')
+ *        .set('Accept', 'application/json')
+ *        .set('X-API-Key', 'foobar')
+ *        .end(callback);
+ *
+ *      req.get('/')
+ *        .set({ Accept: 'application/json', 'X-API-Key': 'foobar' })
+ *        .end(callback);
+ *
+ * @param {String|Object} field
+ * @param {String} val
+ * @return {Request} for chaining
+ * @api public
+ */
+
+Request.prototype.set = function(field, val){
+  if (isObject(field)) {
+    for (var key in field) {
+      this.set(key, field[key]);
+    }
+    return this;
+  }
+  this._header[field.toLowerCase()] = val;
+  this.header[field] = val;
+  return this;
+};
+
+/**
+ * Remove header `field`.
+ *
+ * Example:
+ *
+ *      req.get('/')
+ *        .unset('User-Agent')
+ *        .end(callback);
+ *
+ * @param {String} field
+ * @return {Request} for chaining
+ * @api public
+ */
+
+Request.prototype.unset = function(field){
+  delete this._header[field.toLowerCase()];
+  delete this.header[field];
+  return this;
+};
+
+/**
+ * Get case-insensitive header `field` value.
+ *
+ * @param {String} field
+ * @return {String}
+ * @api private
+ */
+
+Request.prototype.getHeader = function(field){
+  return this._header[field.toLowerCase()];
+};
+
+/**
+ * Set Content-Type to `type`, mapping values from `request.types`.
+ *
+ * Examples:
+ *
+ *      superagent.types.xml = 'application/xml';
+ *
+ *      request.post('/')
+ *        .type('xml')
+ *        .send(xmlstring)
+ *        .end(callback);
+ *
+ *      request.post('/')
+ *        .type('application/xml')
+ *        .send(xmlstring)
+ *        .end(callback);
+ *
+ * @param {String} type
+ * @return {Request} for chaining
+ * @api public
+ */
+
+Request.prototype.type = function(type){
+  this.set('Content-Type', request.types[type] || type);
+  return this;
+};
+
+/**
+ * Set Accept to `type`, mapping values from `request.types`.
+ *
+ * Examples:
+ *
+ *      superagent.types.json = 'application/json';
+ *
+ *      request.get('/agent')
+ *        .accept('json')
+ *        .end(callback);
+ *
+ *      request.get('/agent')
+ *        .accept('application/json')
+ *        .end(callback);
+ *
+ * @param {String} accept
+ * @return {Request} for chaining
+ * @api public
+ */
+
+Request.prototype.accept = function(type){
+  this.set('Accept', request.types[type] || type);
+  return this;
+};
+
+/**
+ * Set Authorization field value with `user` and `pass`.
+ *
+ * @param {String} user
+ * @param {String} pass
+ * @return {Request} for chaining
+ * @api public
+ */
+
+Request.prototype.auth = function(user, pass){
+  var str = btoa(user + ':' + pass);
+  this.set('Authorization', 'Basic ' + str);
+  return this;
+};
+
+/**
+* Add query-string `val`.
+*
+* Examples:
+*
+*   request.get('/shoes')
+*     .query('size=10')
+*     .query({ color: 'blue' })
+*
+* @param {Object|String} val
+* @return {Request} for chaining
+* @api public
+*/
+
+Request.prototype.query = function(val){
+  if ('string' != typeof val) val = serialize(val);
+  if (val) this._query.push(val);
+  return this;
+};
+
+/**
+ * Write the field `name` and `val` for "multipart/form-data"
+ * request bodies.
+ *
+ * ``` js
+ * request.post('/upload')
+ *   .field('foo', 'bar')
+ *   .end(callback);
+ * ```
+ *
+ * @param {String} name
+ * @param {String|Blob|File} val
+ * @return {Request} for chaining
+ * @api public
+ */
+
+Request.prototype.field = function(name, val){
+  if (!this._formData) this._formData = new FormData();
+  this._formData.append(name, val);
+  return this;
+};
+
+/**
+ * Queue the given `file` as an attachment to the specified `field`,
+ * with optional `filename`.
+ *
+ * ``` js
+ * request.post('/upload')
+ *   .attach(new Blob(['<a id="a"><b id="b">hey!</b></a>'], { type: "text/html"}))
+ *   .end(callback);
+ * ```
+ *
+ * @param {String} field
+ * @param {Blob|File} file
+ * @param {String} filename
+ * @return {Request} for chaining
+ * @api public
+ */
+
+Request.prototype.attach = function(field, file, filename){
+  if (!this._formData) this._formData = new FormData();
+  this._formData.append(field, file, filename);
+  return this;
+};
+
+/**
+ * Send `data`, defaulting the `.type()` to "json" when
+ * an object is given.
+ *
+ * Examples:
+ *
+ *       // querystring
+ *       request.get('/search')
+ *         .end(callback)
+ *
+ *       // multiple data "writes"
+ *       request.get('/search')
+ *         .send({ search: 'query' })
+ *         .send({ range: '1..5' })
+ *         .send({ order: 'desc' })
+ *         .end(callback)
+ *
+ *       // manual json
+ *       request.post('/user')
+ *         .type('json')
+ *         .send('{"name":"tj"})
+ *         .end(callback)
+ *
+ *       // auto json
+ *       request.post('/user')
+ *         .send({ name: 'tj' })
+ *         .end(callback)
+ *
+ *       // manual x-www-form-urlencoded
+ *       request.post('/user')
+ *         .type('form')
+ *         .send('name=tj')
+ *         .end(callback)
+ *
+ *       // auto x-www-form-urlencoded
+ *       request.post('/user')
+ *         .type('form')
+ *         .send({ name: 'tj' })
+ *         .end(callback)
+ *
+ *       // defaults to x-www-form-urlencoded
+  *      request.post('/user')
+  *        .send('name=tobi')
+  *        .send('species=ferret')
+  *        .end(callback)
+ *
+ * @param {String|Object} data
+ * @return {Request} for chaining
+ * @api public
+ */
+
+Request.prototype.send = function(data){
+  var obj = isObject(data);
+  var type = this.getHeader('Content-Type');
+
+  // merge
+  if (obj && isObject(this._data)) {
+    for (var key in data) {
+      this._data[key] = data[key];
+    }
+  } else if ('string' == typeof data) {
+    if (!type) this.type('form');
+    type = this.getHeader('Content-Type');
+    if ('application/x-www-form-urlencoded' == type) {
+      this._data = this._data
+        ? this._data + '&' + data
+        : data;
+    } else {
+      this._data = (this._data || '') + data;
+    }
+  } else {
+    this._data = data;
+  }
+
+  if (!obj) return this;
+  if (!type) this.type('json');
+  return this;
+};
+
+/**
+ * Invoke the callback with `err` and `res`
+ * and handle arity check.
+ *
+ * @param {Error} err
+ * @param {Response} res
+ * @api private
+ */
+
+Request.prototype.callback = function(err, res){
+  var fn = this._callback;
+  this.clearTimeout();
+  if (2 == fn.length) return fn(err, res);
+  if (err) return this.emit('error', err);
+  fn(res);
+};
+
+/**
+ * Invoke callback with x-domain error.
+ *
+ * @api private
+ */
+
+Request.prototype.crossDomainError = function(){
+  var err = new Error('Origin is not allowed by Access-Control-Allow-Origin');
+  err.crossDomain = true;
+  this.callback(err);
+};
+
+/**
+ * Invoke callback with timeout error.
+ *
+ * @api private
+ */
+
+Request.prototype.timeoutError = function(){
+  var timeout = this._timeout;
+  var err = new Error('timeout of ' + timeout + 'ms exceeded');
+  err.timeout = timeout;
+  this.callback(err);
+};
+
+/**
+ * Enable transmission of cookies with x-domain requests.
+ *
+ * Note that for this to work the origin must not be
+ * using "Access-Control-Allow-Origin" with a wildcard,
+ * and also must set "Access-Control-Allow-Credentials"
+ * to "true".
+ *
+ * @api public
+ */
+
+Request.prototype.withCredentials = function(){
+  this._withCredentials = true;
+  return this;
+};
+
+/**
+ * Initiate request, invoking callback `fn(res)`
+ * with an instanceof `Response`.
+ *
+ * @param {Function} fn
+ * @return {Request} for chaining
+ * @api public
+ */
+
+Request.prototype.end = function(fn){
+  var self = this;
+  var xhr = this.xhr = getXHR();
+  var query = this._query.join('&');
+  var timeout = this._timeout;
+  var data = this._formData || this._data;
+
+  // store callback
+  this._callback = fn || noop;
+
+  // state change
+  xhr.onreadystatechange = function(){
+    if (4 != xhr.readyState) return;
+    if (0 == xhr.status) {
+      if (self.aborted) return self.timeoutError();
+      return self.crossDomainError();
+    }
+    self.emit('end');
+  };
+
+  // progress
+  if (xhr.upload) {
+    xhr.upload.onprogress = function(e){
+      e.percent = e.loaded / e.total * 100;
+      self.emit('progress', e);
+    };
+  }
+
+  // timeout
+  if (timeout && !this._timer) {
+    this._timer = setTimeout(function(){
+      self.abort();
+    }, timeout);
+  }
+
+  // querystring
+  if (query) {
+    query = request.serializeObject(query);
+    this.url += ~this.url.indexOf('?')
+      ? '&' + query
+      : '?' + query;
+  }
+
+  // initiate request
+  xhr.open(this.method, this.url, true);
+
+  // CORS
+  if (this._withCredentials) xhr.withCredentials = true;
+
+  // body
+  if ('GET' != this.method && 'HEAD' != this.method && 'string' != typeof data && !isHost(data)) {
+    // serialize stuff
+    var serialize = request.serialize[this.getHeader('Content-Type')];
+    if (serialize) data = serialize(data);
+  }
+
+  // set header fields
+  for (var field in this.header) {
+    if (null == this.header[field]) continue;
+    xhr.setRequestHeader(field, this.header[field]);
+  }
+
+  // send stuff
+  this.emit('request', this);
+  xhr.send(data);
+  return this;
+};
+
+/**
+ * Expose `Request`.
+ */
+
+request.Request = Request;
+
+/**
+ * Issue a request:
+ *
+ * Examples:
+ *
+ *    request('GET', '/users').end(callback)
+ *    request('/users').end(callback)
+ *    request('/users', callback)
+ *
+ * @param {String} method
+ * @param {String|Function} url or callback
+ * @return {Request}
+ * @api public
+ */
+
+function request(method, url) {
+  // callback
+  if ('function' == typeof url) {
+    return new Request('GET', method).end(url);
+  }
+
+  // url first
+  if (1 == arguments.length) {
+    return new Request('GET', method);
+  }
+
+  return new Request(method, url);
+}
+
+/**
+ * GET `url` with optional callback `fn(res)`.
+ *
+ * @param {String} url
+ * @param {Mixed|Function} data or fn
+ * @param {Function} fn
+ * @return {Request}
+ * @api public
+ */
+
+request.get = function(url, data, fn){
+  var req = request('GET', url);
+  if ('function' == typeof data) fn = data, data = null;
+  if (data) req.query(data);
+  if (fn) req.end(fn);
+  return req;
+};
+
+/**
+ * HEAD `url` with optional callback `fn(res)`.
+ *
+ * @param {String} url
+ * @param {Mixed|Function} data or fn
+ * @param {Function} fn
+ * @return {Request}
+ * @api public
+ */
+
+request.head = function(url, data, fn){
+  var req = request('HEAD', url);
+  if ('function' == typeof data) fn = data, data = null;
+  if (data) req.send(data);
+  if (fn) req.end(fn);
+  return req;
+};
+
+/**
+ * DELETE `url` with optional callback `fn(res)`.
+ *
+ * @param {String} url
+ * @param {Function} fn
+ * @return {Request}
+ * @api public
+ */
+
+request.del = function(url, fn){
+  var req = request('DELETE', url);
+  if (fn) req.end(fn);
+  return req;
+};
+
+/**
+ * PATCH `url` with optional `data` and callback `fn(res)`.
+ *
+ * @param {String} url
+ * @param {Mixed} data
+ * @param {Function} fn
+ * @return {Request}
+ * @api public
+ */
+
+request.patch = function(url, data, fn){
+  var req = request('PATCH', url);
+  if ('function' == typeof data) fn = data, data = null;
+  if (data) req.send(data);
+  if (fn) req.end(fn);
+  return req;
+};
+
+/**
+ * POST `url` with optional `data` and callback `fn(res)`.
+ *
+ * @param {String} url
+ * @param {Mixed} data
+ * @param {Function} fn
+ * @return {Request}
+ * @api public
+ */
+
+request.post = function(url, data, fn){
+  var req = request('POST', url);
+  if ('function' == typeof data) fn = data, data = null;
+  if (data) req.send(data);
+  if (fn) req.end(fn);
+  return req;
+};
+
+/**
+ * PUT `url` with optional `data` and callback `fn(res)`.
+ *
+ * @param {String} url
+ * @param {Mixed|Function} data or fn
+ * @param {Function} fn
+ * @return {Request}
+ * @api public
+ */
+
+request.put = function(url, data, fn){
+  var req = request('PUT', url);
+  if ('function' == typeof data) fn = data, data = null;
+  if (data) req.send(data);
+  if (fn) req.end(fn);
+  return req;
+};
+
+/**
+ * Expose `request`.
+ */
+
+module.exports = request;
+
+},{"emitter":248,"reduce":249}],248:[function(require,module,exports){
+
+/**
+ * Expose `Emitter`.
+ */
+
+module.exports = Emitter;
+
+/**
+ * Initialize a new `Emitter`.
+ *
+ * @api public
+ */
+
+function Emitter(obj) {
+  if (obj) return mixin(obj);
+};
+
+/**
+ * Mixin the emitter properties.
+ *
+ * @param {Object} obj
+ * @return {Object}
+ * @api private
+ */
+
+function mixin(obj) {
+  for (var key in Emitter.prototype) {
+    obj[key] = Emitter.prototype[key];
+  }
+  return obj;
+}
+
+/**
+ * Listen on the given `event` with `fn`.
+ *
+ * @param {String} event
+ * @param {Function} fn
+ * @return {Emitter}
+ * @api public
+ */
+
+Emitter.prototype.on =
+Emitter.prototype.addEventListener = function(event, fn){
+  this._callbacks = this._callbacks || {};
+  (this._callbacks[event] = this._callbacks[event] || [])
+    .push(fn);
+  return this;
+};
+
+/**
+ * Adds an `event` listener that will be invoked a single
+ * time then automatically removed.
+ *
+ * @param {String} event
+ * @param {Function} fn
+ * @return {Emitter}
+ * @api public
+ */
+
+Emitter.prototype.once = function(event, fn){
+  var self = this;
+  this._callbacks = this._callbacks || {};
+
+  function on() {
+    self.off(event, on);
+    fn.apply(this, arguments);
+  }
+
+  on.fn = fn;
+  this.on(event, on);
+  return this;
+};
+
+/**
+ * Remove the given callback for `event` or all
+ * registered callbacks.
+ *
+ * @param {String} event
+ * @param {Function} fn
+ * @return {Emitter}
+ * @api public
+ */
+
+Emitter.prototype.off =
+Emitter.prototype.removeListener =
+Emitter.prototype.removeAllListeners =
+Emitter.prototype.removeEventListener = function(event, fn){
+  this._callbacks = this._callbacks || {};
+
+  // all
+  if (0 == arguments.length) {
+    this._callbacks = {};
+    return this;
+  }
+
+  // specific event
+  var callbacks = this._callbacks[event];
+  if (!callbacks) return this;
+
+  // remove all handlers
+  if (1 == arguments.length) {
+    delete this._callbacks[event];
+    return this;
+  }
+
+  // remove specific handler
+  var cb;
+  for (var i = 0; i < callbacks.length; i++) {
+    cb = callbacks[i];
+    if (cb === fn || cb.fn === fn) {
+      callbacks.splice(i, 1);
+      break;
+    }
+  }
+  return this;
+};
+
+/**
+ * Emit `event` with the given args.
+ *
+ * @param {String} event
+ * @param {Mixed} ...
+ * @return {Emitter}
+ */
+
+Emitter.prototype.emit = function(event){
+  this._callbacks = this._callbacks || {};
+  var args = [].slice.call(arguments, 1)
+    , callbacks = this._callbacks[event];
+
+  if (callbacks) {
+    callbacks = callbacks.slice(0);
+    for (var i = 0, len = callbacks.length; i < len; ++i) {
+      callbacks[i].apply(this, args);
+    }
+  }
+
+  return this;
+};
+
+/**
+ * Return array of callbacks for `event`.
+ *
+ * @param {String} event
+ * @return {Array}
+ * @api public
+ */
+
+Emitter.prototype.listeners = function(event){
+  this._callbacks = this._callbacks || {};
+  return this._callbacks[event] || [];
+};
+
+/**
+ * Check if this emitter has `event` handlers.
+ *
+ * @param {String} event
+ * @return {Boolean}
+ * @api public
+ */
+
+Emitter.prototype.hasListeners = function(event){
+  return !! this.listeners(event).length;
+};
+
+},{}],249:[function(require,module,exports){
+
+/**
+ * Reduce `arr` with `fn`.
+ *
+ * @param {Array} arr
+ * @param {Function} fn
+ * @param {Mixed} initial
+ *
+ * TODO: combatible error handling?
+ */
+
+module.exports = function(arr, fn, initial){  
+  var idx = 0;
+  var len = arr.length;
+  var curr = arguments.length == 3
+    ? initial
+    : arr[idx++];
+
+  while (idx < len) {
+    curr = fn.call(null, curr, arr[idx], ++idx, arr);
+  }
+  
+  return curr;
+};
+},{}]},{},[1]);

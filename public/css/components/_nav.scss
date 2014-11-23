@@ -9,6 +9,8 @@
         width: 100%;
         background: #ccc;
         z-index: 1000;
+        overflow: scroll;
+        -webkit-overflow-scrolling: touch;
         transition: right 200ms cubic-bezier(0.4, 0, 0.2, 1);
         -webkit-transition: right 200ms cubic-bezier(0.4, 0, 0.2, 1);
         -moz-transition: right 200ms cubic-bezier(0.4, 0, 0.2, 1);

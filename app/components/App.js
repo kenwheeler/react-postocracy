@@ -3,21 +3,21 @@ var Router = require('react-router');
 var RouteHandler = Router.RouteHandler;
 var PureRenderMixin = React.addons.PureRenderMixin;
 var UIStore = require('../stores/UIStore');
-var LinkStore = require('../stores/LinkStore');
 var UserStore = require('../stores/UserStore');
-var API = require('../../api/Api');
+var Sidebar = require('./common/Sidebar');
+var Header = require('./common/Header');
+var Navigation = require('./common/Navigation');
 
 function getState() {
   return {
     navigationActive: UIStore.getNavState(),
-    links: LinkStore.getLinks(),
     user: UserStore.getUser()
   }
 }
 
 var App = React.createClass({
 
-  mixins: [UIStore.mixin, LinkStore.mixin, UserStore.mixin, PureRenderMixin],
+  mixins: [UIStore.mixin, UserStore.mixin, PureRenderMixin],
 
   getInitialState: function(){
       return getState();
@@ -29,7 +29,16 @@ var App = React.createClass({
 
   render: function() {
     return (
-      <RouteHandler links={this.state.links} user={this.state.user} params={this.props.params} navigationActive={this.state.navigationActive} />
+      <div className="container">
+        <Header navigationActive={this.state.navigationActive} />
+        <Navigation navigationActive={this.state.navigationActive} user={this.state.user} />
+        <div className="content" id="content">
+          <main className="main">
+            <RouteHandler user={this.state.user}/>
+            <Sidebar user={this.state.user} />
+          </main>
+        </div>
+      </div>
     )
   }
 

@@ -1,0 +1,10 @@
+/
+/new
+/controversial
+/channel/:name
+/channel/:name/new
+/channel/:name/controversial
+/channel/create
+/link/:name
+/user/login
+/user/profile

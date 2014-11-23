@@ -4,6 +4,8 @@
 
 html, body, .container {
     height: 100%;
+    -webkit-text-size-adjust:100%;
+    overflow: hidden;
 }
 
 body {
@@ -15,43 +17,57 @@ body {
 }
 
 .container {
-    padding-top: 62px;
-    @include breakpoint($mobile){
-      padding-top: 94px;
-      width: 100%;
-    }
+    position: absolute;
+    width: 100%;
 }
 
 .contain {
-  @include container;
-  position: relative;
-  margin: auto;
+    @include container;
+    position: relative;
+    margin: auto;
+}
+
+.content {
+    top: 62px;
+    bottom: 0px;
+    overflow: scroll;
+    overflow-scrolling: touch;
+    -webkit-overflow-scrolling: touch;
+    position: absolute;
+    width: 100%;
+    @include breakpoint($mobile) {
+      top: 96px;
+    }
 }
 
 .main {
-  @include container;
-  position: relative;
-  margin: auto;
-  padding: 0;
-  .main__feed {
+    @include container;
+    margin: auto;
+    padding: 0;
     background: white;
-    border-radius: 3px;
-    @include span(12, false);
-    padding-right: 300px;
-    @include breakpoint($mobile){
-      @include span(12, false);
-      padding-right: 0px;
+    z-index: 1;
+    position: relative;
+    min-height: 100%;
+    .main__feed {
+        background: white;
+        border-radius: 3px;
+        min-height: 100%;
+        @include span(12, false);
+        padding-right: 300px;
+        @include breakpoint($mobile) {
+            @include span(12, false);
+            padding-right: 0px;
+        }
     }
-  }
-  .main__sidebar {
-    position: absolute;
-    top: 0px;
-    bottom: 0px;
-    right: 0px;
-    background: $secondary;
-    width: 300px;
-    @include breakpoint($mobile){
-      display: none;
+    .main__sidebar {
+        position: absolute;
+        top: 0px;
+        bottom: 0px;
+        right: 0px;
+        background: $secondary;
+        width: 300px;
+        @include breakpoint($mobile) {
+            display: none;
+        }
     }
-  }
 }

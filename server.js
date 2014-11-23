@@ -19,9 +19,6 @@ var TwitterStrategy = require('passport-twitter').Strategy;
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 
-require('node-jsx').install();
-var routes = require('./routes.js');
-
 passport.serializeUser(function(user, done) {
   done(null, user.id);
 });
@@ -60,13 +57,16 @@ passport.use(new TwitterStrategy({
   });
 }));
 
+// Routes
+require('node-jsx').install();
+var routes = require('./routes.js');
+
 // Server Init
 var app = express();
 var port = process.env.PORT || 1337;
 app.engine('handlebars', exphbs({ defaultLayout: 'layout'}));
 app.set('view engine', 'handlebars');
 app.disable('etag');
-
 app.use(morgan('dev'))
 app.use(cookieParser());
 app.use(bodyParser.json());
@@ -83,10 +83,19 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
-
 app.use("/", express.static(__dirname + "/public/"));
 
+// Links
 app.get("/api/links", routes.api.links);
+
+// Channel
+// app.get("/api/channel", routes.api.channel.list);
+// app.get("/api/channel/:id", routes.api.channel.read);
+app.get("/api/channel/unique/", isLoggedIn, routes.api.channel.unique);
+app.post("/api/channel/", isLoggedIn, routes.api.channel.create);
+// app.update("/api/channel/:id", isLoggedIn, routes.api.channel.update);
+// app.delete("/api/channel/:id", isLoggedIn, routes.api.channel.delete);
+
 app.get('/login', passport.authenticate('twitter'));
 app.get('/auth/twitter/callback',
   passport.authenticate('twitter', {

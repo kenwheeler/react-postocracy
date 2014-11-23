@@ -41,11 +41,11 @@ $grid-max-width: 1200px;
 // Buttons
 @import "./components/_buttons";
 
-//Actions List
-@import "./components/_actionslist";
-
 //Account Box
 @import "./components/_accountbox";
 
 //Search Box
 @import "./components/_searchbox";
+
+//Channel Form
+@import "./components/_channelform";

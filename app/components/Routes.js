@@ -5,8 +5,9 @@ var DefaultRoute = Router.DefaultRoute;
 
 var AppRoutes = (
   <Route name="app" path="/" handler={require('./App')}>
-    <Route name="top" path="/" handler={require('./home/HomeIndex')} />
-    <Route name="sort" path=":sort" handler={require('./home/HomeIndex')} />
+    <DefaultRoute handler={require('./home/Home')} />
+    <Route name="sort" path="/:sort" handler={require('./home/Home')} />
+    <Route name="channelCreate" path="/channel/create" handler={require('./channels/ChannelCreate')} />
   </Route>
 );
 

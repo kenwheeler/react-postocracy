@@ -209,7 +209,9 @@ p {
   box-sizing: border-box; }
 
 html, body, .container {
-  height: 100%; }
+  height: 100%;
+  -webkit-text-size-adjust: 100%;
+  overflow: hidden; }
 
 body {
   background: #eee;
@@ -219,11 +221,8 @@ body {
   padding: 0; }
 
 .container {
-  padding-top: 62px; }
-  @media (max-width: 767px) {
-    .container {
-      padding-top: 94px;
-      width: 100%; } }
+  position: absolute;
+  width: 100%; }
 
 .contain {
   width: 100%;
@@ -231,15 +230,31 @@ body {
   position: relative;
   margin: auto; }
 
+.content {
+  top: 62px;
+  bottom: 0px;
+  overflow: scroll;
+  overflow-scrolling: touch;
+  -webkit-overflow-scrolling: touch;
+  position: absolute;
+  width: 100%; }
+  @media (max-width: 767px) {
+    .content {
+      top: 96px; } }
+
 .main {
   width: 100%;
   max-width: 1200px;
-  position: relative;
   margin: auto;
-  padding: 0; }
+  padding: 0;
+  background: white;
+  z-index: 1;
+  position: relative;
+  min-height: 100%; }
   .main .main__feed {
     background: white;
     border-radius: 3px;
+    min-height: 100%;
     width: 100%;
     float: left;
     padding-right: 300px; }
@@ -261,11 +276,12 @@ body {
 
 .siteHeader {
   background: #e74c3c;
+  position: absolute;
   color: white;
   text-align: right;
-  position: fixed;
   width: 100%;
   top: 0px;
+  height: 62px;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
   z-index: 999; }
   .siteHeader .siteHeader__title {
@@ -279,6 +295,8 @@ body {
     float: left;
     vertical-align: middle;
     -webkit-user-select: none; }
+    .siteHeader .siteHeader__title a {
+      color: white; }
   .siteHeader .siteHeader__filters {
     float: left;
     display: inline-block; }
@@ -298,7 +316,9 @@ body {
         float: none;
         display: block;
         clear: left;
-        background: #34495e; }
+        background: #34495e;
+        position: relative;
+        top: 0px; }
         .siteHeader .siteHeader__filters a {
           padding: 5px;
           margin: 0;
@@ -329,6 +349,8 @@ body {
       width: 100%;
       background: #ccc;
       z-index: 1000;
+      overflow: scroll;
+      -webkit-overflow-scrolling: touch;
       transition: right 200ms cubic-bezier(0.4, 0, 0.2, 1);
       -webkit-transition: right 200ms cubic-bezier(0.4, 0, 0.2, 1);
       -moz-transition: right 200ms cubic-bezier(0.4, 0, 0.2, 1); }
@@ -430,9 +452,12 @@ body {
   .channels .channels__actions {
     padding: 20px; }
     .channels .channels__actions .channels__create {
-      width: 100%; }
+      font-size: 16px;
+      width: 100%;
+      display: block;
+      text-align: center; }
 
-.button, .button__primary, .channels .channels__actions .channels__create, .accountBox .account__actions .account__action {
+.button, .button__primary, .channels .channels__actions .channels__create, .accountBox .account__actions .account__action, .main__feed--form form button {
   background: #34495e;
   box-shadow: 0px 3px 0px #222f3d;
   border: 0;
@@ -442,10 +467,10 @@ body {
   font-weight: bold;
   color: white;
   outline: none; }
-  .button:hover, .button__primary:hover, .channels .channels__actions .channels__create:hover, .accountBox .account__actions .account__action:hover {
+  .button:hover, .button__primary:hover, .channels .channels__actions .channels__create:hover, .accountBox .account__actions .account__action:hover, .main__feed--form form button:hover {
     background: #222f3d;
     box-shadow: 0px 3px 0px #10161c; }
-  .button:active, .button__primary:active, .channels .channels__actions .channels__create:active, .accountBox .account__actions .account__action:active {
+  .button:active, .button__primary:active, .channels .channels__actions .channels__create:active, .accountBox .account__actions .account__action:active, .main__feed--form form button:active {
     position: relative;
     top: 2px;
     box-shadow: none; }
@@ -465,20 +490,6 @@ body {
   background: none;
   border: none;
   outline: none; }
-
-.actionsList {
-  margin-right: 20px; }
-  .actionsList a {
-    font-size: 20px;
-    color: white;
-    padding: 22px 20px 18px;
-    line-height: 20px;
-    display: inline-block; }
-    .actionsList a:active, .actionsList a:hover {
-      background: #d62a1a; }
-    @media (max-width: 767px) {
-      .actionsList a {
-        display: none; } }
 
 .accountBox {
   background: white;
@@ -563,3 +574,62 @@ body {
       right: 20px;
       font-size: 24px;
       color: #e74c3c; }
+
+.main__feed--form h2 {
+  padding: 20px 40px;
+  font-weight: bold; }
+  @media (max-width: 767px) {
+    .main__feed--form h2 {
+      padding: 20px 20px; } }
+.main__feed--form form {
+  padding: 0px 40px; }
+  @media (max-width: 767px) {
+    .main__feed--form form {
+      padding: 0px 20px; } }
+  .main__feed--form form input, .main__feed--form form label, .main__feed--form form button {
+    display: block; }
+  .main__feed--form form input, .main__feed--form form textarea {
+    margin-bottom: 20px;
+    outline: none;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    -webkit-appearance: none;
+    padding: 10px;
+    min-width: 250px;
+    float: left;
+    clear: left; }
+  @media (max-width: 767px) {
+    .main__feed--form form input {
+      width: 90%; } }
+  .main__feed--form form textarea {
+    font-family: inherit;
+    font-size: inherit;
+    width: 100%; }
+    @media (max-width: 767px) {
+      .main__feed--form form textarea {
+        width: 100%; } }
+  .main__feed--form form label {
+    margin-bottom: 10px;
+    clear: left; }
+  .main__feed--form form button {
+    cursor: pointer;
+    clear: left; }
+    @media (max-width: 767px) {
+      .main__feed--form form button {
+        width: 100%; } }
+  .main__feed--form form .channel__unique {
+    display: inline-block;
+    padding: 10px;
+    font-size: 16px;
+    color: #b51818;
+    line-height: 1.5;
+    margin-left: 10px; }
+    @media (max-width: 767px) {
+      .main__feed--form form .channel__unique {
+        padding: 10px 0px;
+        width: 10%;
+        margin-left: 0;
+        text-align: center; } }
+    .main__feed--form form .channel__unique .icon-check {
+      color: #4cb518; }

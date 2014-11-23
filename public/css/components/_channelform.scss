@@ -1,0 +1,72 @@
+.main__feed--form {
+  h2 {
+    padding: 20px 40px;
+    @include breakpoint($mobile){
+      padding: 20px 20px;
+    }
+    font-weight: bold;
+  }
+  form {
+    padding: 0px 40px;
+    @include breakpoint($mobile){
+      padding: 0px 20px;
+    }
+    input, label,button {
+      display: block;
+    }
+    input,textarea {
+      margin-bottom: 20px;
+      outline: none;
+      font-size: 16px;
+      border: 1px solid #ddd;
+      border-radius: 3px;
+      -webkit-appearance: none;
+      padding: 10px;
+      min-width: 250px;
+      float: left;
+      clear: left;
+    }
+    input {
+      @include breakpoint($mobile){
+        width: 90%;
+      }
+    }
+    textarea {
+      font-family: inherit;
+      font-size: inherit;
+      width: 100%;
+      @include breakpoint($mobile){
+        width: 100%;
+      }
+    }
+    label {
+      margin-bottom: 10px;
+      clear: left;
+    }
+    button {
+      @extend .button;
+      cursor: pointer;
+      clear: left;
+      @include breakpoint($mobile){
+        width: 100%;
+      }
+    }
+    .channel__unique {
+      display: inline-block;
+      padding: 10px;
+      font-size: 16px;
+      color: darken($red, 10%);
+      line-height: 1.5;
+      margin-left: 10px;
+      @include breakpoint($mobile){
+        padding: 10px 0px;
+        width: 10%;
+        margin-left: 0;
+        text-align: center;
+      }
+      .icon-check {
+        color: darken($green, 10%);
+      }
+    }
+  }
+}

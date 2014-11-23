@@ -27,7 +27,10 @@
     padding: 20px;
     .channels__create {
       @extend .button__primary;
+      font-size: 16px;
       width: 100%;
+      display: block;
+      text-align: center;
     }
   }
 }
