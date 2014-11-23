@@ -11,11 +11,21 @@
     @include breakpoint($mobile){
       padding: 0px 20px;
     }
+    .channel__error {
+      color: darken($red, 10%);
+      display: block;
+      font-size: 14px;
+      clear: left;
+      i {
+        line-height: 1;
+        vertical-align: middle;
+        margin-right: 5px;
+      }
+    }
     input, label,button {
       display: block;
     }
     input,textarea {
-      margin-bottom: 20px;
       outline: none;
       font-size: 16px;
       border: 1px solid #ddd;
@@ -27,14 +37,19 @@
       clear: left;
     }
     input {
+      margin-bottom: 10px;
       @include breakpoint($mobile){
-        width: 90%;
+        width: 100%;
+      }
+      &.invalid {
+        border-color: darken($red, 10%);
       }
     }
     textarea {
       font-family: inherit;
       font-size: inherit;
       width: 100%;
+      display: block;
       @include breakpoint($mobile){
         width: 100%;
       }
@@ -47,25 +62,11 @@
       @extend .button;
       cursor: pointer;
       clear: left;
+      margin: 20px 0px;
+      float: left;
+      display: block;
       @include breakpoint($mobile){
         width: 100%;
-      }
-    }
-    .channel__unique {
-      display: inline-block;
-      padding: 10px;
-      font-size: 16px;
-      color: darken($red, 10%);
-      line-height: 1.5;
-      margin-left: 10px;
-      @include breakpoint($mobile){
-        padding: 10px 0px;
-        width: 10%;
-        margin-left: 0;
-        text-align: center;
-      }
-      .icon-check {
-        color: darken($green, 10%);
       }
     }
   }

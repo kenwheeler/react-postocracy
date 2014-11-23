@@ -1,28 +1,17 @@
 var React = require('react');
 var PureRenderMixin = React.addons.PureRenderMixin;
+var Navigation = require('react-router').Navigation;
 var ChannelActions = require('../../actions/ChannelActions');
+var Validation = require('../mixins/Validation');
 var superagent = require('superagent');
 
 module.exports = React.createClass({
-  mixins: [PureRenderMixin],
-  getInitialState: function(){
-    return {
-      errors: [],
-      valid: true,
-      channelUnique: true,
-    }
-  },
+  mixins: [PureRenderMixin, Validation, Navigation],
   validateForm: function(e){
-    return true;
-  },
-  checkUnique: function(){
-    var self = this;
-    superagent
-      .get('/api/channel/unique/')
-      .query({name: self.refs.name.getDOMNode().value})
-      .end(function(res){
-        self.setState({channelUnique: res.body.unique})
-      });
+    this.setState({errors: [], valid: true});
+    this.checkRequired(e.target.value);
+    this.checkUnique(e.target.value);
+    this.checkFormat(e.target.value);
   },
   handleSubmit: function(e){
     var self = this;
@@ -32,32 +21,38 @@ module.exports = React.createClass({
         .post('/api/channel/')
         .send({ name: self.refs.name.getDOMNode().value, description: self.refs.description.getDOMNode().value })
         .end(function(error, res){
-          alert(res);
+          if(!error){
+            var loc = '/channel/' + JSON.parse(res.text).slug;
+            console.log(loc);
+            self.transitionTo(loc);
+          }
         });
     e.preventDefault();
   },
+  componentWillMount: function(e){
+    if(this.props.user.length === 0) {
+      this.transitionTo("loginRequired");
+    }
+  },
   render: function() {
-    var formErrors = this.state.errors.map(function(error){
-      return <span className="channel__error">{error}</span>
+    var formErrors = this.state.errors.map(function(error, index){
+      return <span key={index} className="channel__error"><i className="icon-alert"/>{error}</span>
     });
     return (
       <section className="main__feed main__feed--form">
         <h2>Create Channel</h2>
         <form name="channel-create" className="channel__form" onSubmit={this.handleSubmit}>
-          {formErrors}
           <div className="form__row">
             <label htmlFor="name">Name:</label>
-            <input type="text" name="name" ref="name" onKeyUp={this.checkUnique} placeholder="Channel Name" autoComplete="off"/>
-            <span className="channel__unique">
-              {this.state.channelUnique ? <i className="icon-check"/> : <i className="icon-x"/>}
-            </span>
+            <input type="text" className={this.state.valid ? "" : "invalid"} name="name" ref="name" onChange={this.validateForm} placeholder="Channel Name" autoComplete="off"/>
+            {formErrors}
           </div>
           <div className="form__row">
             <label htmlFor="description">Description:</label>
             <textarea name="description" ref="description" placeholder="Describe your channel" rows="5"></textarea>
           </div>
           <div className="form__row">
-            <button type="submit">Save Channel</button>
+            <button type="submit" disabled={this.state.valid ? "" : "disabled"}>Save Channel</button>
           </div>
         </form>
       </section>

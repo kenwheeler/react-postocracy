@@ -17,6 +17,10 @@
     top: 2px;
     box-shadow: none;
   }
+  &[disabled=disabled]{
+    background: #aaa;
+    box-shadow: 0px 3px 0px darken(#aaa, 10%);
+  }
 }
 
 .button__primary {

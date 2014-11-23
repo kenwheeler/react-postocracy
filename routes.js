@@ -6,6 +6,7 @@ var links = require('./mocks/links.js');
 var UserActions = require('./app/actions/UserActions');
 var LinkActions = require('./app/actions/LinkActions');
 var Channel = require('./api/models/Channel');
+var S = require('string');
 
 module.exports = {
   api: {
@@ -18,11 +19,11 @@ module.exports = {
         channel._creator = req.user.id
         channel.name = req.body.name;
         channel.slug = req.body.name.toLowerCase();
-        channel.description = req.body.name;
+        channel.description = S(req.body.description).stripTags();
         channel.save(function(err) {
           if (err)
             res.send(err);
-          res.json({ saved: true });
+          res.json({ saved: true, slug: channel.slug });
         });
       },
       unique: function(req,res){

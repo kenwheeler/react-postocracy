@@ -8,6 +8,7 @@ var AppRoutes = (
     <DefaultRoute handler={require('./home/Home')} />
     <Route name="sort" path="/:sort" handler={require('./home/Home')} />
     <Route name="channelCreate" path="/channel/create" handler={require('./channels/ChannelCreate')} />
+    <Route name="loginRequired" path="/user/login" handler={require('./login/Login')} />
   </Route>
 );
 

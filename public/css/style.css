@@ -454,10 +454,11 @@ body {
     .channels .channels__actions .channels__create {
       font-size: 16px;
       width: 100%;
+      line-height: 1;
       display: block;
       text-align: center; }
 
-.button, .button__primary, .channels .channels__actions .channels__create, .accountBox .account__actions .account__action, .main__feed--form form button {
+.button, .button__primary, .channels .channels__actions .channels__create, .accountBox .account__actions .account__action, .main__feed--form form button, .main__feed--login .action__button {
   background: #34495e;
   box-shadow: 0px 3px 0px #222f3d;
   border: 0;
@@ -467,13 +468,16 @@ body {
   font-weight: bold;
   color: white;
   outline: none; }
-  .button:hover, .button__primary:hover, .channels .channels__actions .channels__create:hover, .accountBox .account__actions .account__action:hover, .main__feed--form form button:hover {
+  .button:hover, .button__primary:hover, .channels .channels__actions .channels__create:hover, .accountBox .account__actions .account__action:hover, .main__feed--form form button:hover, .main__feed--login .action__button:hover {
     background: #222f3d;
     box-shadow: 0px 3px 0px #10161c; }
-  .button:active, .button__primary:active, .channels .channels__actions .channels__create:active, .accountBox .account__actions .account__action:active, .main__feed--form form button:active {
+  .button:active, .button__primary:active, .channels .channels__actions .channels__create:active, .accountBox .account__actions .account__action:active, .main__feed--form form button:active, .main__feed--login .action__button:active {
     position: relative;
     top: 2px;
     box-shadow: none; }
+  .button[disabled=disabled], [disabled=disabled].button__primary, .channels .channels__actions [disabled=disabled].channels__create, .accountBox .account__actions [disabled=disabled].account__action, .main__feed--form form button[disabled=disabled], .main__feed--login [disabled=disabled].action__button {
+    background: #aaa;
+    box-shadow: 0px 3px 0px #909090; }
 
 .button__primary, .channels .channels__actions .channels__create, .accountBox .account__actions .account__action {
   background: #e74c3c;
@@ -513,7 +517,7 @@ body {
       width: 100%;
       display: inline-block;
       text-align: center;
-      line-height: 1.2; }
+      line-height: 1; }
   .accountBox .account__photo {
     display: table-cell; }
     .accountBox .account__photo img {
@@ -586,10 +590,18 @@ body {
   @media (max-width: 767px) {
     .main__feed--form form {
       padding: 0px 20px; } }
+  .main__feed--form form .channel__error {
+    color: #b51818;
+    display: block;
+    font-size: 14px;
+    clear: left; }
+    .main__feed--form form .channel__error i {
+      line-height: 1;
+      vertical-align: middle;
+      margin-right: 5px; }
   .main__feed--form form input, .main__feed--form form label, .main__feed--form form button {
     display: block; }
   .main__feed--form form input, .main__feed--form form textarea {
-    margin-bottom: 20px;
     outline: none;
     font-size: 16px;
     border: 1px solid #ddd;
@@ -599,13 +611,18 @@ body {
     min-width: 250px;
     float: left;
     clear: left; }
-  @media (max-width: 767px) {
-    .main__feed--form form input {
-      width: 90%; } }
+  .main__feed--form form input {
+    margin-bottom: 10px; }
+    @media (max-width: 767px) {
+      .main__feed--form form input {
+        width: 100%; } }
+    .main__feed--form form input.invalid {
+      border-color: #b51818; }
   .main__feed--form form textarea {
     font-family: inherit;
     font-size: inherit;
-    width: 100%; }
+    width: 100%;
+    display: block; }
     @media (max-width: 767px) {
       .main__feed--form form textarea {
         width: 100%; } }
@@ -614,22 +631,21 @@ body {
     clear: left; }
   .main__feed--form form button {
     cursor: pointer;
-    clear: left; }
+    clear: left;
+    margin: 20px 0px;
+    float: left;
+    display: block; }
     @media (max-width: 767px) {
       .main__feed--form form button {
         width: 100%; } }
-  .main__feed--form form .channel__unique {
-    display: inline-block;
-    padding: 10px;
-    font-size: 16px;
-    color: #b51818;
-    line-height: 1.5;
-    margin-left: 10px; }
-    @media (max-width: 767px) {
-      .main__feed--form form .channel__unique {
-        padding: 10px 0px;
-        width: 10%;
-        margin-left: 0;
-        text-align: center; } }
-    .main__feed--form form .channel__unique .icon-check {
-      color: #4cb518; }
+
+.main__feed--login h2 {
+  padding: 20px 40px 0px;
+  font-weight: bold; }
+  @media (max-width: 767px) {
+    .main__feed--login h2 {
+      padding: 20px 20px; } }
+.main__feed--login .action__button {
+  margin: 0px 40px 20px; }
+.main__feed--login p {
+  margin: 0px 40px 20px; }

@@ -1,0 +1,16 @@
+.main__feed--login {
+  h2 {
+    padding: 20px 40px 0px;
+    @include breakpoint($mobile){
+      padding: 20px 20px;
+    }
+    font-weight: bold;
+  }
+  .action__button {
+    @extend .button;
+    margin: 0px 40px 20px;
+  }
+  p {
+    margin: 0px 40px 20px;
+  }
+}
