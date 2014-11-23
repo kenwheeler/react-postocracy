@@ -15,6 +15,5 @@ Router.run(routes, Router.HistoryLocation, function (Handler, state) {
   var params = state.params;
   UIActions.setNavState(false);
   React.render(<Handler params={params}/>, document.body, function(){
-    nonbounce("content");
   });
 });

@@ -16,7 +16,6 @@ Router.run(routes, Router.HistoryLocation, function (Handler, state) {
   var params = state.params;
   UIActions.setNavState(false);
   React.render(React.createElement(Handler, {params: params}), document.body, function(){
-    nonbounce("content");
   });
 });
 },{"./app/actions/LinkActions":3,"./app/actions/UIActions":4,"./app/actions/UserActions":5,"./app/components/Routes":7,"react":246,"react-router":54}],2:[function(require,module,exports){
@@ -106,7 +105,7 @@ var App = React.createClass({displayName: 'App',
       React.createElement("div", {className: "container"}, 
         React.createElement(Header, {navigationActive: this.state.navigationActive}), 
         React.createElement(Navigation, {navigationActive: this.state.navigationActive, user: this.state.user}), 
-        React.createElement("div", {className: "content", id: "content"}, 
+        React.createElement("div", {className: "content"}, 
           React.createElement("main", {className: "main"}, 
             React.createElement(RouteHandler, {user: this.state.user}), 
             React.createElement(Sidebar, {user: this.state.user})
@@ -267,7 +266,7 @@ var SearchBox = require('../elements/SearchBox');
 module.exports = React.createClass({displayName: 'exports',
   render: function() {
     return (
-      React.createElement("nav", {className: 'navigation ' + (this.props.navigationActive ? 'active' : '')}, 
+      React.createElement("nav", {id: "nav", className: 'navigation ' + (this.props.navigationActive ? 'active' : '')}, 
         React.createElement(SearchBox, null), 
         React.createElement(AccountBox, {user: this.props.user}), 
         React.createElement(ChannelList, null)

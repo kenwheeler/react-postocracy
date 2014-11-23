@@ -32,7 +32,7 @@ var App = React.createClass({
       <div className="container">
         <Header navigationActive={this.state.navigationActive} />
         <Navigation navigationActive={this.state.navigationActive} user={this.state.user} />
-        <div className="content" id="content">
+        <div className="content">
           <main className="main">
             <RouteHandler user={this.state.user}/>
             <Sidebar user={this.state.user} />
