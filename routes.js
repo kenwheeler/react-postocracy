@@ -3,6 +3,7 @@ var React = require('react');
 var Router = require('react-router');
 var routes = require('./app/components/Routes');
 var links = require('./mocks/links.js');
+var Api = require('./api/Api');
 var UserActions = require('./app/actions/UserActions');
 var LinkActions = require('./app/actions/LinkActions');
 var Channel = require('./api/models/Channel');
@@ -38,16 +39,19 @@ module.exports = {
     }
   },
   catchall: function(req,res){
-    LinkActions.loadLinks(links);
-    UserActions.loadUser(req.user ? req.user.twitter : []);
-    Router.run(routes, req.path, function (Handler, state) {
-      var params = state.params;
-      var html = React.renderToString(<Handler/>);
-      res.render('index', {
-        markup: html,
-        links: JSON.stringify(links),
-        user: req.user ? JSON.stringify(req.user.twitter) : "[]"
+    console.log(req)
+    Api.getState(req.user, function(data){
+      LinkActions.loadLinks(data.links);
+      UserActions.loadUser(data.user);
+      Router.run(routes, req.path, function (Handler, state) {
+        var params = state.params;
+        var html = React.renderToString(<Handler/>);
+        res.render('index', {
+          markup: html,
+          links: JSON.stringify(links),
+          user: req.user ? JSON.stringify(req.user.twitter) : "[]"
+        });
       });
-    });
+    })
   }
 }

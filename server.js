@@ -8,7 +8,17 @@ var config = require('./config.js');
 // DB
 var mongoose = require('mongoose');
 var User = require('./api/models/User');
-mongoose.connect(process.env.MONGOLAB_URI || config.mongo.url);
+var mongoUrl= process.env.MONGOLAB_URI || config.mongo.url;
+
+var connectWithRetry = function() {
+  return mongoose.connect(mongoUrl, function(err) {
+    if (err) {
+      console.error('Failed to connect to mongo on startup - retrying in 5 sec', err);
+      setTimeout(connectWithRetry, 5000);
+    }
+  });
+};
+connectWithRetry();
 
 // Auth
 var cookieParser = require('cookie-parser');
@@ -107,6 +117,11 @@ app.get('/logout', function(req, res) {
   req.logout();
   res.redirect('/');
 });
+
+app.get('/channel/:channel/', isLoggedIn, routes.catchall);
+app.get('/channel/:channel/:page/', isLoggedIn, routes.catchall);
+app.get('/channel/:channel/:view/:page/', isLoggedIn, routes.catchall);
+
 app.get('*', isLoggedIn, routes.catchall);
 
 function isLoggedIn(req, res, next) {

@@ -7,4 +7,4 @@ var linkSchema = new mongoose.Schema({
   url: String
 });
 
-module.exports = mongoose.model('Channel', linkSchema);
+module.exports = mongoose.model('Link', linkSchema);

@@ -4,6 +4,7 @@ var Router = require('react-router')
 var routes = require('./app/components/Routes');
 var LinkActions = require('./app/actions/LinkActions');
 var UserActions = require('./app/actions/UserActions');
+var ChannelActions = require('./app/actions/ChannelActions');
 var UIActions = require('./app/actions/UIActions');
 
 var links = JSON.parse(document.getElementById('links-state').innerHTML);
@@ -18,7 +19,7 @@ Router.run(routes, Router.HistoryLocation, function (Handler, state) {
   React.render(React.createElement(Handler, {params: params}), document.body, function(){
   });
 });
-},{"./app/actions/LinkActions":3,"./app/actions/UIActions":4,"./app/actions/UserActions":5,"./app/components/Routes":7,"react":248,"react-router":56}],2:[function(require,module,exports){
+},{"./app/actions/ChannelActions":2,"./app/actions/LinkActions":3,"./app/actions/UIActions":4,"./app/actions/UserActions":5,"./app/components/Routes":7,"react":248,"react-router":56}],2:[function(require,module,exports){
 var McFly = require('../flux/McFly');
 
 var ChannelActions = McFly.createActions({

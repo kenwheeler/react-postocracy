@@ -3,6 +3,7 @@ var Router = require('react-router')
 var routes = require('./app/components/Routes');
 var LinkActions = require('./app/actions/LinkActions');
 var UserActions = require('./app/actions/UserActions');
+var ChannelActions = require('./app/actions/ChannelActions');
 var UIActions = require('./app/actions/UIActions');
 
 var links = JSON.parse(document.getElementById('links-state').innerHTML);
