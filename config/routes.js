@@ -1,12 +1,12 @@
 // React
 var React = require('react');
 var Router = require('react-router');
-var routes = require('./app/components/Routes');
-var links = require('./mocks/links.js');
-var Api = require('./api/Api');
-var UserActions = require('./app/actions/UserActions');
-var LinkActions = require('./app/actions/LinkActions');
-var Channel = require('./api/models/Channel');
+var routes = require('../app/components/Routes');
+var links = require('../mocks/links.js');
+var Api = require('../api/Api');
+var UserActions = require('../app/actions/UserActions');
+var LinkActions = require('../app/actions/LinkActions');
+var Channel = require('../api/models/Channel');
 var S = require('string');
 
 module.exports = {
@@ -39,7 +39,6 @@ module.exports = {
     }
   },
   catchall: function(req,res){
-    console.log(req)
     Api.getState(req.user, function(data){
       LinkActions.loadLinks(data.links);
       UserActions.loadUser(data.user);
